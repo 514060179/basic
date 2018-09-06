@@ -55,7 +55,7 @@ public class ReturnParam extends CodeParam {
     }
 
     public static ReturnParam sessionOverdue(){
-        return new ReturnParam(sessionOverdue,"用户未登录或登陆过期",null);
+        return new ReturnParam(sessionOverdue,sessionOverdueMsg,null);
     }
 
     public String getCode() {

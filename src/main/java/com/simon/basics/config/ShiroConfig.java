@@ -1,6 +1,7 @@
 package com.simon.basics.config;
 
 import com.simon.basics.filter.LoginAuthorizationFilter;
+import com.simon.basics.filter.RestFilter;
 import com.simon.basics.shiro.AuthRealm;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -94,11 +95,11 @@ public class ShiroConfig {
         shiroFilter.setSecurityManager(securityManager);
         Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
         filters.put("token", new LoginAuthorizationFilter());
-//        filters.put("corsFilter", new RestFilter());
+        filters.put("corsFilter", new RestFilter());
         shiroFilter.setFilters(filters);
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        filterChainDefinitionMap.put("/user/login", "anon");
-        filterChainDefinitionMap.put("/user/**", "token");
+        filterChainDefinitionMap.put("/user/login", "corsFilter,anon");
+        filterChainDefinitionMap.put("/user/**", "corsFilter,token");
 //        filterChainDefinitionMap.put("/user/**", "corsFilter,token");
         shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilter;

@@ -49,8 +49,6 @@ public class UserController {
         Subject subject = SecurityUtils.getSubject();
         AuthenticationToken token =
                 new UsernamePasswordToken("simon","1233");
-        Subject currentUser = SecurityUtils.getSubject();
-        currentUser.login(token);
         if (!subject.isAuthenticated()) {
             //使用shiro来验证
 //			token.setRememberMe(true);
