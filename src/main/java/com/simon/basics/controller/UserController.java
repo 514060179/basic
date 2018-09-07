@@ -1,8 +1,7 @@
 package com.simon.basics.controller;
 
 import com.simon.basics.componet.service.JedisService;
-import com.simon.basics.dao.UserMapper;
-import com.simon.basics.model.ReturnParam;
+import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.model.User;
 import com.simon.basics.service.UserService;
 import org.apache.shiro.SecurityUtils;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
+ * 测试使用
  * @author fengtianying
  * @date 2018/9/4 13:22
  */
@@ -31,19 +31,19 @@ public class UserController {
     @Autowired
     private JedisService jedisService;
     @GetMapping("/findById/{userId}")
-    public ReturnParam findById(@PathVariable("userId") Integer userId){
+    public ReturnParam findById(@PathVariable("userId") Long userId){
         logger.error("sadasdas1");
         logger.info("sadasdas2");
         return ReturnParam.success(userService.findById(userId));
     }
     @GetMapping("/findById2")
-    public ReturnParam findById2(@RequestParam Integer userId){
+    public ReturnParam findById2(@RequestParam Long userId){
         logger.error("sadasdas3");
         logger.info("sadasdas4");
         return ReturnParam.success(userService.findById(userId));
     }
     @GetMapping("/login")
-    public ReturnParam login(@RequestParam Integer userId){
+    public ReturnParam login(@RequestParam Long userId){
 
         // 获取主体
         Subject subject = SecurityUtils.getSubject();
@@ -56,8 +56,10 @@ public class UserController {
                 subject.login(token);//验证角色和权限
             } catch (IncorrectCredentialsException e1) {
                 System.out.println("密码验证失败: " + e1.getMessage());
+                return ReturnParam.incorrectCredentials();
             }catch (AuthenticationException e2) {
                 System.out.println("登陆失败: " + e2.getMessage());
+                return ReturnParam.incorrectCredentials();
             }
         }
         return ReturnParam.success(userService.findById(userId));
@@ -71,14 +73,9 @@ public class UserController {
         return ReturnParam.success();
     }
     @GetMapping("/redis")
-    public ReturnParam redis(@RequestParam Integer userId){
+    public ReturnParam redis(@RequestParam Long userId){
         User user = userService.findById(userId);
         jedisService.put("user",user);
         return ReturnParam.success(jedisService.getObject("user",User.class));
-    }
-    @GetMapping("/update")
-    public ReturnParam update(@RequestParam Integer userId){
-        userService.updateTest();
-        return ReturnParam.success();
     }
 }

@@ -1,15 +1,13 @@
 package com.simon.basics.filter;
 
-import com.simon.basics.model.ReturnParam;
+import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.util.JSONUtil;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 
 /**

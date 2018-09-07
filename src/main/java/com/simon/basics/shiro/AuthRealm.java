@@ -29,14 +29,14 @@ public class AuthRealm extends AuthorizingRealm {
         //查询sql
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String userName = token.getUsername();
-        User user = userMapper.selectByPrimaryKey(Integer.parseInt("1"));
+        User user = userMapper.selectByPrimaryKey(1L);
         //验证密码
         AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(userName, user.getPassword().toCharArray(), ByteSource.Util.bytes(userName),this.getName());
 //        UsernamePasswordToken utoken=(UsernamePasswordToken) token;//获取用户输入的token
 //        String username = utoken.getUsername();
 //        User user = userService.findUserByUserName(username);
 //        return new SimpleAuthenticationInfo(user, user.getPassword(),this.getClass().getName());//放入shiro.调用CredentialsMatcher检验密码
-//        this.setSession();
+        this.setSession("currentUser",userName);
         return authcInfo;
     }
     //授权

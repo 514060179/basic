@@ -8,7 +8,5 @@ import com.simon.basics.model.User;
  */
 public interface UserService {
 
-    User findById(Integer userId);
-
-    int updateTest();
+    User findById(Long userId);
 }

@@ -1,4 +1,4 @@
-package com.simon.basics.model;
+package com.simon.basics.model.vo;
 
 /**
  * @author fengtianying
@@ -57,6 +57,12 @@ public class ReturnParam extends CodeParam {
     public static ReturnParam sessionOverdue(){
         return new ReturnParam(sessionOverdue,sessionOverdueMsg,null);
     }
+
+    public static ReturnParam incorrectCredentials(){
+        return new ReturnParam(incorrectCredentials,incorrectCredentialsMsg,null);
+    }
+
+
 
     public String getCode() {
         return code;

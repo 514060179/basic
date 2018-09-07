@@ -1,6 +1,6 @@
 package com.simon.basics.componet;
 
-import com.simon.basics.model.ReturnParam;
+import com.simon.basics.model.vo.ReturnParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.MissingServletRequestParameterException;

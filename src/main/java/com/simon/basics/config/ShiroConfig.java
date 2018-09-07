@@ -1,7 +1,12 @@
 package com.simon.basics.config;
 
+import com.simon.basics.filter.CustomRolesAuthorizationFilter;
 import com.simon.basics.filter.LoginAuthorizationFilter;
 import com.simon.basics.filter.RestFilter;
+import com.simon.basics.model.Jurisdiction;
+import com.simon.basics.model.Role;
+import com.simon.basics.service.RoleAndJnService;
+import com.simon.basics.service.impl.RoleAndJnServiceImpl;
 import com.simon.basics.shiro.AuthRealm;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -18,8 +23,8 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import java.util.LinkedHashMap;
-import java.util.Map;
+
+import java.util.*;
 import javax.servlet.Filter;
 
 
@@ -65,7 +70,7 @@ public class ShiroConfig {
      * sessionManager配置
      * @return
      */
-//    @Bean
+    @Bean
     public DefaultWebSessionManager sessionManager(){
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         sessionManager.setSessionDAO(sessionDAO());
@@ -96,15 +101,32 @@ public class ShiroConfig {
         Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
         filters.put("token", new LoginAuthorizationFilter());
         filters.put("corsFilter", new RestFilter());
+        filters.put("customRolesAuthorizationFilter", new CustomRolesAuthorizationFilter());
         shiroFilter.setFilters(filters);
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         filterChainDefinitionMap.put("/user/login", "corsFilter,anon");
         filterChainDefinitionMap.put("/user/**", "corsFilter,token");
+        filterChainDefinitionMap.putAll(otherChains());
 //        filterChainDefinitionMap.put("/user/**", "corsFilter,token");
         shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilter;
     }
 
+    @Bean
+    public Map<String,String> otherChains() {
+        Map<String,String> otherChains = new HashMap<>();//规则集合
+        //获取权限
+        List<Map<String,String>> mapList = roleAndJnService().findCustomRolesAuthorization();
+        for (Map<String,String> map : mapList){
+            otherChains.put(map.get("url"),"customRolesAuthorizationFilter["+map.get("roleName")+"]");
+        }
+        return otherChains;
+    }
+
+    @Bean
+    public  RoleAndJnService roleAndJnService(){
+        return new RoleAndJnServiceImpl();
+    }
     /**
      * 保证实现了Shiro内部lifecycle函数的bean执行
      */

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.simon.basics.dao.JurisdictionMapper" >
+  <resultMap id="BaseResultMap" type="com.simon.basics.model.Jurisdiction" >
+    <id column="jn_id" property="jnId" jdbcType="BIGINT" />
+    <result column="jn_name" property="jnName" jdbcType="VARCHAR" />
+    <result column="jn_url" property="jnUrl" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    j.jn_id, j.jn_name, j.jn_url, j.create_time, j.update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from jurisdiction
+    where jn_id = #{jnId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from jurisdiction
+    where jn_id = #{jnId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.simon.basics.model.Jurisdiction" >
+    insert into jurisdiction (jn_id, jn_name, jn_url, 
+      create_time, update_time)
+    values (#{jnId,jdbcType=BIGINT}, #{jnName,jdbcType=VARCHAR}, #{jnUrl,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.simon.basics.model.Jurisdiction" >
+    insert into jurisdiction
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="jnId != null" >
+        jn_id,
+      </if>
+      <if test="jnName != null" >
+        jn_name,
+      </if>
+      <if test="jnUrl != null" >
+        jn_url,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="jnId != null" >
+        #{jnId,jdbcType=BIGINT},
+      </if>
+      <if test="jnName != null" >
+        #{jnName,jdbcType=VARCHAR},
+      </if>
+      <if test="jnUrl != null" >
+        #{jnUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.simon.basics.model.Jurisdiction" >
+    update jurisdiction
+    <set >
+      <if test="jnName != null" >
+        jn_name = #{jnName,jdbcType=VARCHAR},
+      </if>
+      <if test="jnUrl != null" >
+        jn_url = #{jnUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where jn_id = #{jnId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.simon.basics.model.Jurisdiction" >
+    update jurisdiction
+    set jn_name = #{jnName,jdbcType=VARCHAR},
+      jn_url = #{jnUrl,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where jn_id = #{jnId,jdbcType=BIGINT}
+  </update>
+
+
+  <select id="findListByRoleId" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/>
+    FROM jurisdiction j LEFT JOIN role_jn rj ON j.jn_id=rj.jn_id
+    WHERE rj.role_id=#{roleId}
+  </select>
+</mapper>

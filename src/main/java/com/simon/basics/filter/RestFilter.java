@@ -4,8 +4,11 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Enumeration;
+import java.util.Optional;
 
+/**
+ * 解决跨域问题
+ */
 public class RestFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -13,17 +16,27 @@ public class RestFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest request = ((HttpServletRequest) servletRequest);
-        HttpServletResponse response = (HttpServletResponse) servletResponse;
-        if (request.getMethod().equals("OPTIONS")) {
-            response.setHeader("Access-Control-Allow-Origin", "*");
-            response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-            response.setHeader("Access-Control-Max-Age", "0");
-            response.setStatus(200);
-            return;
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest req = null;
+        if (request instanceof HttpServletRequest) {
+            req = (HttpServletRequest) request;
         }
-        filterChain.doFilter(servletRequest, servletResponse);
+        HttpServletResponse res = null;
+        if (response instanceof HttpServletResponse) {
+            res = (HttpServletResponse) response;
+        }
+        if (req != null && res != null) {
+            //设置允许传递的参数
+            res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+            //设置允许带上cookie
+            res.setHeader("Access-Control-Allow-Credentials", "true");
+            String origin = Optional.ofNullable(req.getHeader("Origin")).orElse(req.getHeader("Referer"));
+            //设置允许的请求来源
+            res.setHeader("Access-Control-Allow-Origin", origin);
+            //设置允许的请求方法
+            res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
+        }
+        chain.doFilter(request, response);
     }
 
     @Override
