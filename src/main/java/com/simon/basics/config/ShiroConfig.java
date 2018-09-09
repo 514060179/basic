@@ -104,8 +104,8 @@ public class ShiroConfig {
         filters.put("customRolesAuthorizationFilter", new CustomRolesAuthorizationFilter());
         shiroFilter.setFilters(filters);
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        filterChainDefinitionMap.put("/user/login", "corsFilter,anon");
-        filterChainDefinitionMap.put("/user/**", "corsFilter,token");
+        filterChainDefinitionMap.put("/**", "corsFilter");
+//        filterChainDefinitionMap.put("/user/**", "corsFilter,token");
         filterChainDefinitionMap.putAll(otherChains());
 //        filterChainDefinitionMap.put("/user/**", "corsFilter,token");
         shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMap);
@@ -118,7 +118,9 @@ public class ShiroConfig {
         //获取权限
         List<Map<String,String>> mapList = roleAndJnService().findCustomRolesAuthorization();
         for (Map<String,String> map : mapList){
-            otherChains.put(map.get("url"),"customRolesAuthorizationFilter["+map.get("roleName")+"]");
+            if (map.get("url")!=null){
+                otherChains.put(map.get("url"),"customRolesAuthorizationFilter["+map.get("roleName")+"]");
+            }
         }
         return otherChains;
     }

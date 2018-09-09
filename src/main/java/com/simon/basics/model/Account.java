@@ -1,10 +1,12 @@
 package com.simon.basics.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Account {
+public class Account implements Serializable{
     private Long accountId;
 
     private String username;
@@ -51,6 +53,7 @@ public class Account {
         this.type = type == null ? null : type.trim();
     }
 
+    @JsonFormat(pattern="yyyy-MM-ddHH:mm:ss")
     public Date getCreateTime() {
         return createTime;
     }
@@ -59,6 +62,7 @@ public class Account {
         this.createTime = createTime;
     }
 
+    @JsonFormat(pattern="yyyy-MM-ddHH:mm:ss")
     public Date getUpdateTime() {
         return updateTime;
     }

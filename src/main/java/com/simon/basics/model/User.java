@@ -1,5 +1,6 @@
 package com.simon.basics.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -110,10 +111,12 @@ public class User extends Account {
         this.remark = remark == null ? null : remark.trim();
     }
 
+    @JsonFormat(pattern="yyyy-MM-ddHH:mm:ss")
     public Date getCreateTime() {
         return createTime;
     }
 
+    @JsonFormat(pattern="yyyy-MM-ddHH:mm:ss")
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }

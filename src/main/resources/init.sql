@@ -172,7 +172,7 @@ ALTER TABLE seat_layout COMMENT '座位结构、布局';
 /*==============================================================*/
 /* Table: user                                                  */
 /*==============================================================*/
-CREATE TABLE USER
+CREATE TABLE `user`
 (
    user_id              BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键',
    account_id           BIGINT NOT NULL COMMENT '登录账户id',
