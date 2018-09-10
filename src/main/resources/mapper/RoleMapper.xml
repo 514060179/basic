@@ -91,10 +91,12 @@
     where role_id = #{roleId,jdbcType=BIGINT}
   </update>
 
-  <select id="findListByUserId" resultMap="BaseWithJnResultMap">
-    SELECT <include refid="Base_With_Jn_Column_List"/>
-    FROM role r LEFT JOIN user_role u ON r.role_id=u.role_id
-    WHERE u.user_id=${userId}
+  <select id="findListByAccountId" resultType="string">
+    SELECT DISTINCT j.jn_url
+    FROM user u LEFT JOIN user_role ur ON u.user_id=ur.user_id
+    LEFT JOIN role_jn rj ON ur.role_id=rj.role_id
+    INNER JOIN jurisdiction j ON rj.jn_id = j.jn_id
+    WHERE u.account_id=${accountId}
   </select>
 
   <select id="findAll" resultMap="BaseWithJnResultMap">

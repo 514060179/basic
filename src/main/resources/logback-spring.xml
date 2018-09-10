@@ -6,7 +6,7 @@
     <!-- 日志最大的历史 30天 -->
     <property name="log.maxHistory" value="30"/>
     <!--等级-->
-    <property name="log.level" value="info"/>
+    <property name="log.level" value="debug"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">

@@ -3,6 +3,7 @@ package com.simon.basics.componet;
 import com.simon.basics.model.vo.ReturnParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -34,9 +35,17 @@ public class GlobalExceptionHandler {
         return ReturnParam.noHandlerFound(e.getRequestURL() + " Not Found");
     }
 
+    @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
+    public ReturnParam httpRequestMethodNotSupportedExceptionHandler(Exception e) {
+        logger.error(">>>> system ：请求方法错误 ", e);
+        return ReturnParam.systemError("405 get/post 请求方法错误");
+    }
+
     @ExceptionHandler(value = Exception.class)
     public ReturnParam exceptionHandler(Exception e) {
         logger.error(">>>> system error： ", e);
         return ReturnParam.systemError("系统异常！");
     }
+
+
 }

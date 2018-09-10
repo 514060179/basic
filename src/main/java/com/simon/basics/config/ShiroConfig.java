@@ -1,5 +1,6 @@
 package com.simon.basics.config;
 
+import com.simon.basics.filter.CustomPermissionsAuthorizationFilter;
 import com.simon.basics.filter.CustomRolesAuthorizationFilter;
 import com.simon.basics.filter.LoginAuthorizationFilter;
 import com.simon.basics.filter.RestFilter;
@@ -54,6 +55,7 @@ public class ShiroConfig {
     public AuthRealm userRealm(){
         AuthRealm authRealm = new AuthRealm();
         authRealm.setCredentialsMatcher(credentialsMatcher());
+//        authRealm.setPermissionResolver();
         return new AuthRealm();
     }
 
@@ -102,23 +104,24 @@ public class ShiroConfig {
         filters.put("token", new LoginAuthorizationFilter());
         filters.put("corsFilter", new RestFilter());
         filters.put("customRolesAuthorizationFilter", new CustomRolesAuthorizationFilter());
+        filters.put("customPermissionsAuthorizationFilter", new CustomPermissionsAuthorizationFilter());
         shiroFilter.setFilters(filters);
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        filterChainDefinitionMap.put("/**", "corsFilter");
-//        filterChainDefinitionMap.put("/user/**", "corsFilter,token");
-        filterChainDefinitionMap.putAll(otherChains());
-//        filterChainDefinitionMap.put("/user/**", "corsFilter,token");
+//        filterChainDefinitionMap.put("/**", "corsFilter");
+        filterChainDefinitionMap.put("/api/**", "token");
+        filterChainDefinitionMap.putAll(roleChains());
         shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilter;
     }
 
+    //角色拦截
     @Bean
-    public Map<String,String> otherChains() {
+    public Map<String,String> roleChains() {
         Map<String,String> otherChains = new HashMap<>();//规则集合
         //获取权限
         List<Map<String,String>> mapList = roleAndJnService().findCustomRolesAuthorization();
         for (Map<String,String> map : mapList){
-            if (map.get("url")!=null){
+            if (map.get("url")!=null&&!"".equals(map.get("url").trim())){
                 otherChains.put(map.get("url"),"customRolesAuthorizationFilter["+map.get("roleName")+"]");
             }
         }

@@ -2,9 +2,12 @@ package com.simon.basics.shiro;
 
 import com.simon.basics.dao.UserMapper;
 import com.simon.basics.model.User;
+import com.simon.basics.service.RoleAndJnService;
+import com.simon.basics.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.InvalidSessionException;
@@ -14,6 +17,8 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 /**
  * @author fengtianying
  * @date 2018/9/3 15:16
@@ -21,7 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AuthRealm extends AuthorizingRealm {
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
+    @Autowired
+    private RoleAndJnService roleAndJnService;
     //认证.登录
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
@@ -29,36 +36,25 @@ public class AuthRealm extends AuthorizingRealm {
         //查询sql
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String userName = token.getUsername();
-        User user = userMapper.selectByPrimaryKey(1L);
+        User user = userService.findByUserName(userName);
         //验证密码
-        AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(userName, user.getPassword().toCharArray(), ByteSource.Util.bytes(userName),this.getName());
-//        UsernamePasswordToken utoken=(UsernamePasswordToken) token;//获取用户输入的token
-//        String username = utoken.getUsername();
-//        User user = userService.findUserByUserName(username);
-//        return new SimpleAuthenticationInfo(user, user.getPassword(),this.getClass().getName());//放入shiro.调用CredentialsMatcher检验密码
-        this.setSession("currentUser",userName);
-        return authcInfo;
+        //放入shiro.调用CredentialsMatcher检验密码
+        if (user!=null){
+            AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(userName, user.getPassword().toCharArray(), ByteSource.Util.bytes(userName),this.getName());
+            this.setSession("currentUser",user);
+            return authcInfo;
+        }
+        return null;
     }
     //授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
-        System.out.println("授权");
         User user=(User) principal.fromRealm(this.getClass().getName()).iterator().next();//获取session中的用户
-//        List<String> permissions=new ArrayList<>();
-//        Set<Role> roles = user.getRoles();
-//        if(roles.size()>0) {
-//            for(Role role : roles) {
-//                Set<Module> modules = role.getModules();
-//                if(modules.size()>0) {
-//                    for(Module module : modules) {
-//                        permissions.add(module.getMname());
-//                    }
-//                }
-//            }
-//        }
-//        SimpleAuthorizationInfo info=new SimpleAuthorizationInfo();
-//        info.addStringPermissions(permissions);//将权限放入shiro中.
-        return null;
+        //获取用户权限信息
+        List<String> urlList = roleAndJnService.findListByAccountId(user.getAccountId());
+        SimpleAuthorizationInfo info=new SimpleAuthorizationInfo();
+        info.addStringPermissions(urlList);//将权限放入shiro中.
+        return info;
     }
 
     /**

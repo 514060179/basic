@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public User findById(Long userId) {
-        return userMapper.selectByPrimaryKey(userId);
+    public User findByUserName(String userName) {
+        return userMapper.findByUserName(userName);
     }
 }

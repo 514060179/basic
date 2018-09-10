@@ -5,45 +5,24 @@
     <id column="account_id" property="accountId" jdbcType="BIGINT" />
     <result column="username" property="username" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
   </resultMap>
   <resultMap id="BaseResultMap" type="com.simon.basics.model.User" extends="ParentResultMap">
     <id column="user_id" property="userId" jdbcType="BIGINT" />
-    <result column="account_id" property="accountId" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="sex" property="sex" jdbcType="CHAR" />
     <result column="age" property="age" jdbcType="INTEGER" />
     <result column="phone" property="phone" jdbcType="VARCHAR" />
     <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="CHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    a.username,a.password,u.user_id, u.account_id, u.NAME, u.sex, u.age, u.phone, u.card_num, u.address, u.TYPE, u.remark, u.create_time,
+    a.username,a.password,u.user_id, a.account_id, u.NAME, u.sex, u.age, u.phone, u.card_num, u.address, a.`type`, u.remark, u.create_time,
     u.update_time
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from user u INNER JOIN account a ON u.account_id=a.account_id
-    where u.user_id = #{userId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from user
-    where user_id = #{userId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.simon.basics.model.User" >
-    insert into user (user_id, account_id, NAME, 
-      sex, age, phone, card_num, 
-      address, TYPE, remark, 
-      create_time, update_time)
-    values (#{userId,jdbcType=BIGINT}, #{accountId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
-      #{sex,jdbcType=CHAR}, #{age,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{cardNum,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
   <insert id="insertSelective" parameterType="com.simon.basics.model.User" >
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -162,19 +141,10 @@
     </set>
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.simon.basics.model.User" >
-    update user
-    set account_id = #{accountId,jdbcType=BIGINT},
-      NAME = #{name,jdbcType=VARCHAR},
-      sex = #{sex,jdbcType=CHAR},
-      age = #{age,jdbcType=INTEGER},
-      phone = #{phone,jdbcType=VARCHAR},
-      card_num = #{cardNum,jdbcType=VARCHAR},
-      address = #{address,jdbcType=VARCHAR},
-      TYPE = #{type,jdbcType=CHAR},
-      remark = #{remark,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where user_id = #{userId,jdbcType=BIGINT}
-  </update>
+  <select id="findByUserName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from account a LEFT JOIN user u ON u.account_id=a.account_id
+    where a.username = #{userName,jdbcType=VARCHAR}
+  </select>
 </mapper>

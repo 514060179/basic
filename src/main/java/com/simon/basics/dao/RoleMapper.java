@@ -18,7 +18,7 @@ public interface RoleMapper {
 
     int updateByPrimaryKey(Role record);
 
-    List<Role> findListByUserId(Long userId);
+    List<String> findListByAccountId(Long accountId);
 
     List<Role> findAll();
 

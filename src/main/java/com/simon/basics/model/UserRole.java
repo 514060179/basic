@@ -7,7 +7,7 @@ public class UserRole {
 
     private Long roleId;
 
-    private Long userId;
+    private Long accountId;
 
     private Date createTime;
 
@@ -29,12 +29,12 @@ public class UserRole {
         this.roleId = roleId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getAccountId() {
+        return accountId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
     public Date getCreateTime() {

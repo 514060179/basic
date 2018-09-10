@@ -8,5 +8,6 @@ import com.simon.basics.model.User;
  */
 public interface UserService {
 
-    User findById(Long userId);
+
+    User findByUserName(String userName);
 }

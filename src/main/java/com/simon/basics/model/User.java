@@ -8,8 +8,6 @@ import java.util.Date;
 public class User extends Account {
     private Long userId;
 
-    private Long accountId;
-
     private String name;
 
     private String sex;
@@ -21,8 +19,6 @@ public class User extends Account {
     private String cardNum;
 
     private String address;
-
-    private String type;
 
     private String remark;
 
@@ -37,14 +33,6 @@ public class User extends Account {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public Long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
     }
 
     public String getName() {
@@ -93,14 +81,6 @@ public class User extends Account {
 
     public void setAddress(String address) {
         this.address = address == null ? null : address.trim();
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
     }
 
     public String getRemark() {

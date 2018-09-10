@@ -89,6 +89,7 @@ CREATE TABLE jurisdiction
    jn_id                BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键',
    jn_name              VARCHAR(50) NOT NULL COMMENT '权限名称',
    jn_url               VARCHAR(500) NOT NULL COMMENT '具体操作权限',
+   jn_pid               bigint not null default 0 comment '父级id',
    create_time          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
    update_time          DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
    PRIMARY KEY (jn_id)

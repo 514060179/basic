@@ -3,13 +3,14 @@
 <mapper namespace="com.simon.basics.dao.JurisdictionMapper" >
   <resultMap id="BaseResultMap" type="com.simon.basics.model.Jurisdiction" >
     <id column="jn_id" property="jnId" jdbcType="BIGINT" />
+    <id column="jn_pid" property="jnPid" jdbcType="BIGINT" />
     <result column="jn_name" property="jnName" jdbcType="VARCHAR" />
     <result column="jn_url" property="jnUrl" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    j.jn_id, j.jn_name, j.jn_url, j.create_time, j.update_time
+    j.jn_id, j.jn_pid, j.jn_name, j.jn_url, j.create_time, j.update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 

@@ -5,6 +5,8 @@ import java.util.Date;
 public class Jurisdiction {
     private Long jnId;
 
+    private Long jnPid;
+
     private String jnName;
 
     private String jnUrl;
@@ -15,6 +17,14 @@ public class Jurisdiction {
 
     public Long getJnId() {
         return jnId;
+    }
+
+    public Long getJnPid() {
+        return jnPid;
+    }
+
+    public void setJnPid(Long jnPid) {
+        this.jnPid = jnPid;
     }
 
     public void setJnId(Long jnId) {

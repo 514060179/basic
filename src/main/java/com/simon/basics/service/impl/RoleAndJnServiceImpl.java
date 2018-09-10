@@ -29,7 +29,7 @@ public class RoleAndJnServiceImpl implements RoleAndJnService {
     }
 
     @Override
-    public List<Role> findListByUserId(Long userId) {
-        return roleMapper.findListByUserId(userId);
+    public List<String> findListByAccountId(Long userId) {
+        return roleMapper.findListByAccountId(userId);
     }
 }
