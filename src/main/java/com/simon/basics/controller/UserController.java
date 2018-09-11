@@ -56,7 +56,7 @@ public class UserController {
                 return ReturnParam.incorrectCredentials();
             }
         }
-        return ReturnParam.success(subject.getSession().getAttribute("currentUser"));
+        return ReturnParam.success(SecurityUtils.getSubject().getPrincipal());
     }
 
     @GetMapping("/logout")
