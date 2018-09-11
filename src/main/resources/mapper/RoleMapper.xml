@@ -93,10 +93,17 @@
 
   <select id="findListByAccountId" resultType="string">
     SELECT DISTINCT j.jn_url
-    FROM user u LEFT JOIN user_role ur ON u.user_id=ur.user_id
+    FROM user u LEFT JOIN user_role ur ON u.user_id=ur.account_id
     LEFT JOIN role_jn rj ON ur.role_id=rj.role_id
     INNER JOIN jurisdiction j ON rj.jn_id = j.jn_id
-    WHERE u.account_id=${accountId}
+    WHERE u.account_id=#{accountId}
+  </select>
+
+  <select id="findRoleListByAccountId" resultType="string">
+    SELECT role_name
+    FROM user u LEFT JOIN user_role ur ON u.user_id=ur.account_id
+    LEFT JOIN role r ON ur.role_id=r.role_id
+     WHERE u.account_id=#{accountId}
   </select>
 
   <select id="findAll" resultMap="BaseWithJnResultMap">

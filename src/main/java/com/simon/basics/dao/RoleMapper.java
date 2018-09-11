@@ -20,6 +20,8 @@ public interface RoleMapper {
 
     List<String> findListByAccountId(Long accountId);
 
+    List<String> findRoleListByAccountId(Long accountId);
+
     List<Role> findAll();
 
     List<Map<String,String>> findCustomRolesAuthorization();

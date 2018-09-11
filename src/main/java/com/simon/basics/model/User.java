@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.Set;
 
 public class User extends Account {
     private Long userId;
@@ -21,6 +22,8 @@ public class User extends Account {
     private String address;
 
     private String remark;
+
+    private Set<String> roleSet;
 
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
@@ -107,5 +110,13 @@ public class User extends Account {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Set<String> getRoleSet() {
+        return roleSet;
+    }
+
+    public void setRoleSet(Set<String> roleSet) {
+        this.roleSet = roleSet;
     }
 }

@@ -29,7 +29,7 @@ public class Swagger2 {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("运营商首页统计")
+                .title("student system")
                 .contact(new Contact("simonfeng", "http://www.baidu.com", "514060179@qq.com"))
                 .description("API")
                 .version("1.0")

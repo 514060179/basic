@@ -15,5 +15,17 @@ public interface RoleAndJnService {
 
     List<Map<String,String>> findCustomRolesAuthorization();
 
-    List<String> findListByAccountId(Long userId);
+    /**
+     * 通过accountId获取权限
+     * @param accountId
+     * @return
+     */
+    List<String> findListByAccountId(Long accountId);
+
+    /**
+     * 通过accountId获取角色
+     * @param accountId
+     * @return
+     */
+    List<String> findRoleListByAccountId(Long accountId);
 }

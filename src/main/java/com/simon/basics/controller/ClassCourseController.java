@@ -1,6 +1,7 @@
 package com.simon.basics.controller;
 
 import com.simon.basics.model.vo.ReturnParam;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/course")
+@Api(tags = "class",description = "课程/班级：列表、详情、修改、新增")
 public class ClassCourseController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());

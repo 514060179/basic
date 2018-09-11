@@ -3,13 +3,16 @@ package com.simon.basics.componet;
 import com.simon.basics.model.vo.ReturnParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 
 /**
  * 全局异常处理
@@ -41,11 +44,21 @@ public class GlobalExceptionHandler {
         return ReturnParam.systemError("405 get/post 请求方法错误");
     }
 
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    public ReturnParam constraintViolationExceptionHandler(Exception e) {
+        logger.error(">>>> system error： ", e);
+        return ReturnParam.systemError(e.getMessage());
+    }
     @ExceptionHandler(value = Exception.class)
     public ReturnParam exceptionHandler(Exception e) {
         logger.error(">>>> system error： ", e);
         return ReturnParam.systemError("系统异常！");
     }
+//    @ResponseStatus(value= HttpStatus.UNAUTHORIZED,reason="没有权限")
+//    public ReturnParam unauthorizedHandler(Exception e) {
+//        logger.error(">>>> system error： ", e);
+//        return ReturnParam.systemError("系统异常！");
+//    }
 
 
 }
