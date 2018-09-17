@@ -359,7 +359,40 @@ insert  into `user_role`(`user_role_id`,`role_id`,`account_id`,`create_time`,`up
 (3,3,3,'2018-09-10 08:34:48','2018-09-10 08:34:48'),
 (4,4,4,'2018-09-10 08:34:50','2018-09-10 08:34:50');
 
+CREATE TABLE roster_income
+(
+   income_id            BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键' PRIMARY KEY,
+   account_id           BIGINT NOT NULL COMMENT '教师id',
+   course_id            BIGINT COMMENT '课程id',
+   income_section_num   INT NOT NULL DEFAULT 1 COMMENT '第几课时、课程章节数',
+   income_type          CHAR(2) NOT NULL COMMENT '收入类型（1按时收入2按分成）',
+   must_number          INT NOT NULL COMMENT '应到人数',
+   actual_number        INT NOT NULL COMMENT '实到人数',
+   total_hour           DECIMAL(6,2) NOT NULL DEFAULT 0 COMMENT '上课总时间',
+   average_hour         DECIMAL(6,1) COMMENT '每【average_hour】时起',
+   average_hour_cost    DECIMAL(6,2) COMMENT '每【average_hour】时收费【average_hour_cost】元',
+   percentage           DECIMAL(3,2) DEFAULT 0 COMMENT '百分点【teacher_charge_type】为1时：超过【exceed_num】人数提成【percentage】。为2时：每节课的提成百分比',
+   exceed_num           INT COMMENT '超过【exceed_num】人数提成【percentage】',
+   average_course       DECIMAL(6,2) DEFAULT 0 COMMENT '课程每节收费',
+   income_amount        DECIMAL(6,2) NOT NULL DEFAULT 0 COMMENT '收入金额',
+   create_time          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+   update_time          DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='教师课程收入';
+
+ALTER TABLE roster_income ADD CONSTRAINT FK_Reference_20 FOREIGN KEY (course_id)
+      REFERENCES class_course (course_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE roster_income ADD CONSTRAINT FK_Reference_21 FOREIGN KEY (account_id)
+      REFERENCES account (account_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- user 添加字段
+ ALTER TABLE `simon`.`user`
+  ADD COLUMN `teacher_charge_type` CHAR(2) NULL COMMENT '老师收费类型(1按时2按提成)' AFTER `type`,
+  ADD COLUMN `average_hour` DECIMAL(6,1) NULL COMMENT '每【average_hour】时起' AFTER `teacher_charge_type`,
+  ADD COLUMN `average_hour_cost` DECIMAL(6,2) NULL COMMENT '每【average_hour】时起' AFTER `average_hour`,
+  ADD COLUMN `percentage` DECIMAL(3,2) NULL COMMENT '百分点【teacher_charge_type】为1时：超过【exceed_num】人数提成【percentage】。为2时：每节课的提成百分比' AFTER `average_hour`,
+  ADD COLUMN `exceed_num` INT NULL COMMENT '超过【exceed_num】人数提成【percentage】' AFTER `percentage`;
