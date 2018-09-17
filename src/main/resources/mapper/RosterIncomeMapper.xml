@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.simon.basics.dao.RosterIncomeMapper" >
+  <resultMap id="BaseResultMap" type="com.simon.basics.model.RosterIncome" >
+    <id column="income_id" property="incomeId" jdbcType="BIGINT" />
+    <result column="account_id" property="accountId" jdbcType="BIGINT" />
+    <result column="course_id" property="courseId" jdbcType="BIGINT" />
+    <result column="income_section_num" property="incomeSectionNum" jdbcType="INTEGER" />
+    <result column="income_type" property="incomeType" jdbcType="CHAR" />
+    <result column="must_number" property="mustNumber" jdbcType="INTEGER" />
+    <result column="actual_number" property="actualNumber" jdbcType="INTEGER" />
+    <result column="total_hour" property="totalHour" jdbcType="DECIMAL" />
+    <result column="average_hour" property="averageHour" jdbcType="DECIMAL" />
+    <result column="average_hour_cost" property="averageHourCost" jdbcType="DECIMAL" />
+    <result column="percentage" property="percentage" jdbcType="DECIMAL" />
+    <result column="exceed_num" property="exceedNum" jdbcType="INTEGER" />
+    <result column="average_course" property="averageCourse" jdbcType="DECIMAL" />
+    <result column="income_amount" property="incomeAmount" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    income_id, account_id, course_id, income_section_num, income_type, must_number, actual_number, 
+    total_hour, average_hour, average_hour_cost, percentage, exceed_num, average_course, 
+    income_amount, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from roster_income
+    where income_id = #{incomeId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from roster_income
+    where income_id = #{incomeId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.simon.basics.model.RosterIncome" >
+    insert into roster_income (income_id, account_id, course_id, 
+      income_section_num, income_type, must_number, 
+      actual_number, total_hour, average_hour, 
+      average_hour_cost, percentage, exceed_num, 
+      average_course, income_amount, create_time, 
+      update_time)
+    values (#{incomeId,jdbcType=BIGINT}, #{accountId,jdbcType=BIGINT}, #{courseId,jdbcType=BIGINT}, 
+      #{incomeSectionNum,jdbcType=INTEGER}, #{incomeType,jdbcType=CHAR}, #{mustNumber,jdbcType=INTEGER}, 
+      #{actualNumber,jdbcType=INTEGER}, #{totalHour,jdbcType=DECIMAL}, #{averageHour,jdbcType=DECIMAL}, 
+      #{averageHourCost,jdbcType=DECIMAL}, #{percentage,jdbcType=DECIMAL}, #{exceedNum,jdbcType=INTEGER}, 
+      #{averageCourse,jdbcType=DECIMAL}, #{incomeAmount,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.simon.basics.model.RosterIncome" >
+    insert into roster_income
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="incomeId != null" >
+        income_id,
+      </if>
+      <if test="accountId != null" >
+        account_id,
+      </if>
+      <if test="courseId != null" >
+        course_id,
+      </if>
+      <if test="incomeSectionNum != null" >
+        income_section_num,
+      </if>
+      <if test="incomeType != null" >
+        income_type,
+      </if>
+      <if test="mustNumber != null" >
+        must_number,
+      </if>
+      <if test="actualNumber != null" >
+        actual_number,
+      </if>
+      <if test="totalHour != null" >
+        total_hour,
+      </if>
+      <if test="averageHour != null" >
+        average_hour,
+      </if>
+      <if test="averageHourCost != null" >
+        average_hour_cost,
+      </if>
+      <if test="percentage != null" >
+        percentage,
+      </if>
+      <if test="exceedNum != null" >
+        exceed_num,
+      </if>
+      <if test="averageCourse != null" >
+        average_course,
+      </if>
+      <if test="incomeAmount != null" >
+        income_amount,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="incomeId != null" >
+        #{incomeId,jdbcType=BIGINT},
+      </if>
+      <if test="accountId != null" >
+        #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="courseId != null" >
+        #{courseId,jdbcType=BIGINT},
+      </if>
+      <if test="incomeSectionNum != null" >
+        #{incomeSectionNum,jdbcType=INTEGER},
+      </if>
+      <if test="incomeType != null" >
+        #{incomeType,jdbcType=CHAR},
+      </if>
+      <if test="mustNumber != null" >
+        #{mustNumber,jdbcType=INTEGER},
+      </if>
+      <if test="actualNumber != null" >
+        #{actualNumber,jdbcType=INTEGER},
+      </if>
+      <if test="totalHour != null" >
+        #{totalHour,jdbcType=DECIMAL},
+      </if>
+      <if test="averageHour != null" >
+        #{averageHour,jdbcType=DECIMAL},
+      </if>
+      <if test="averageHourCost != null" >
+        #{averageHourCost,jdbcType=DECIMAL},
+      </if>
+      <if test="percentage != null" >
+        #{percentage,jdbcType=DECIMAL},
+      </if>
+      <if test="exceedNum != null" >
+        #{exceedNum,jdbcType=INTEGER},
+      </if>
+      <if test="averageCourse != null" >
+        #{averageCourse,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeAmount != null" >
+        #{incomeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.simon.basics.model.RosterIncome" >
+    update roster_income
+    <set >
+      <if test="accountId != null" >
+        account_id = #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="courseId != null" >
+        course_id = #{courseId,jdbcType=BIGINT},
+      </if>
+      <if test="incomeSectionNum != null" >
+        income_section_num = #{incomeSectionNum,jdbcType=INTEGER},
+      </if>
+      <if test="incomeType != null" >
+        income_type = #{incomeType,jdbcType=CHAR},
+      </if>
+      <if test="mustNumber != null" >
+        must_number = #{mustNumber,jdbcType=INTEGER},
+      </if>
+      <if test="actualNumber != null" >
+        actual_number = #{actualNumber,jdbcType=INTEGER},
+      </if>
+      <if test="totalHour != null" >
+        total_hour = #{totalHour,jdbcType=DECIMAL},
+      </if>
+      <if test="averageHour != null" >
+        average_hour = #{averageHour,jdbcType=DECIMAL},
+      </if>
+      <if test="averageHourCost != null" >
+        average_hour_cost = #{averageHourCost,jdbcType=DECIMAL},
+      </if>
+      <if test="percentage != null" >
+        percentage = #{percentage,jdbcType=DECIMAL},
+      </if>
+      <if test="exceedNum != null" >
+        exceed_num = #{exceedNum,jdbcType=INTEGER},
+      </if>
+      <if test="averageCourse != null" >
+        average_course = #{averageCourse,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeAmount != null" >
+        income_amount = #{incomeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where income_id = #{incomeId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.simon.basics.model.RosterIncome" >
+    update roster_income
+    set account_id = #{accountId,jdbcType=BIGINT},
+      course_id = #{courseId,jdbcType=BIGINT},
+      income_section_num = #{incomeSectionNum,jdbcType=INTEGER},
+      income_type = #{incomeType,jdbcType=CHAR},
+      must_number = #{mustNumber,jdbcType=INTEGER},
+      actual_number = #{actualNumber,jdbcType=INTEGER},
+      total_hour = #{totalHour,jdbcType=DECIMAL},
+      average_hour = #{averageHour,jdbcType=DECIMAL},
+      average_hour_cost = #{averageHourCost,jdbcType=DECIMAL},
+      percentage = #{percentage,jdbcType=DECIMAL},
+      exceed_num = #{exceedNum,jdbcType=INTEGER},
+      average_course = #{averageCourse,jdbcType=DECIMAL},
+      income_amount = #{incomeAmount,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where income_id = #{incomeId,jdbcType=BIGINT}
+  </update>
+</mapper>

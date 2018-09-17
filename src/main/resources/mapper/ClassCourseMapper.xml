@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.simon.basics.dao.ClassCourseMapper" >
+  <resultMap id="BaseResultMap" type="com.simon.basics.model.ClassCourse" >
+    <id column="course_id" property="courseId" jdbcType="BIGINT" />
+    <result column="seat_id" property="seatId" jdbcType="BIGINT" />
+    <result column="account_id" property="accountId" jdbcType="BIGINT" />
+    <result column="type_id" property="typeId" jdbcType="BIGINT" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="course_cost" property="courseCost" jdbcType="DOUBLE" />
+    <result column="course_start_time" property="courseStartTime" jdbcType="TIMESTAMP" />
+    <result column="course_end_time" property="courseEndTime" jdbcType="TIMESTAMP" />
+    <result column="course_status" property="courseStatus" jdbcType="CHAR" />
+    <result column="deleted" property="deleted" jdbcType="BIT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.simon.basics.model.ClassCourseWithBLOBs" extends="BaseResultMap" >
+    <result column="course_abstract" property="courseAbstract" jdbcType="LONGVARCHAR" />
+    <result column="course_remark" property="courseRemark" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    course_id, seat_id, account_id, type_id, course_name, course_cost, course_start_time, 
+    course_end_time, course_status, deleted, create_time, update_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    course_abstract, course_remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from class_course
+    where course_id = #{courseId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from class_course
+    where course_id = #{courseId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.simon.basics.model.ClassCourseWithBLOBs" >
+    insert into class_course (course_id, seat_id, account_id, 
+      type_id, course_name, course_cost, 
+      course_start_time, course_end_time, course_status, 
+      deleted, create_time, update_time, 
+      course_abstract, course_remark)
+    values (#{courseId,jdbcType=BIGINT}, #{seatId,jdbcType=BIGINT}, #{accountId,jdbcType=BIGINT}, 
+      #{typeId,jdbcType=BIGINT}, #{courseName,jdbcType=VARCHAR}, #{courseCost,jdbcType=DOUBLE}, 
+      #{courseStartTime,jdbcType=TIMESTAMP}, #{courseEndTime,jdbcType=TIMESTAMP}, #{courseStatus,jdbcType=CHAR}, 
+      #{deleted,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{courseAbstract,jdbcType=LONGVARCHAR}, #{courseRemark,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.simon.basics.model.ClassCourseWithBLOBs" >
+    insert into class_course
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="courseId != null" >
+        course_id,
+      </if>
+      <if test="seatId != null" >
+        seat_id,
+      </if>
+      <if test="accountId != null" >
+        account_id,
+      </if>
+      <if test="typeId != null" >
+        type_id,
+      </if>
+      <if test="courseName != null" >
+        course_name,
+      </if>
+      <if test="courseCost != null" >
+        course_cost,
+      </if>
+      <if test="courseStartTime != null" >
+        course_start_time,
+      </if>
+      <if test="courseEndTime != null" >
+        course_end_time,
+      </if>
+      <if test="courseStatus != null" >
+        course_status,
+      </if>
+      <if test="deleted != null" >
+        deleted,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="courseAbstract != null" >
+        course_abstract,
+      </if>
+      <if test="courseRemark != null" >
+        course_remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="courseId != null" >
+        #{courseId,jdbcType=BIGINT},
+      </if>
+      <if test="seatId != null" >
+        #{seatId,jdbcType=BIGINT},
+      </if>
+      <if test="accountId != null" >
+        #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=BIGINT},
+      </if>
+      <if test="courseName != null" >
+        #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="courseCost != null" >
+        #{courseCost,jdbcType=DOUBLE},
+      </if>
+      <if test="courseStartTime != null" >
+        #{courseStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courseEndTime != null" >
+        #{courseEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courseStatus != null" >
+        #{courseStatus,jdbcType=CHAR},
+      </if>
+      <if test="deleted != null" >
+        #{deleted,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courseAbstract != null" >
+        #{courseAbstract,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="courseRemark != null" >
+        #{courseRemark,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.simon.basics.model.ClassCourseWithBLOBs" >
+    update class_course
+    <set >
+      <if test="seatId != null" >
+        seat_id = #{seatId,jdbcType=BIGINT},
+      </if>
+      <if test="accountId != null" >
+        account_id = #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="typeId != null" >
+        type_id = #{typeId,jdbcType=BIGINT},
+      </if>
+      <if test="courseName != null" >
+        course_name = #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="courseCost != null" >
+        course_cost = #{courseCost,jdbcType=DOUBLE},
+      </if>
+      <if test="courseStartTime != null" >
+        course_start_time = #{courseStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courseEndTime != null" >
+        course_end_time = #{courseEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courseStatus != null" >
+        course_status = #{courseStatus,jdbcType=CHAR},
+      </if>
+      <if test="deleted != null" >
+        deleted = #{deleted,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courseAbstract != null" >
+        course_abstract = #{courseAbstract,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="courseRemark != null" >
+        course_remark = #{courseRemark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where course_id = #{courseId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.simon.basics.model.ClassCourseWithBLOBs" >
+    update class_course
+    set seat_id = #{seatId,jdbcType=BIGINT},
+      account_id = #{accountId,jdbcType=BIGINT},
+      type_id = #{typeId,jdbcType=BIGINT},
+      course_name = #{courseName,jdbcType=VARCHAR},
+      course_cost = #{courseCost,jdbcType=DOUBLE},
+      course_start_time = #{courseStartTime,jdbcType=TIMESTAMP},
+      course_end_time = #{courseEndTime,jdbcType=TIMESTAMP},
+      course_status = #{courseStatus,jdbcType=CHAR},
+      deleted = #{deleted,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      course_abstract = #{courseAbstract,jdbcType=LONGVARCHAR},
+      course_remark = #{courseRemark,jdbcType=LONGVARCHAR}
+    where course_id = #{courseId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.simon.basics.model.ClassCourse" >
+    update class_course
+    set seat_id = #{seatId,jdbcType=BIGINT},
+      account_id = #{accountId,jdbcType=BIGINT},
+      type_id = #{typeId,jdbcType=BIGINT},
+      course_name = #{courseName,jdbcType=VARCHAR},
+      course_cost = #{courseCost,jdbcType=DOUBLE},
+      course_start_time = #{courseStartTime,jdbcType=TIMESTAMP},
+      course_end_time = #{courseEndTime,jdbcType=TIMESTAMP},
+      course_status = #{courseStatus,jdbcType=CHAR},
+      deleted = #{deleted,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where course_id = #{courseId,jdbcType=BIGINT}
+  </update>
+</mapper>

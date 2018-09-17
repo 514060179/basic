@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.simon.basics.dao.SeatLayoutMapper" >
+  <resultMap id="BaseResultMap" type="com.simon.basics.model.SeatLayout" >
+    <id column="seat_id" property="seatId" jdbcType="BIGINT" />
+    <result column="seat_left" property="seatLeft" jdbcType="INTEGER" />
+    <result column="seat_mid" property="seatMid" jdbcType="INTEGER" />
+    <result column="seat_right" property="seatRight" jdbcType="INTEGER" />
+    <result column="seat_rows" property="seatRows" jdbcType="INTEGER" />
+    <result column="deleted" property="deleted" jdbcType="BIT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    seat_id, seat_left, seat_mid, seat_right, seat_rows, deleted, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from seat_layout
+    where seat_id = #{seatId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from seat_layout
+    where seat_id = #{seatId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.simon.basics.model.SeatLayout" >
+    insert into seat_layout (seat_id, seat_left, seat_mid, 
+      seat_right, seat_rows, deleted, 
+      create_time, update_time)
+    values (#{seatId,jdbcType=BIGINT}, #{seatLeft,jdbcType=INTEGER}, #{seatMid,jdbcType=INTEGER}, 
+      #{seatRight,jdbcType=INTEGER}, #{seatRows,jdbcType=INTEGER}, #{deleted,jdbcType=BIT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.simon.basics.model.SeatLayout" >
+    insert into seat_layout
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="seatId != null" >
+        seat_id,
+      </if>
+      <if test="seatLeft != null" >
+        seat_left,
+      </if>
+      <if test="seatMid != null" >
+        seat_mid,
+      </if>
+      <if test="seatRight != null" >
+        seat_right,
+      </if>
+      <if test="seatRows != null" >
+        seat_rows,
+      </if>
+      <if test="deleted != null" >
+        deleted,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="seatId != null" >
+        #{seatId,jdbcType=BIGINT},
+      </if>
+      <if test="seatLeft != null" >
+        #{seatLeft,jdbcType=INTEGER},
+      </if>
+      <if test="seatMid != null" >
+        #{seatMid,jdbcType=INTEGER},
+      </if>
+      <if test="seatRight != null" >
+        #{seatRight,jdbcType=INTEGER},
+      </if>
+      <if test="seatRows != null" >
+        #{seatRows,jdbcType=INTEGER},
+      </if>
+      <if test="deleted != null" >
+        #{deleted,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.simon.basics.model.SeatLayout" >
+    update seat_layout
+    <set >
+      <if test="seatLeft != null" >
+        seat_left = #{seatLeft,jdbcType=INTEGER},
+      </if>
+      <if test="seatMid != null" >
+        seat_mid = #{seatMid,jdbcType=INTEGER},
+      </if>
+      <if test="seatRight != null" >
+        seat_right = #{seatRight,jdbcType=INTEGER},
+      </if>
+      <if test="seatRows != null" >
+        seat_rows = #{seatRows,jdbcType=INTEGER},
+      </if>
+      <if test="deleted != null" >
+        deleted = #{deleted,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where seat_id = #{seatId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.simon.basics.model.SeatLayout" >
+    update seat_layout
+    set seat_left = #{seatLeft,jdbcType=INTEGER},
+      seat_mid = #{seatMid,jdbcType=INTEGER},
+      seat_right = #{seatRight,jdbcType=INTEGER},
+      seat_rows = #{seatRows,jdbcType=INTEGER},
+      deleted = #{deleted,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where seat_id = #{seatId,jdbcType=BIGINT}
+  </update>
+</mapper>
