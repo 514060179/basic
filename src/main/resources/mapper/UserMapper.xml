@@ -10,6 +10,7 @@
   <resultMap id="BaseResultMap" type="com.simon.basics.model.User" extends="ParentResultMap">
     <id column="user_id" property="userId" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="parent_name" property="parentName" jdbcType="VARCHAR" />
     <result column="sex" property="sex" jdbcType="CHAR" />
     <result column="age" property="age" jdbcType="INTEGER" />
     <result column="phone" property="phone" jdbcType="VARCHAR" />
@@ -20,7 +21,7 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    a.username,a.password,u.user_id, a.account_id, u.NAME, u.sex, u.age, u.phone, u.card_num, u.address, a.`type`, u.remark, u.create_time,
+    a.username,a.password,u.user_id, a.account_id, u.name,u.parent_name, u.sex, u.age, u.phone, u.card_num, u.address, a.`type`, u.remark, u.create_time,
     u.update_time
   </sql>
   <insert id="insertSelective" parameterType="com.simon.basics.model.User" >

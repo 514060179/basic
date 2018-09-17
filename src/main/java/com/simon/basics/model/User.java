@@ -11,6 +11,8 @@ public class User extends Account {
 
     private String name;
 
+    private String parentName;
+
     private String sex;
 
     private Integer age;
@@ -43,6 +45,14 @@ public class User extends Account {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 
     public String getSex() {
