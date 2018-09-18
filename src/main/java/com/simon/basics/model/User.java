@@ -3,6 +3,7 @@ package com.simon.basics.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -22,6 +23,16 @@ public class User extends Account {
     private String cardNum;
 
     private String address;
+
+    private String teacherChargeType;
+
+    private BigDecimal averageHour;
+
+    private BigDecimal percentage;
+
+    private Integer exceedNum;
+
+    private BigDecimal averageHourCost;
 
     private String remark;
     @JsonIgnore
@@ -93,6 +104,46 @@ public class User extends Account {
 
     public void setAddress(String address) {
         this.address = address == null ? null : address.trim();
+    }
+
+    public String getTeacherChargeType() {
+        return teacherChargeType;
+    }
+
+    public void setTeacherChargeType(String teacherChargeType) {
+        this.teacherChargeType = teacherChargeType;
+    }
+
+    public BigDecimal getAverageHour() {
+        return averageHour;
+    }
+
+    public void setAverageHour(BigDecimal averageHour) {
+        this.averageHour = averageHour;
+    }
+
+    public BigDecimal getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(BigDecimal percentage) {
+        this.percentage = percentage;
+    }
+
+    public Integer getExceedNum() {
+        return exceedNum;
+    }
+
+    public void setExceedNum(Integer exceedNum) {
+        this.exceedNum = exceedNum;
+    }
+
+    public BigDecimal getAverageHourCost() {
+        return averageHourCost;
+    }
+
+    public void setAverageHourCost(BigDecimal averageHourCost) {
+        this.averageHourCost = averageHourCost;
     }
 
     public String getRemark() {

@@ -1,23 +1,39 @@
 package com.simon.basics.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class ClassCourseWithBLOBs extends ClassCourse {
-    private String courseAbstract;
 
-    private String courseRemark;
+    @ApiModelProperty(hidden = true)
+    private CourseType courseType;
 
-    public String getCourseAbstract() {
-        return courseAbstract;
+    @ApiModelProperty(hidden = true)
+    private User user;
+
+    @ApiModelProperty(hidden = true)
+    private SeatLayout seatLayout;
+
+    public CourseType getCourseType() {
+        return courseType;
     }
 
-    public void setCourseAbstract(String courseAbstract) {
-        this.courseAbstract = courseAbstract == null ? null : courseAbstract.trim();
+    public void setCourseType(CourseType courseType) {
+        this.courseType = courseType;
     }
 
-    public String getCourseRemark() {
-        return courseRemark;
+    public User getUser() {
+        return user;
     }
 
-    public void setCourseRemark(String courseRemark) {
-        this.courseRemark = courseRemark == null ? null : courseRemark.trim();
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public SeatLayout getSeatLayout() {
+        return seatLayout;
+    }
+
+    public void setSeatLayout(SeatLayout seatLayout) {
+        this.seatLayout = seatLayout;
     }
 }

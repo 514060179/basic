@@ -6,6 +6,7 @@ import com.simon.basics.model.User;
 import com.simon.basics.service.UserService;
 import com.simon.basics.util.SaltEncryUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -66,11 +67,13 @@ public class UserController {
     }
 
     @GetMapping("/list")
+    @ApiOperation(value = "获取列表")
     public ReturnParam list(){
         return ReturnParam.success(userService.findListByPage(new User(),0,1));
     }
 
     @GetMapping("/register")
+    @ApiOperation(value = "注册（暂不用）")
     public ReturnParam register(){
 
         return ReturnParam.success(userService.findListByPage(new User(),0,1));

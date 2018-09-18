@@ -16,6 +16,12 @@
     <result column="phone" property="phone" jdbcType="VARCHAR" />
     <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="teacher_charge_type" property="teacherChargeType" jdbcType="CHAR" />
+    <result column="average_hour" property="averageHour" jdbcType="DECIMAL" />
+    <result column="percentage" property="percentage" jdbcType="DECIMAL" />
+    <result column="exceed_num" property="exceedNum" jdbcType="INTEGER" />
+    <result column="average_hour_cost" property="averageHourCost" jdbcType="DECIMAL" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
