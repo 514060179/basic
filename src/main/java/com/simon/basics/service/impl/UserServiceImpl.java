@@ -33,4 +33,23 @@ public class UserServiceImpl implements UserService{
     }
 
 
+    @Transactional
+    @Override
+    public int add(User user) {
+        int i = userMapper.insertAccountSelective(user);
+        if (i>0){
+            userMapper.insertSelective(user);
+        }else{
+            throw new RuntimeException("新增用户出错！");
+        }
+        return i;
+    }
+
+    @Override
+    public int update(User user) {
+        userMapper.updateByPrimaryKeySelective(user);
+        return 0;
+    }
+
+
 }

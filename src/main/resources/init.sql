@@ -396,3 +396,6 @@ ALTER TABLE roster_income ADD CONSTRAINT FK_Reference_21 FOREIGN KEY (account_id
   ADD COLUMN `average_hour_cost` DECIMAL(6,2) NULL COMMENT '每【average_hour】时起' AFTER `average_hour`,
   ADD COLUMN `percentage` DECIMAL(3,2) NULL COMMENT '百分点【teacher_charge_type】为1时：超过【exceed_num】人数提成【percentage】。为2时：每节课的提成百分比' AFTER `average_hour`,
   ADD COLUMN `exceed_num` INT NULL COMMENT '超过【exceed_num】人数提成【percentage】' AFTER `percentage`;
+
+ALTER TABLE `simon`.`user`
+ADD COLUMN `parent_name` varchar(50)   DEFAULT NULL COMMENT '家长姓名'  AFTER `name`;

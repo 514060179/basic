@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = ConstraintViolationException.class)
     public ReturnParam constraintViolationExceptionHandler(Exception e) {
         logger.error(">>>> system error： ", e);
-        return ReturnParam.systemError(e.getMessage());
+        return ReturnParam.paramiolationException(e.getMessage());
     }
     @ExceptionHandler(value = Exception.class)
     public ReturnParam exceptionHandler(Exception e) {

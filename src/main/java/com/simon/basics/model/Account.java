@@ -2,19 +2,23 @@ package com.simon.basics.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
 
 public class Account implements Serializable{
+    @ApiModelProperty(value = "账户id",hidden = true)
     private Long accountId;
 
+    @ApiModelProperty(value = "账户用户名",hidden = true)
     private String username;
 
+    @ApiModelProperty(value = "账户密码",hidden = true)
     @JsonIgnore
     private String password;
-
+    @ApiModelProperty(value = "用户类型:1学生2教师")
     private String type;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;

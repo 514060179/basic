@@ -40,7 +40,10 @@
         account_id,
       </if>
       <if test="name != null" >
-        NAME,
+        name,
+      </if>
+      <if test="parentName != null" >
+        parent_name,
       </if>
       <if test="sex != null" >
         sex,
@@ -58,7 +61,7 @@
         address,
       </if>
       <if test="type != null" >
-        TYPE,
+        type,
       </if>
       <if test="remark != null" >
         remark,
@@ -79,6 +82,9 @@
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentName != null" >
+        #{parentName,jdbcType=VARCHAR},
       </if>
       <if test="sex != null" >
         #{sex,jdbcType=CHAR},
@@ -109,12 +115,34 @@
       </if>
     </trim>
   </insert>
+  <insert id="insertAccountSelective" parameterType="com.simon.basics.model.Account" keyProperty="accountId" useGeneratedKeys="true" >
+    insert into account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.simon.basics.model.User" >
     update user
     <set >
-      <if test="accountId != null" >
-        account_id = #{accountId,jdbcType=BIGINT},
-      </if>
       <if test="name != null" >
         NAME = #{name,jdbcType=VARCHAR},
       </if>
@@ -124,8 +152,8 @@
       <if test="age != null" >
         age = #{age,jdbcType=INTEGER},
       </if>
-      <if test="phone != null" >
-        phone = #{phone,jdbcType=VARCHAR},
+      <if test="parentName != null" >
+        parent_name = #{parentName,jdbcType=VARCHAR},
       </if>
       <if test="cardNum != null" >
         card_num = #{cardNum,jdbcType=VARCHAR},
@@ -133,20 +161,29 @@
       <if test="address != null" >
         address = #{address,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
-        TYPE = #{type,jdbcType=CHAR},
-      </if>
+      <!--<if test="type != null" >-->
+        <!--TYPE = #{type,jdbcType=CHAR},-->
+      <!--</if>-->
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+      <if test="teacherChargeType != null" >
+        teacher_charge_type = #{remark,jdbcType=CHAR},
       </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      <if test="averageHour != null" >
+        average_hour = #{remark,jdbcType=DECIMAL},
+      </if>
+      <if test="percentage != null" >
+        percentage = #{remark,jdbcType=DECIMAL},
+      </if>
+      <if test="exceedNum != null" >
+        exceed_num = #{remark,jdbcType=INTEGER},
+      </if>
+      <if test="averageHourCost != null" >
+        average_hour_cost = #{remark,jdbcType=DECIMAL},
       </if>
     </set>
-    where user_id = #{userId,jdbcType=BIGINT}
+    where account_id = #{accountId,jdbcType=BIGINT}
   </update>
   <select id="findByUserName" resultMap="BaseResultMap">
     select
@@ -161,25 +198,28 @@
     from account a LEFT JOIN user u ON u.account_id=a.account_id
     <where>
       <if test="accountId != null" >
-        a.account_id = #{accountId,jdbcType=BIGINT},
+        AND u.account_id = #{accountId,jdbcType=BIGINT}
       </if>
       <if test="name != null" >
-        a.NAME = #{name,jdbcType=VARCHAR},
+        AND u.NAME = #{name,jdbcType=VARCHAR}
       </if>
       <if test="sex != null" >
-        a.sex = #{sex,jdbcType=CHAR},
+        AND u.sex = #{sex,jdbcType=CHAR}
+      </if>
+      <if test="type != null" >
+        AND u.type = #{type,jdbcType=CHAR}
       </if>
       <if test="age != null" >
-        a.age = #{age,jdbcType=INTEGER},
+        AND u.age = #{age,jdbcType=INTEGER}
       </if>
       <if test="phone != null" >
-        a.phone = #{phone,jdbcType=VARCHAR},
+        AND u.phone = #{phone,jdbcType=VARCHAR}
       </if>
       <if test="cardNum != null" >
-        a.card_num = #{cardNum,jdbcType=VARCHAR},
+        AND u.card_num = #{cardNum,jdbcType=VARCHAR}
       </if>
       <if test="address != null" >
-        a.address = #{address,jdbcType=VARCHAR},
+        AND u.address = #{address,jdbcType=VARCHAR}
       </if>
     </where>
   </select>

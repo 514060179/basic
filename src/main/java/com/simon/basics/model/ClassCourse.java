@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ClassCourse {
@@ -14,7 +15,7 @@ public class ClassCourse {
     @ApiModelProperty(value = "座位id")
     private Long seatId;
 
-    @ApiModelProperty(value = "座位id",hidden = true)
+    @ApiModelProperty(value = "账户id")
     private Long accountId;
 
     @ApiModelProperty(value = "课程类型id")
@@ -24,7 +25,7 @@ public class ClassCourse {
     private String courseName;
 
     @ApiModelProperty(value = "课程价格")
-    private Double courseCost;
+    private BigDecimal courseCost;
 
     @ApiModelProperty(value = "开始时间")
     private Date courseStartTime;
@@ -92,11 +93,11 @@ public class ClassCourse {
         this.courseName = courseName == null ? null : courseName.trim();
     }
 
-    public Double getCourseCost() {
+    public BigDecimal getCourseCost() {
         return courseCost;
     }
 
-    public void setCourseCost(Double courseCost) {
+    public void setCourseCost(BigDecimal courseCost) {
         this.courseCost = courseCost;
     }
 

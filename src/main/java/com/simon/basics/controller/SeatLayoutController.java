@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("api/seatLayout")
-@Api(tags = "seatLayout",description = "座位列表")
+@Api(tags = "seatLayout",description = "座位结构列表")
 public class SeatLayoutController {
 
     @Autowired

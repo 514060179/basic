@@ -2,43 +2,48 @@ package com.simon.basics.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
 public class User extends Account {
+    @ApiModelProperty("用户信息id")
     private Long userId;
-
+    @ApiModelProperty("用户名字")
     private String name;
-
+    @ApiModelProperty("学生家长名字")
     private String parentName;
-
+    @ApiModelProperty("用户性别")
     private String sex;
-
+    @ApiModelProperty("用户年龄")
     private Integer age;
-
+    @ApiModelProperty("用户手机号码")
     private String phone;
-
+    @ApiModelProperty("用户身份证号")
     private String cardNum;
-
+    @ApiModelProperty("地址")
     private String address;
-
+    @ApiModelProperty(value = "教师收费类型",hidden = true)
     private String teacherChargeType;
-
+    @ApiModelProperty(value = "按【averageHour】小时收费" ,hidden = true)
     private BigDecimal averageHour;
-
+    @ApiModelProperty(value = "百分点提成" ,hidden = true)
     private BigDecimal percentage;
-
+    @ApiModelProperty(value = "超过【exceedNum】人数提成【percentage】" ,hidden = true)
     private Integer exceedNum;
-
+    @ApiModelProperty(value = "按【averageHour】小时收费【averageHourCost】",hidden = true)
     private BigDecimal averageHourCost;
-
+    @ApiModelProperty(value = "备注",hidden = true)
     private String remark;
     @JsonIgnore
+    @ApiModelProperty(value = "角色集合",hidden = true)
     private Set<String> roleSet;
+    @ApiModelProperty(hidden = true)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
+    @ApiModelProperty(hidden = true)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date updateTime;
 

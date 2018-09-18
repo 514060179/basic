@@ -40,7 +40,7 @@ public class ClassCourseController {
     }
 
     @PostMapping("add")
-    public ReturnParam add(ClassCourse classCourse, @RequestParam Long seatId, @RequestParam Long typeId, @RequestParam Double courseCost, @RequestParam  Date courseStartTime, @RequestParam @Future Date courseEndTime){
+    public ReturnParam add(ClassCourse classCourse, @RequestParam Long accountId,@RequestParam Long seatId, @RequestParam Long typeId, @RequestParam Double courseCost, @RequestParam  Date courseStartTime, @RequestParam @Future Date courseEndTime){
         return ReturnParam.success(classCourseService.add(classCourse));
     }
 

@@ -49,6 +49,9 @@ public class ReturnParam extends CodeParam {
     public static ReturnParam missParam(String msg){
         return new ReturnParam(missParam,msg,null);
     }
+    public static ReturnParam paramiolationException(String msg){
+        return new ReturnParam(paramiolationException,msg,null);
+    }
 
     public static ReturnParam noHandlerFound(String msg){
         return new ReturnParam(noHandlerFound,msg,null);
@@ -60,6 +63,18 @@ public class ReturnParam extends CodeParam {
 
     public static ReturnParam incorrectCredentials(){
         return new ReturnParam(incorrectCredentials,incorrectCredentialsMsg,null);
+    }
+
+    public static ReturnParam userExist(){
+        return new ReturnParam(userExist,userExistMsg,null);
+    }
+
+    public static ReturnParam verifing(){
+        return new ReturnParam(verifing,verifingMsg,null);
+    }
+
+    public static ReturnParam noVerification(){
+        return new ReturnParam(noVerification,noVerificationMsg,null);
     }
 
 

@@ -44,8 +44,6 @@ public class ClassCourseServiceimpl implements ClassCourseService {
 
     @Override
     public int add(ClassCourse classCourse) {
-        User user=(User)SecurityUtils.getSubject().getPrincipal();
-        classCourse.setAccountId(user.getAccountId());
         return classCourseMapper.insertSelective(classCourse);
     }
 }
