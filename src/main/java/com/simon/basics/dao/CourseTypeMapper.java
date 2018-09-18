@@ -1,17 +1,14 @@
 package com.simon.basics.dao;
 
 import com.simon.basics.model.CourseType;
+import com.simon.basics.model.CourseTypeWithBLOBs;
+
+import java.util.List;
 
 public interface CourseTypeMapper {
-    int deleteByPrimaryKey(Long typeId);
 
-    int insert(CourseType record);
+    List<CourseType> findParentListByTypeSeries();
 
-    int insertSelective(CourseType record);
+    List<CourseType> findChildListByTypeSeries(Long typeId);
 
-    CourseType selectByPrimaryKey(Long typeId);
-
-    int updateByPrimaryKeySelective(CourseType record);
-
-    int updateByPrimaryKey(CourseType record);
 }

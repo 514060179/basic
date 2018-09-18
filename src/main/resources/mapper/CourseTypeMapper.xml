@@ -9,98 +9,30 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <resultMap id="UnionResultMap" type="com.simon.basics.model.CourseTypeWithBLOBs" extends="BaseResultMap">
+    <collection property="courseTypeList" ofType="com.simon.basics.model.CourseType" >
+      <id column="child_type_id" property="typeId" jdbcType="BIGINT" />
+      <result column="child_type_name" property="typeName" jdbcType="VARCHAR" />
+    </collection>
+  </resultMap>
   <sql id="Base_Column_List" >
     type_id, type_name, type_series, deleted, create_time, update_time
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <sql id="Union_Column_List" >
+     ct1.type_id, ct1.type_name, ct1.type_series, ct1.deleted, ct1.create_time, ct1.update_time,
+     ct2.type_id AS child_type_id,ct2.type_name AS child_type_name
+  </sql>
+  <select id="findParentListByTypeSeries" resultMap="UnionResultMap">
     select 
+    <include refid="Union_Column_List" />
+    from course_type ct1 LEFT JOIN course_type ct2 ON ct1.type_id=ct2.type_series
+    WHERE ct1.type_series = 0
+  </select>
+  <select id="findChildListByTypeSeries" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
     <include refid="Base_Column_List" />
     from course_type
     where type_id = #{typeId,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from course_type
-    where type_id = #{typeId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.simon.basics.model.CourseType" >
-    insert into course_type (type_id, type_name, type_series, 
-      deleted, create_time, update_time
-      )
-    values (#{typeId,jdbcType=BIGINT}, #{typeName,jdbcType=VARCHAR}, #{typeSeries,jdbcType=BIGINT}, 
-      #{deleted,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.simon.basics.model.CourseType" >
-    insert into course_type
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="typeId != null" >
-        type_id,
-      </if>
-      <if test="typeName != null" >
-        type_name,
-      </if>
-      <if test="typeSeries != null" >
-        type_series,
-      </if>
-      <if test="deleted != null" >
-        deleted,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="updateTime != null" >
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="typeId != null" >
-        #{typeId,jdbcType=BIGINT},
-      </if>
-      <if test="typeName != null" >
-        #{typeName,jdbcType=VARCHAR},
-      </if>
-      <if test="typeSeries != null" >
-        #{typeSeries,jdbcType=BIGINT},
-      </if>
-      <if test="deleted != null" >
-        #{deleted,jdbcType=BIT},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.simon.basics.model.CourseType" >
-    update course_type
-    <set >
-      <if test="typeName != null" >
-        type_name = #{typeName,jdbcType=VARCHAR},
-      </if>
-      <if test="typeSeries != null" >
-        type_series = #{typeSeries,jdbcType=BIGINT},
-      </if>
-      <if test="deleted != null" >
-        deleted = #{deleted,jdbcType=BIT},
-      </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where type_id = #{typeId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.simon.basics.model.CourseType" >
-    update course_type
-    set type_name = #{typeName,jdbcType=VARCHAR},
-      type_series = #{typeSeries,jdbcType=BIGINT},
-      deleted = #{deleted,jdbcType=BIT},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where type_id = #{typeId,jdbcType=BIGINT}
-  </update>
+
 </mapper>

@@ -28,7 +28,6 @@ public class ClassCourseController {
 
     @Autowired
     private ClassCourseService classCourseService;
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("list")
     public ReturnParam list(ClassCourse classCourse, @RequestParam(defaultValue = "1") int pageNum,@RequestParam(defaultValue = "10") int pageSize){
