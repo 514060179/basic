@@ -2,16 +2,11 @@ package com.simon.basics.dao;
 
 import com.simon.basics.model.SeatLayout;
 
+import java.util.List;
+
 public interface SeatLayoutMapper {
-    int deleteByPrimaryKey(Long seatId);
 
-    int insert(SeatLayout record);
 
-    int insertSelective(SeatLayout record);
+    List<SeatLayout> findAllList();
 
-    SeatLayout selectByPrimaryKey(Long seatId);
-
-    int updateByPrimaryKeySelective(SeatLayout record);
-
-    int updateByPrimaryKey(SeatLayout record);
 }
