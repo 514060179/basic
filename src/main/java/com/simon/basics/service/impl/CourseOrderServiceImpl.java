@@ -28,6 +28,6 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         courseOrder.setCourseId(classCourse.getCourseId());
         courseOrder.setOrderNo(new SnowflakeIdWorker().nextId()+"");
         courseOrder.setOrderCost(classCourse.getCourseCost());
-        return courseOrderMapper.updateByPrimaryKey(courseOrder);
+        return courseOrderMapper.insertSelective(courseOrder);
     }
 }
