@@ -1,16 +1,16 @@
 package com.simon.basics.controller;
 
 import com.simon.basics.model.ClassCourse;
+import com.simon.basics.model.CourseOrder;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.service.ClassCourseService;
 import com.simon.basics.service.CourseOrderService;
 import com.simon.basics.util.SnowflakeIdWorker;
 import io.swagger.annotations.Api;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author simon.feng
@@ -19,16 +19,28 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("api/courseOrder")
-@Api(tags = "courseOrder",description = "课程订单")
+@Api(tags = "courseOrder", description = "课程订单")
 public class CourseOrderController {
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private CourseOrderService courseOrderService;
     @Autowired
     private ClassCourseService classCourseService;
+
+    @PostMapping("list")
+    public ReturnParam list(CourseOrder courseOrder, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
+        return ReturnParam.success(courseOrderService.getListByPage(courseOrder,pageNum,pageSize));
+    }
+
     @PostMapping("create")
-    public ReturnParam create(@RequestParam Long courseId){
-        ClassCourse classCourse = classCourseService.findOne(courseId);
+    public ReturnParam create(@RequestParam Long courseId) {
+        ClassCourse classCourse = classCourseService.findOne(courseId,null);
+        CourseOrder courseOrder = courseOrderService.findOneByCourseId(courseId);
+        if (courseOrder!=null){
+            logger.warn("重复下单：");
+            ReturnParam.repeatOrder();
+        }
         return ReturnParam.success(courseOrderService.create(classCourse));
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +45,7 @@ public class GlobalExceptionHandler {
         return ReturnParam.systemError("405 get/post 请求方法错误");
     }
 
-    @ExceptionHandler(value = ConstraintViolationException.class)
+    @ExceptionHandler(value = {ConstraintViolationException.class,MethodArgumentTypeMismatchException.class})
     public ReturnParam constraintViolationExceptionHandler(Exception e) {
         logger.error(">>>> system error： ", e);
         return ReturnParam.paramiolationException(e.getMessage());

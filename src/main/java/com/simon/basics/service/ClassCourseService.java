@@ -1,7 +1,6 @@
 package com.simon.basics.service;
 
-import com.simon.basics.model.ClassCourse;
-import com.simon.basics.model.ClassCourseWithBLOBs;
+import com.simon.basics.model.*;
 
 import java.util.List;
 
@@ -13,22 +12,25 @@ public interface ClassCourseService {
 
     /**
      * 详情
+     *
      * @param courseId
      * @return
      */
-    ClassCourse findOne(Long courseId);
+    ClassCourse findOne(Long courseId, Long accountId);
 
     /**
      * 列表
+     *
      * @param classCourse
      * @param pageNum
      * @param pageSize
      * @return
      */
-    List<ClassCourseWithBLOBs> findListByPage(ClassCourse classCourse,int pageNum,int pageSize);
+    List<ClassCourseWithBLOBs> findListByPage(ClassCourse classCourse, int pageNum, int pageSize);
 
     /**
      * 更新
+     *
      * @param classCourse
      * @return
      */
@@ -36,6 +38,7 @@ public interface ClassCourseService {
 
     /**
      * 删除
+     *
      * @param courseId
      * @return
      */
@@ -43,8 +46,44 @@ public interface ClassCourseService {
 
     /**
      * 新增
+     *
      * @param classCourse
      * @return
      */
     int add(ClassCourse classCourse);
+
+    /**
+     * 开始上课
+     *
+     * @param classCourse
+     * @return
+     */
+    ClassCourse courseStart(ClassCourse classCourse);
+
+
+    /**
+     * 获取考勤名单
+     *
+     * @param courseId
+     * @param courseCurrent
+     * @return
+     */
+    List<CourseRosterAttendance> getAttendanceList(Long courseId, int courseCurrent);
+
+
+    /**
+     * 获取X课时出席名单
+     *
+     * @param courseId
+     * @param courseCurrent
+     * @return
+     */
+    RosterAttendance findRosterAttendance(Long courseId, int courseCurrent);
+
+    /**
+     * 结束课程
+     *
+     * @param classCourse
+     */
+    void courseEnd(ClassCourse classCourse, User user, int actualNumber, int mustNumber, Long costTime);
 }

@@ -1,25 +1,28 @@
 package com.simon.basics.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class CourseOrder {
+    @ApiModelProperty(value = "课程订单id")
     private Long orderId;
-
+    @ApiModelProperty(value = "订单编号")
     private String orderNo;
-
+    @ApiModelProperty(value = "课程id")
     private Long courseId;
-
+    @ApiModelProperty(value = "用户（老师）id")
     private Long accountId;
-
+    @ApiModelProperty(value = "订单状态")
     private String orderStatus;
-
+    @ApiModelProperty(value = "支付金额")
     private BigDecimal orderCost;
-
+    @ApiModelProperty(value = "支付状态",hidden = true)
     private String orderPayStatus;
-
+    @ApiModelProperty(value = "创建时间",hidden = true)
     private Date createTime;
-
+    @ApiModelProperty(value = "更新时间",hidden = true)
     private Date updateTime;
 
     public Long getOrderId() {

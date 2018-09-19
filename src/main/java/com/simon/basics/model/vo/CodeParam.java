@@ -10,6 +10,18 @@ public class CodeParam {
 
     public final static String successMsg = "操作成功！";
 
+    public final static String courseEnding = "201";
+
+    public final static String courseEndingMsg = "课程已结束！";
+
+    public final static String lastCourseNoEnding = "202";
+
+    public final static String lastCourseNoEndingMsg = "上节课程未结束！";
+
+    public final static String repeatOrder = "203";
+
+    public final static String repeatOrderMsg = "重复创建订单！";
+
     public final static String missParam = "300";
 
     public final static String missParamMsg = "缺少参数！";

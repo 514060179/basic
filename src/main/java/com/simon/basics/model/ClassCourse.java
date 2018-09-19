@@ -36,6 +36,12 @@ public class ClassCourse {
     @ApiModelProperty(hidden = true)
     private String courseStatus;
 
+    @ApiModelProperty(value = "当前课时")
+    private Integer courseCurrent;
+
+    @ApiModelProperty(value = "总课时")
+    private Integer courseTotal;
+
     @ApiModelProperty(hidden = true)
     private Boolean deleted;
 
@@ -123,6 +129,22 @@ public class ClassCourse {
 
     public void setCourseStatus(String courseStatus) {
         this.courseStatus = courseStatus == null ? null : courseStatus.trim();
+    }
+
+    public Integer getCourseCurrent() {
+        return courseCurrent;
+    }
+
+    public void setCourseCurrent(Integer courseCurrent) {
+        this.courseCurrent = courseCurrent;
+    }
+
+    public Integer getCourseTotal() {
+        return courseTotal;
+    }
+
+    public void setCourseTotal(Integer courseTotal) {
+        this.courseTotal = courseTotal;
     }
 
     public Boolean getDeleted() {

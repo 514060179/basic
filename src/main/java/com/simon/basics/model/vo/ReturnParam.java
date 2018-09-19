@@ -34,6 +34,16 @@ public class ReturnParam extends CodeParam {
         return new ReturnParam(success,msg,null);
     }
 
+    public static ReturnParam courseEnding(){
+        return new ReturnParam(courseEnding,courseEndingMsg,null);
+    }
+    public static ReturnParam lastCourseNoEnding(){
+        return new ReturnParam(lastCourseNoEnding,lastCourseNoEndingMsg,null);
+    }
+    public static ReturnParam repeatOrder(){
+        return new ReturnParam(repeatOrder,repeatOrderMsg,null);
+    }
+
     public static ReturnParam success(Object data){
         return new ReturnParam(success,"成功",data);
     }

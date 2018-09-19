@@ -41,7 +41,7 @@ public class LoginController {
     @Autowired
     private JedisService jedisService;
     @PostMapping("/toLogin")
-    public ReturnParam login(@RequestParam String userName, @RequestParam String password, @RequestParam(required = false)@Email String email, @RequestParam(required = false)@Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$",message = "手机号码格式有误！") String phone, @RequestParam(required = false)@Max(value = 60,message = "得分必须小于60")int socre){
+    public ReturnParam login(@RequestParam String userName, @RequestParam String password){
 
         // 获取主体
         Subject subject = SecurityUtils.getSubject();

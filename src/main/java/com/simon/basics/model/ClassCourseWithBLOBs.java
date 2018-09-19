@@ -13,6 +13,17 @@ public class ClassCourseWithBLOBs extends ClassCourse {
     @ApiModelProperty(hidden = true)
     private SeatLayout seatLayout;
 
+    @ApiModelProperty(hidden = true)
+    private Boolean bought;
+
+    public Boolean getBought() {
+        return bought;
+    }
+
+    public void setBought(Boolean bought) {
+        this.bought = bought;
+    }
+
     public CourseType getCourseType() {
         return courseType;
     }

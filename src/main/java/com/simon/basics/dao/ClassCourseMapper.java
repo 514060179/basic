@@ -2,6 +2,7 @@ package com.simon.basics.dao;
 
 import com.simon.basics.model.ClassCourse;
 import com.simon.basics.model.ClassCourseWithBLOBs;
+import com.simon.basics.model.CourseRosterAttendance;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,15 +14,17 @@ public interface ClassCourseMapper {
 
     int insertSelective(ClassCourse classCourse);
 
-    ClassCourseWithBLOBs selectByPrimaryKey(Long courseId);
+    ClassCourseWithBLOBs selectByPrimaryKey(@Param("courseId") Long courseId, @Param("accountId") Long accountId);
 
     List<ClassCourseWithBLOBs> findListByCondition(ClassCourse classCourse);
 
-    int updateByPrimaryKeySelective(ClassCourse record);
+    int updateByPrimaryKeyAndAccountIdSelective(ClassCourse record);
 
     int updateByPrimaryKeyWithBLOBs(ClassCourseWithBLOBs record);
 
     int updateByPrimaryKey(ClassCourse record);
 
-    int updateStatus(@Param("courseId") Long courseId, @Param("deleted")Boolean deleted);
+    int updateStatus(@Param("courseId") Long courseId, @Param("deleted") Boolean deleted);
+
+    List<CourseRosterAttendance> getAttendanceList(@Param("courseId") Long courseId, @Param("courseCurrent") int courseCurrent);
 }

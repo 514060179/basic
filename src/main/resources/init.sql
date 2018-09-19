@@ -399,3 +399,60 @@ ALTER TABLE roster_income ADD CONSTRAINT FK_Reference_21 FOREIGN KEY (account_id
 
 ALTER TABLE `simon`.`user`
 ADD COLUMN `parent_name` varchar(50)   DEFAULT NULL COMMENT '家长姓名'  AFTER `name`;
+
+
+ALTER TABLE `simon`.`class_course`
+  ADD COLUMN `course_current` INT DEFAULT 0 NOT NULL COMMENT '当前课时' AFTER `course_status`,
+  ADD COLUMN `course_total` INT NOT NULL COMMENT '总课时' AFTER `course_current`;
+
+
+ALTER TABLE `simon`.`course_roster`
+  DROP COLUMN `seat_id`,
+  DROP INDEX `FK_Reference_7`,
+  DROP INDEX `roster_keys`,
+  ADD  UNIQUE INDEX `roster_keys` (`course_id`),
+  DROP FOREIGN KEY `FK_Reference_7`;
+
+
+ALTER TABLE `simon`.`course_roster`
+  DROP COLUMN `course_id`,
+  ADD COLUMN `course_id` BIGINT(20) NOT NULL COMMENT '课程id' AFTER `roster_id`,
+  DROP INDEX `roster_keys`,
+  DROP FOREIGN KEY `FK_Reference_5`;
+
+ALTER TABLE course_roster ADD CONSTRAINT FK_Reference_5 FOREIGN KEY (course_id)
+      REFERENCES class_course (course_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+ALTER TABLE `simon`.`user`
+  ADD COLUMN `school_name` VARCHAR(50) NULL COMMENT '学校' AFTER `name`,
+  ADD COLUMN `grade_name` VARCHAR(50) NULL COMMENT '年级' AFTER `school_name`;
+
+ALTER TABLE `simon`.`roster_attendance`
+  ADD COLUMN `end_time` DATETIME NULL COMMENT '下课时间/结束时间' AFTER `attend_remark`;
+
+ALTER TABLE `simon`.`roster_attendance`
+  CHANGE `attendance_id` `attendance_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键';
+
+ALTER TABLE `simon`.`roster_attendance`
+  CHANGE `attend_name` `attend_name` VARCHAR(100) CHARSET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT '考勤名称';
+
+ALTER TABLE `simon`.`roster_attendance`
+  ADD COLUMN `attend_type` ENUM('1','2') NOT NULL COMMENT '签到类型1学生2老师' AFTER `account_id`;
+ALTER TABLE `simon`.`account`
+  CHANGE `type` `type` ENUM('-1','0','1','2') CHARSET utf8mb4 COLLATE utf8mb4_bin DEFAULT '0' NOT NULL COMMENT '类型（-1超级管理员0管理员1学生2教师）';
+ALTER TABLE `simon`.`class_course`
+  CHANGE `course_status` `course_status` ENUM('-1','0','1','2','3') CHARSET utf8mb4 COLLATE utf8mb4_bin DEFAULT '0' NOT NULL COMMENT '状态（-1取消0新建未发布1已发布2进行中3结束）';
+ALTER TABLE `simon`.`course_order`
+  CHANGE `order_status` `order_status` ENUM('0','1','2') CHARSET utf8mb4 COLLATE utf8mb4_bin DEFAULT '0' NOT NULL COMMENT '状态(0未支付1成功2部分退款)';
+ALTER TABLE `simon`.`roster_income`
+  CHANGE `income_type` `income_type` ENUM('1','2') CHARSET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '收入类型（1按时收入2按分成）';
+ALTER TABLE `simon`.`user`
+  CHANGE `type` `type` ENUM('1','2') CHARSET utf8mb4 COLLATE utf8mb4_bin DEFAULT '1' NOT NULL COMMENT '类型(1学生2老师)',
+  CHANGE `teacher_charge_type` `teacher_charge_type` ENUM('1','2') CHARSET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT '老师收费类型(1按时2按提成)';
+
+
+
+ALTER TABLE `simon`.`roster_attendance`
+  DROP INDEX `attendance_keys`,
+  ADD  INDEX `FK_Reference_8` (`course_id`);

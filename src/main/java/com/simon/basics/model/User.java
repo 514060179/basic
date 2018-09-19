@@ -13,6 +13,10 @@ public class User extends Account {
     private Long userId;
     @ApiModelProperty("用户名字")
     private String name;
+    @ApiModelProperty("学校")
+    private String schoolName;
+    @ApiModelProperty("年级")
+    private String gradeName;
     @ApiModelProperty("学生家长名字")
     private String parentName;
     @ApiModelProperty("用户性别")

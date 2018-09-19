@@ -3,7 +3,7 @@ package com.simon.basics.model;
 import java.util.Date;
 
 public class RosterAttendance {
-    private Integer attendanceId;
+    private Long attendanceId;
 
     private Long courseId;
 
@@ -15,15 +15,19 @@ public class RosterAttendance {
 
     private String attendRemark;
 
+    private String attendanceType;
+
+    private Date endTime;
+
     private Date createTime;
 
     private Date updateTime;
 
-    public Integer getAttendanceId() {
+    public Long getAttendanceId() {
         return attendanceId;
     }
 
-    public void setAttendanceId(Integer attendanceId) {
+    public void setAttendanceId(Long attendanceId) {
         this.attendanceId = attendanceId;
     }
 
@@ -81,5 +85,22 @@ public class RosterAttendance {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public Object getEndTime() {
+        return endTime;
+
+    }
+
+    public String getAttendanceType() {
+        return attendanceType;
+    }
+
+    public void setAttendanceType(String attendanceType) {
+        this.attendanceType = attendanceType;
     }
 }

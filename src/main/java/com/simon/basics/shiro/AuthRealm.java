@@ -39,13 +39,12 @@ public class AuthRealm extends AuthorizingRealm {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String userName = token.getUsername();
         User user = userService.findByUserName(userName);
-        //获取用户权限信息
-        List<String> urlList = roleAndJnService.findRoleListByAccountId(user.getAccountId());
-        user.setRoleSet(new HashSet<>(urlList));
         //验证密码
         //放入shiro.调用CredentialsMatcher检验密码
         if (user!=null){
-//            AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(userName, user.getPassword().toCharArray(), ByteSource.Util.bytes(userName),this.getName());
+            //获取用户权限信息
+            List<String> urlList = roleAndJnService.findRoleListByAccountId(user.getAccountId());
+            user.setRoleSet(new HashSet<>(urlList));
             return new SimpleAuthenticationInfo(user, user.getPassword(),
                     this.getClass().getName());
 //            this.setSession("currentUser",user);

@@ -4,6 +4,7 @@ import com.simon.basics.componet.service.JedisService;
 import com.simon.basics.model.User;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.service.UserService;
+import com.simon.basics.util.SaltEncryUtil;
 import com.simon.basics.util.UtilToString;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -81,6 +82,7 @@ public class UserController {
             logger.warn("新增用户{}已存在", user.getName());
             ReturnParam.userExist();
         }
+        user.setPassword(SaltEncryUtil.getMD5SaltString(username,password));
         return ReturnParam.success(userService.add(user));
     }
 
