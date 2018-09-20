@@ -468,3 +468,7 @@ ALTER TABLE `simon`.`user`
 
 ALTER TABLE `simon`.`roster_attendance`
   CHANGE `attend_type` `attend_type` ENUM('1','2','3') CHARSET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '签到类型1学生2老师3串课';
+
+
+ALTER TABLE `simon`.`roster_attendance`
+  ADD  UNIQUE INDEX `unique_key` (`course_id`, `account_id`, `attend_section_num`);

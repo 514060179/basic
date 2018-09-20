@@ -38,6 +38,14 @@ public class CodeParam {
 
     public final static String paramiolationExceptionMsg = "参数异常！";
 
+    public final static String illegalKeyIdException = "302";
+
+    public final static String illegalKeyIdExceptionMsg = "xxx_id非法来源或类型【enum】有误！";
+
+    public final static String sqlWritePrerequisiteException = "303";
+
+    public final static String sqlWritePrerequisiteExceptionMsg = "条件不足，更新失败！";
+
     public final static String noHandlerFound = "404";
 
     public final static String noHandlerFoundMsg = "找不到资源/请求路径有误";

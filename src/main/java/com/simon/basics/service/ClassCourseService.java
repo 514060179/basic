@@ -106,7 +106,7 @@ public interface ClassCourseService {
      * 串课
      * @param accountId
      * @param courseId
-     * @param courseCurrent
+     * @param rosterId
      */
-    void additional(Long accountId, Long courseId, int courseCurrent, CourseRoster courseRoster);
+    void additional(Long accountId, Long courseId, int courseCurrent, Long rosterId);
 }

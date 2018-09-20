@@ -67,7 +67,7 @@ public class UserController {
                                         @RequestParam String phone, @RequestParam(defaultValue = "1") String type,@RequestParam String name,
                                         @RequestParam Integer age, @RequestParam String username, @RequestParam String password,
                                         @RequestParam String verification,
-                                        @Pattern(regexp="^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$")@RequestParam String cardNum) {
+                                        @Pattern(regexp="^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$",message = "身份证号码格式有误！")@RequestParam String cardNum) {
         //验证码验证
         String code = jedisService.getString(phone);
         if (StringUtils.isEmpty(code)) {

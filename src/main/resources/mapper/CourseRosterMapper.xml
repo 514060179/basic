@@ -18,7 +18,7 @@
     roster_seat_x, roster_seat_y, create_time, update_time
   </sql>
   <sql id="Union_Column_List" >
-    cr.roster_id, cr.course_id, cr.seat_id, cr.account_id, cr.roster_name, cr.roster_course_count_rest,
+    cr.roster_id, cr.course_id, cc.seat_id, cr.account_id, cr.roster_name, cr.roster_course_count_rest,
     cr.roster_seat_x, cr.roster_seat_y, cr.create_time, cr.update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -160,7 +160,7 @@
         roster_name = #{rosterName,jdbcType=VARCHAR},
       </if>
       <if test="rosterCourseCountRest != null" >
-        roster_course_count_rest = #{rosterCourseCountRest,jdbcType=INTEGER},
+        roster_course_count_rest = roster_course_count_rest-1,
       </if>
       <if test="rosterSeatX != null" >
         roster_seat_x = #{rosterSeatX,jdbcType=INTEGER},
@@ -176,6 +176,9 @@
       </if>
     </set>
     where roster_id = #{rosterId,jdbcType=BIGINT}
+    <if test="rosterCourseCountRest != null" >
+      and roster_course_count_rest >0
+    </if>
   </update>
 
   <update id="updateByAccountAndCourseSelective" parameterType="com.simon.basics.model.CourseRoster" >

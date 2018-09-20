@@ -45,6 +45,10 @@ public class ClassCourseServiceimpl implements ClassCourseService {
     @Override
     public List<ClassCourseWithBLOBs> findListByPage(ClassCourse classCourse, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        if (EnumCode.UserType.TYPE_STUDENT.getValue().equals(user.getType())){
+            classCourse.setAccountId(user.getAccountId());
+        }
         return classCourseMapper.findListByCondition(classCourse);
     }
 
@@ -96,6 +100,8 @@ public class ClassCourseServiceimpl implements ClassCourseService {
 
     @Override
     public List<CourseRosterAttendance> getAttendanceList(Long courseId, int courseCurrent) {
+        //获取串课名单
+        123
         return classCourseMapper.getAttendanceList(courseId, courseCurrent);
     }
 
@@ -143,9 +149,16 @@ public class ClassCourseServiceimpl implements ClassCourseService {
             rosterIncomeInsert.setIncomeAmount(user.getPercentage().multiply(averageCourse).setScale(2, BigDecimal.ROUND_HALF_UP));//收入金额
         }
         //更新
-        rosterAttendanceMapper.updateByCourseAndNum(rosterAttendanceUpdate);
+        int i = rosterAttendanceMapper.updateByCourseAndNum(rosterAttendanceUpdate);
+        if (i>0){
+            int j = rosterIncomeMapper.insertSelective(rosterIncomeInsert);
+            if (j<1){
+                throw new SqlWritePrerequisiteException("插入教师收入表条数未:"+i+JSONUtil.objectToJson(rosterIncomeInsert));
+            }
+        }else{
+            throw new SqlWritePrerequisiteException("更新课程出勤表条数未:"+i+JSONUtil.objectToJson(rosterAttendanceUpdate));
+        }
         //插入
-        rosterIncomeMapper.updateByPrimaryKeySelective(rosterIncomeInsert);
     }
 
     @Transactional
@@ -176,8 +189,9 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         return courseRosterMapper.selectByCourseType(accountId, type);
     }
 
+    @Transactional
     @Override
-    public void additional(Long accountId, Long courseId, int courseCurrent, CourseRoster courseRoster) {
+    public void additional(Long accountId, Long courseId, int courseCurrent, Long rosterId) {
         //1签到记录
         RosterAttendance rosterAttendanceInsert = new RosterAttendance();
         rosterAttendanceInsert.setCourseId(courseId);
@@ -186,6 +200,12 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         rosterAttendanceInsert.setAttendSectionNum(courseCurrent);
         rosterAttendanceMapper.insertSelective(rosterAttendanceInsert);
         //2学生课程课时减1
-
+        CourseRoster courseRosterUpdate = new CourseRoster();
+        courseRosterUpdate.setRosterId(rosterId);
+        courseRosterUpdate.setRosterCourseCountRest(1);
+        int i = courseRosterMapper.updateByPrimaryKeySelective(courseRosterUpdate);
+        if (i<1){
+            throw new SqlWritePrerequisiteException("update fail：" + JSONUtil.objectToJson(courseRosterUpdate) + "update success:" + i);
+        }
     }
 }

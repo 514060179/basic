@@ -16,7 +16,7 @@ public interface CourseRosterMapper {
 
     List<CourseRoster> findOneByConditon(CourseRoster courseRoster);
 
-    CourseRoster selectByCourseType(@Param("accountId") Long accountId, @Param("type") Long type);
+    CourseRoster selectByCourseType(@Param("accountId") Long accountId, @Param("typeId") Long typeId);
 
     int updateByPrimaryKeySelective(CourseRoster record);
 

@@ -1,8 +1,10 @@
 package com.simon.basics.componet;
 
+import com.simon.basics.componet.exception.SqlWritePrerequisiteException;
 import com.simon.basics.model.vo.ReturnParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -57,6 +59,18 @@ public class GlobalExceptionHandler {
         logger.error(">>>> system error： ", e);
         return ReturnParam.repeatResource("系统异常！");
     }
+
+    @ExceptionHandler(value = DataIntegrityViolationException.class)
+    public ReturnParam dataIntegrityViolationExceptionHandler(Exception e) {
+        logger.error(">>>> system error： ", e);
+        return ReturnParam.illegalKeyIdException();
+    }
+    @ExceptionHandler(value = SqlWritePrerequisiteException.class)
+    public ReturnParam sqlWritePrerequisiteExceptionnHandler(Exception e) {
+        logger.error(">>>> system error： ", e);
+        return ReturnParam.sqlWritePrerequisiteException();
+    }
+
     @ExceptionHandler(value = Exception.class)
     public ReturnParam exceptionHandler(Exception e) {
         logger.error(">>>> system error： ", e);

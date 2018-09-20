@@ -26,7 +26,7 @@
     select
     <include refid="Base_Column_List" />
     from roster_attendance
-    where course_id = #{courseId,jdbcType=INTEGER} and attend_section_num=#{courseCurrent,jdbcType=INTEGER}
+    where course_id = #{courseId,jdbcType=INTEGER} and attend_section_num=#{courseCurrent,jdbcType=INTEGER} and attend_type = '2'
   </select>
   <insert id="insertSelective" parameterType="com.simon.basics.model.RosterAttendance" >
     insert into roster_attendance
@@ -133,6 +133,9 @@
       </if>
       <if test="attendRemark != null" >
         attend_remark = #{attendRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="ebdTime != null" >
+        end_time = #{ebdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},

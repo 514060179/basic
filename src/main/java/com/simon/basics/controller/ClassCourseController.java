@@ -1,5 +1,6 @@
 package com.simon.basics.controller;
 
+import com.github.pagehelper.PageHelper;
 import com.simon.basics.model.*;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.service.ClassCourseService;
@@ -39,7 +40,12 @@ public class ClassCourseController {
     @PostMapping("detail")
     @ApiOperation("课程详情")
     public ReturnParam detail(@RequestParam Long courseId) {
-        return ReturnParam.success(classCourseService.findOne(courseId, null));
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Long accountId = null;
+        if (EnumCode.UserType.TYPE_STUDENT.getValue().equals(user.getType())) {
+            accountId = user.getAccountId();
+        }
+        return ReturnParam.success(classCourseService.findOne(courseId, accountId));
     }
 
     @PostMapping("add")
@@ -64,8 +70,8 @@ public class ClassCourseController {
             logger.warn("找不到资源：courseId=" + courseId);
             return ReturnParam.noHandlerFound("找不到资源：courseId=" + courseId);
         }
-        //获取上节课
-        RosterAttendance rosterAttendance = classCourseService.findRosterAttendance(courseId, classCourse.getCourseCurrent() - 1);
+        //获取上节课是否结束
+        RosterAttendance rosterAttendance = classCourseService.findRosterAttendance(courseId, classCourse.getCourseCurrent());
         if (rosterAttendance != null && Objects.isNull(rosterAttendance.getEndTime())) {
             logger.warn("上节课程未结束，结束上节课程才课开始上课" + courseId + classCourse.getCourseCurrent());
             return ReturnParam.lastCourseNoEnding();
@@ -98,18 +104,17 @@ public class ClassCourseController {
     @PostMapping("additional")
     @ApiOperation("老师添加串课名单")
     public ReturnParam additional(@RequestParam Long courseId, @RequestParam Long accountId, @RequestParam int courseCurrent) {
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
         //查询是否有资格
-        ClassCourse classCourse = classCourseService.findOne(courseId, user.getAccountId());
+        ClassCourse classCourse = classCourseService.findOne(courseId,null);
         Long type = classCourse.getTypeId();
-        CourseRoster courseRoster = classCourseService.findCourseRoster(accountId,type);
-        if (!Objects.isNull(courseRoster)){
+        CourseRoster courseRoster = classCourseService.findCourseRoster(accountId, type);
+        if (!Objects.isNull(courseRoster)) {
             int rest = courseRoster.getRosterCourseCountRest();
-            if (rest<1){
+            if (rest < 1) {
                 return ReturnParam.courseNotEnoughOrNotHad();
             }
-            classCourseService.additional(accountId,courseId,courseCurrent,courseRoster);
-        }else {
+            classCourseService.additional(accountId, courseId, courseCurrent, courseRoster.getRosterId());
+        } else {
             logger.warn("串课失败！没有购买该类型课程或课程剩余不足！");
             return ReturnParam.courseNotEnoughOrNotHad();
         }
