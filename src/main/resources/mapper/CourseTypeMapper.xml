@@ -32,7 +32,7 @@
     select
     <include refid="Base_Column_List" />
     from course_type
-    where type_id = #{typeId,jdbcType=BIGINT}
+    where type_series = #{typeId,jdbcType=BIGINT}
   </select>
 
 </mapper>
