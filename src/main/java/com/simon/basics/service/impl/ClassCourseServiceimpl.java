@@ -1,11 +1,15 @@
 package com.simon.basics.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.simon.basics.componet.exception.SqlWriteException;
+import com.simon.basics.componet.exception.SqlWritePrerequisiteException;
 import com.simon.basics.dao.ClassCourseMapper;
+import com.simon.basics.dao.CourseRosterMapper;
 import com.simon.basics.dao.RosterAttendanceMapper;
 import com.simon.basics.dao.RosterIncomeMapper;
 import com.simon.basics.model.*;
 import com.simon.basics.service.ClassCourseService;
+import com.simon.basics.util.JSONUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +30,8 @@ public class ClassCourseServiceimpl implements ClassCourseService {
 
     @Autowired
     private ClassCourseMapper classCourseMapper;
+    @Autowired
+    private CourseRosterMapper courseRosterMapper;
     @Autowired
     private RosterAttendanceMapper rosterAttendanceMapper;
     @Autowired
@@ -76,12 +82,12 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         int i = classCourseMapper.updateByPrimaryKeyAndAccountIdSelective(update);
         if (i > 0) {
             //新增签到
-            RosterAttendance rosterAttendanceUpdate = new RosterAttendance();
-            rosterAttendanceUpdate.setAccountId(user.getAccountId());
-            rosterAttendanceUpdate.setAttendSectionNum(classCourse.getCourseTotal() + 1);
-            rosterAttendanceUpdate.setCourseId(classCourse.getCourseId());
-            rosterAttendanceUpdate.setAttendanceType("");
-            rosterAttendanceMapper.insertSelective(rosterAttendanceUpdate);
+            RosterAttendance rosterAttendanceInsert = new RosterAttendance();
+            rosterAttendanceInsert.setAccountId(user.getAccountId());
+            rosterAttendanceInsert.setAttendSectionNum(classCourse.getCourseCurrent() + 1);
+            rosterAttendanceInsert.setCourseId(classCourse.getCourseId());
+            rosterAttendanceInsert.setAttendType(EnumCode.AttendType.ATTEND_TYPE_TEACHER.getValue());
+            rosterAttendanceMapper.insertSelective(rosterAttendanceInsert);
             classCourse.setCourseCurrent(classCourse.getCourseTotal() + 1);
             return classCourse;
         }
@@ -117,18 +123,22 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         rosterIncomeInsert.setMustNumber(mustNumber);//应到人数
         rosterIncomeInsert.setCourseId(classCourse.getCourseId());
         rosterIncomeInsert.setIncomeSectionNum(classCourse.getCourseCurrent());//章节数
-        BigDecimal averageCourse = classCourse.getCourseCost().divide(new BigDecimal(classCourse.getCourseTotal()),2, BigDecimal.ROUND_CEILING);
+        BigDecimal averageCourse = classCourse.getCourseCost().divide(new BigDecimal(classCourse.getCourseTotal()), 2, BigDecimal.ROUND_CEILING);
         rosterIncomeInsert.setAverageCourse(averageCourse);//每节收费
         rosterIncomeInsert.setPercentage(user.getPercentage());//提成百分比
         String teacherChargeType = user.getTeacherChargeType();
         rosterIncomeInsert.setIncomeType(teacherChargeType);//收费类型
         if (EnumCode.TeacherChargeType.CHARGE_TYPE_TIME.getValue().equals(teacherChargeType)) {//按时
             BigDecimal averageHour = user.getAverageHour();
-            int unit = new BigDecimal(costTime).divide(averageHour.multiply(new BigDecimal(1000*60*60))).intValue();//花费总单位时间
+            int unit = new BigDecimal(costTime).divide(averageHour.multiply(new BigDecimal(1000 * 60 * 60))).intValue();//花费总单位时间
             rosterIncomeInsert.setAverageHour(averageHour);//平均X小时起收费。收费单位
-            rosterIncomeInsert.setAverageHourCost(user.getAverageHourCost().multiply(new BigDecimal(unit)).setScale(2, BigDecimal.ROUND_HALF_UP));//每个收费单位收取费用
+            BigDecimal averageHourCost = user.getAverageHourCost().multiply(new BigDecimal(unit)).setScale(2, BigDecimal.ROUND_HALF_UP);//基本收入
+            if (actualNumber > user.getExceedNum()) {//提成
+                averageHourCost = averageHourCost.add(user.getPercentage());
+            }
+            rosterIncomeInsert.setAverageHourCost(user.getAverageHourCost());//每个收费单位收取费用
             rosterIncomeInsert.setExceedNum(user.getExceedNum());//超过人数提成
-            rosterIncomeInsert.setIncomeAmount(new BigDecimal(1000));//收入金额
+            rosterIncomeInsert.setIncomeAmount(averageHourCost);//收入金额
         } else if (EnumCode.TeacherChargeType.CHARGE_TYPE_PERCENTAGE.getValue().equals(teacherChargeType)) {//按提成
             rosterIncomeInsert.setIncomeAmount(user.getPercentage().multiply(averageCourse).setScale(2, BigDecimal.ROUND_HALF_UP));//收入金额
         }
@@ -136,5 +146,46 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         rosterAttendanceMapper.updateByCourseAndNum(rosterAttendanceUpdate);
         //插入
         rosterIncomeMapper.updateByPrimaryKeySelective(rosterIncomeInsert);
+    }
+
+    @Transactional
+    @Override
+    public void sign(Long courseId, int courseCurrent) {
+        //签到
+        //减少学生课堂数
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        RosterAttendance rosterAttendanceInsert = new RosterAttendance();
+        rosterAttendanceInsert.setCourseId(courseId);
+        rosterAttendanceInsert.setAttendSectionNum(courseCurrent);
+        rosterAttendanceInsert.setAccountId(user.getAccountId());
+        rosterAttendanceInsert.setAttendType(EnumCode.AttendType.ATTEND_TYPE_STUDENT.getValue());
+        rosterAttendanceMapper.insertSelective(rosterAttendanceInsert);
+
+        CourseRoster courseRosterUpdate = new CourseRoster();
+        courseRosterUpdate.setCourseId(courseId);
+        courseRosterUpdate.setRosterCourseCountRest(1);
+        courseRosterUpdate.setAccountId(user.getAccountId());
+        int i = courseRosterMapper.updateByAccountAndCourseSelective(courseRosterUpdate);
+        if (i <= 0) {
+            throw new SqlWritePrerequisiteException("update fail：" + JSONUtil.objectToJson(courseRosterUpdate) + "update success:" + i);
+        }
+    }
+
+    @Override
+    public CourseRoster findCourseRoster(Long accountId, Long type) {
+        return courseRosterMapper.selectByCourseType(accountId, type);
+    }
+
+    @Override
+    public void additional(Long accountId, Long courseId, int courseCurrent, CourseRoster courseRoster) {
+        //1签到记录
+        RosterAttendance rosterAttendanceInsert = new RosterAttendance();
+        rosterAttendanceInsert.setCourseId(courseId);
+        rosterAttendanceInsert.setAccountId(accountId);
+        rosterAttendanceInsert.setAttendType(EnumCode.AttendType.ATTEND_TYPE_ADDITIONAL.getValue());
+        rosterAttendanceInsert.setAttendSectionNum(courseCurrent);
+        rosterAttendanceMapper.insertSelective(rosterAttendanceInsert);
+        //2学生课程课时减1
+
     }
 }

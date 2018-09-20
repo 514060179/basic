@@ -66,7 +66,8 @@ public class UserController {
     public ReturnParam add(User user, @Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！")
                                         @RequestParam String phone, @RequestParam(defaultValue = "1") String type,@RequestParam String name,
                                         @RequestParam Integer age, @RequestParam String username, @RequestParam String password,
-                                        @RequestParam String verification,@RequestParam String cardNum) {
+                                        @RequestParam String verification,
+                                        @Pattern(regexp="^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$")@RequestParam String cardNum) {
         //验证码验证
         String code = jedisService.getString(phone);
         if (StringUtils.isEmpty(code)) {
@@ -80,7 +81,7 @@ public class UserController {
         User u = userService.findByUserName(user.getName());
         if (u != null) {
             logger.warn("新增用户{}已存在", user.getName());
-            ReturnParam.userExist();
+            return ReturnParam.userExist();
         }
         user.setPassword(SaltEncryUtil.getMD5SaltString(username,password));
         return ReturnParam.success(userService.add(user));

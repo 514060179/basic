@@ -114,4 +114,31 @@ public class EnumCode {
             return value;
         }
     }
+    /**
+     * 签到类型
+     */
+    public enum AttendType {
+
+        // 老师收费类型(1按时2按提成)
+        ATTEND_TYPE_STUDENT("1"),
+        ATTEND_TYPE_TEACHER("2"),
+        ATTEND_TYPE_ADDITIONAL("3");
+
+        private String value;
+
+        /**
+         * 构造函数
+         * @param value
+         */
+        private AttendType(String value) {
+            this.value = value;
+        }
+
+        /**
+         * @return the value
+         */
+        public String getValue() {
+            return value;
+        }
+    }
 }

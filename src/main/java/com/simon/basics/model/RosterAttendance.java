@@ -15,7 +15,7 @@ public class RosterAttendance {
 
     private String attendRemark;
 
-    private String attendanceType;
+    private String attendType;
 
     private Date endTime;
 
@@ -96,11 +96,11 @@ public class RosterAttendance {
 
     }
 
-    public String getAttendanceType() {
-        return attendanceType;
+    public String getAttendType() {
+        return attendType;
     }
 
-    public void setAttendanceType(String attendanceType) {
-        this.attendanceType = attendanceType;
+    public void setAttendType(String attendanceType) {
+        this.attendType = attendanceType;
     }
 }

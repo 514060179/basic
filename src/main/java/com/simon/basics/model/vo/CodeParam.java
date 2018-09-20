@@ -22,6 +22,14 @@ public class CodeParam {
 
     public final static String repeatOrderMsg = "重复创建订单！";
 
+    public final static String courseNotEnoughOrNotHad = "204";
+
+    public final static String courseNotEnoughOrNotHadMsg = "没有购买该类型课程或课程剩余不足！";
+
+    public final static String repeatResource = "205";
+
+    public final static String repeatResourceMsg = "重复资源！";
+
     public final static String missParam = "300";
 
     public final static String missParamMsg = "缺少参数！";

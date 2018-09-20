@@ -3,6 +3,7 @@ package com.simon.basics.componet;
 import com.simon.basics.model.vo.ReturnParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -49,6 +50,12 @@ public class GlobalExceptionHandler {
     public ReturnParam constraintViolationExceptionHandler(Exception e) {
         logger.error(">>>> system error： ", e);
         return ReturnParam.paramiolationException(e.getMessage());
+    }
+
+    @ExceptionHandler(value = DuplicateKeyException.class)
+    public ReturnParam duplicateKeyExceptionHandler(Exception e) {
+        logger.error(">>>> system error： ", e);
+        return ReturnParam.repeatResource("系统异常！");
     }
     @ExceptionHandler(value = Exception.class)
     public ReturnParam exceptionHandler(Exception e) {

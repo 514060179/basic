@@ -456,3 +456,15 @@ ALTER TABLE `simon`.`user`
 ALTER TABLE `simon`.`roster_attendance`
   DROP INDEX `attendance_keys`,
   ADD  INDEX `FK_Reference_8` (`course_id`);
+
+
+ALTER TABLE `simon`.`user`
+  CHANGE `percentage` `percentage` DECIMAL(6,2) NULL COMMENT '提成点【teacher_charge_type】为1时：超过【exceed_num】人数提成【percentage】。为2时：每节课的提成点';
+
+
+ALTER TABLE `simon`.`user`
+  CHANGE `sex` `sex` ENUM('0','1') CHARSET utf8mb4 COLLATE utf8mb4_bin DEFAULT '0' NOT NULL COMMENT '性别（0男1女）';
+
+
+ALTER TABLE `simon`.`roster_attendance`
+  CHANGE `attend_type` `attend_type` ENUM('1','2','3') CHARSET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '签到类型1学生2老师3串课';

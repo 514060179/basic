@@ -86,4 +86,27 @@ public interface ClassCourseService {
      * @param classCourse
      */
     void courseEnd(ClassCourse classCourse, User user, int actualNumber, int mustNumber, Long costTime);
+
+    /**
+     * 学生签到
+     * @param courseId
+     * @param courseCurrent
+     */
+    void sign(Long courseId, int courseCurrent);
+
+    /**
+     * 获取用户课程名单
+     * @param accountId
+     * @param type
+     * @return
+     */
+    CourseRoster findCourseRoster( Long accountId, Long type);
+
+    /**
+     * 串课
+     * @param accountId
+     * @param courseId
+     * @param courseCurrent
+     */
+    void additional(Long accountId, Long courseId, int courseCurrent, CourseRoster courseRoster);
 }

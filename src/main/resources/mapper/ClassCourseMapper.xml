@@ -67,13 +67,20 @@
       u.user_id,u.account_id, u.name, u.sex, u.age, u.phone, u.address,u.remark,u.average_hour_cost,u.exceed_num,u.percentage,u.average_hour,u.teacher_charge_type,
       ct.type_id, ct.type_name, ct.type_series, ct.deleted
   </sql>
-    <select id="selectByPrimaryKey" resultMap="UnionMapResult" parameterType="java.lang.Long">
+    <select id="selectByPrimaryKey" resultMap="UnionMapResult">
         select
-        <include refid="Union_Column_List"/>,IFNULL(co.order_id,FALSE ) AS bought
+        <include refid="Union_Column_List"/>
+        <if test="accountId != null">
+            ,IFNULL(co.order_id,FALSE ) AS bought
+        </if>
         from class_course cc
         JOIN seat_layout sl ON cc.seat_id=sl.seat_id
         JOIN user u ON u.account_id=cc.account_id
         JOIN course_type ct ON ct.type_id=cc.type_id
+        <if test="accountId != null">
+            LEFT JOIN course_order co ON cc.course_id=co.course_id AND co.account_id = #{accountId,jdbcType=BIGINT} AND
+            co.order_status = 1
+        </if>
         where cc.course_id = #{courseId,jdbcType=BIGINT}
         <if test="accountId != null">
             AND cc.account_id = #{accountId,jdbcType=BIGINT}
@@ -354,8 +361,8 @@
       IFNULL(ra.attendance_id, FALSE) AS isAttendance
     FROM course_roster cr INNER JOIN `user` u ON cr.account_id = u.account_id
       LEFT JOIN roster_attendance ra
-        ON cr.course_id = ra.course_id AND cr.account_id = ra.account_id AND ra.attend_section_num = #{courseCurrent}
-    WHERE cr.course_id = #{courseId,jdbcType=BIGINT} AND ra.attend_type=1
+        ON cr.course_id = ra.course_id AND cr.account_id = ra.account_id AND ra.attend_section_num = #{courseCurrent} AND ra.attend_type=1
+    WHERE cr.course_id = #{courseId,jdbcType=BIGINT}
   </select>
 
 </mapper>

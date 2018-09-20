@@ -17,11 +17,51 @@
     roster_id, course_id, seat_id, account_id, roster_name, roster_course_count_rest, 
     roster_seat_x, roster_seat_y, create_time, update_time
   </sql>
+  <sql id="Union_Column_List" >
+    cr.roster_id, cr.course_id, cr.seat_id, cr.account_id, cr.roster_name, cr.roster_course_count_rest,
+    cr.roster_seat_x, cr.roster_seat_y, cr.create_time, cr.update_time
+  </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from course_roster
     where roster_id = #{rosterId,jdbcType=BIGINT}
+  </select>
+  <select id="findOneByConditon" resultMap="BaseResultMap" parameterType="com.simon.basics.model.CourseRoster" >
+    select
+    <include refid="Base_Column_List" />
+    from course_roster
+    <where>
+      <if test="courseId != null" >
+        and course_id = #{courseId,jdbcType=BIGINT}
+      </if>
+      <if test="seatId != null" >
+        and seat_id = #{seatId,jdbcType=BIGINT}
+      </if>
+      <if test="accountId != null" >
+        and account_id = #{accountId,jdbcType=BIGINT}
+      </if>
+      <if test="rosterName != null" >
+        and roster_name = #{rosterName,jdbcType=VARCHAR}
+      </if>
+      <if test="rosterCourseCountRest != null" >
+        and roster_course_count_rest = #{rosterCourseCountRest,jdbcType=INTEGER}
+      </if>
+      <if test="rosterSeatX != null" >
+        and roster_seat_x = #{rosterSeatX,jdbcType=INTEGER}
+      </if>
+      <if test="rosterSeatY != null" >
+        and roster_seat_y = #{rosterSeatY,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+  <select id="selectByCourseType" resultMap="BaseResultMap">
+    select
+    <include refid="Union_Column_List" />
+    from course_roster cr
+    inner join class_course cc
+    on cr.course_id=cc.course_id and cr.account_id=#{accountId,jdbcType=BIGINT}
+    where cc.type_id = #{typeId,jdbcType=BIGINT} LIMIT 0,1
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from course_roster
@@ -136,6 +176,34 @@
       </if>
     </set>
     where roster_id = #{rosterId,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByAccountAndCourseSelective" parameterType="com.simon.basics.model.CourseRoster" >
+    update course_roster
+    <set >
+      <if test="courseId != null" >
+        course_id = #{courseId,jdbcType=BIGINT},
+      </if>
+      <if test="seatId != null" >
+        seat_id = #{seatId,jdbcType=BIGINT},
+      </if>
+      <if test="accountId != null" >
+        account_id = #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="rosterName != null" >
+        roster_name = #{rosterName,jdbcType=VARCHAR},
+      </if>
+      <if test="rosterCourseCountRest != null" >
+        roster_course_count_rest = roster_course_count_rest-1,
+      </if>
+      <if test="rosterSeatX != null" >
+        roster_seat_x = #{rosterSeatX,jdbcType=INTEGER},
+      </if>
+      <if test="rosterSeatY != null" >
+        roster_seat_y = #{rosterSeatY,jdbcType=INTEGER},
+      </if>
+    </set>
+    where account_id = #{accountId,jdbcType=BIGINT} and course_id = #{courseId,jdbcType=BIGINT} and roster_course_count_rest>0
   </update>
   <update id="updateByPrimaryKey" parameterType="com.simon.basics.model.CourseRoster" >
     update course_roster

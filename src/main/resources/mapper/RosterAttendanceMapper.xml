@@ -8,15 +8,16 @@
     <result column="attend_section_num" property="attendSectionNum" jdbcType="INTEGER" />
     <result column="attend_name" property="attendName" jdbcType="VARCHAR" />
     <result column="attend_remark" property="attendRemark" jdbcType="VARCHAR" />
+    <result column="attend_type" property="attendType" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    attendance_id, course_id, account_id, attend_section_num, attend_name, attend_remark, 
+    attendance_id, course_id, account_id, attend_section_num, attend_name, attend_remark, attend_type,
     create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from roster_attendance
     where attendance_id = #{attendanceId,jdbcType=BIGINT}
@@ -48,8 +49,8 @@
       <if test="attendRemark != null" >
         attend_remark,
       </if>
-      <if test="attendanceType != null" >
-        attendance_type,
+      <if test="attendType != null" >
+        attend_type,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -77,8 +78,8 @@
       <if test="attendRemark != null" >
         #{attendRemark,jdbcType=VARCHAR},
       </if>
-      <if test="attendanceType != null" >
-        #{attendanceType,jdbcType=VARCHAR},
+      <if test="attendType != null" >
+        #{attendType,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},

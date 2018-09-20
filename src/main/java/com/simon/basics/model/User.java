@@ -29,17 +29,17 @@ public class User extends Account {
     private String cardNum;
     @ApiModelProperty("地址")
     private String address;
-    @ApiModelProperty(value = "教师收费类型",hidden = true)
+    @ApiModelProperty(value = "教师收费类型:1按时2按提成",allowableValues = "range[1,2]")
     private String teacherChargeType;
-    @ApiModelProperty(value = "按【averageHour】小时收费" ,hidden = true)
+    @ApiModelProperty(value = "收费类型为1时（必填）：按【averageHour】小时收费")
     private BigDecimal averageHour;
-    @ApiModelProperty(value = "百分点提成" ,hidden = true)
+    @ApiModelProperty(value = "提成点")
     private BigDecimal percentage;
-    @ApiModelProperty(value = "超过【exceedNum】人数提成【percentage】" ,hidden = true)
+    @ApiModelProperty(value = "收费类型为1时：超过【exceedNum】人数提成【percentage】;收费类型为2时：每节课提成点")
     private Integer exceedNum;
-    @ApiModelProperty(value = "按【averageHour】小时收费【averageHourCost】",hidden = true)
+    @ApiModelProperty(value = "收费类型为1时（必填）按【averageHour】小时收费【averageHourCost】")
     private BigDecimal averageHourCost;
-    @ApiModelProperty(value = "备注",hidden = true)
+    @ApiModelProperty(value = "备注")
     private String remark;
     @JsonIgnore
     @ApiModelProperty(value = "角色集合",hidden = true)
@@ -65,6 +65,22 @@ public class User extends Account {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
+    public String getGradeName() {
+        return gradeName;
+    }
+
+    public void setGradeName(String gradeName) {
+        this.gradeName = gradeName;
     }
 
     public String getParentName() {

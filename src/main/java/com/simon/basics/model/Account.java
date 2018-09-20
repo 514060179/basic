@@ -18,7 +18,7 @@ public class Account implements Serializable{
     @ApiModelProperty(value = "账户密码",hidden = true)
     @JsonIgnore
     private String password;
-    @ApiModelProperty(value = "用户类型:1学生2教师")
+    @ApiModelProperty(value = "用户类型:1学生2教师",allowableValues = "range[1,2]")
     private String type;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
