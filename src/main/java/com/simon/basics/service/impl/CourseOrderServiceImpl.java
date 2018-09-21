@@ -30,7 +30,9 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if (EnumCode.UserType.TYPE_STUDENT.getValue().equals(user.getType())){//学生 查询自己
             courseOrder.setAccountId(user.getAccountId());
-        }else{//管理员 查询所有
+        }else if(EnumCode.UserType.TYPE_TEACHER.getValue().equals(user.getType())){//教师无法查询
+            return null;
+        }else{
             courseOrder.setAccountId(null);
         }
         PageHelper.startPage(pageNum,pageSize);
@@ -54,8 +56,14 @@ public class CourseOrderServiceImpl implements CourseOrderService {
 
     @Override
     public CourseOrder findOneByCourseId(Long courseId) {
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
         CourseOrder courseOrder = new CourseOrder();
         courseOrder.setCourseId(courseId);
+        if (EnumCode.UserType.TYPE_STUDENT.getValue().equals(user.getType())){//学生 查询自己
+            courseOrder.setAccountId(user.getAccountId());
+        }else{//管理员 查询所有
+            courseOrder.setAccountId(null);
+        }
         List<CourseOrder> findCourseOrderList = courseOrderMapper.findListByCondition(courseOrder);
         if (findCourseOrderList==null||findCourseOrderList.size()==0){
             return null;

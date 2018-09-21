@@ -35,11 +35,11 @@ public class CourseOrderController {
 
     @PostMapping("create")
     public ReturnParam create(@RequestParam Long courseId) {
-        ClassCourse classCourse = classCourseService.findOne(courseId,null);
+        ClassCourse classCourse = classCourseService.findOne(courseId,null,null);
         CourseOrder courseOrder = courseOrderService.findOneByCourseId(courseId);
         if (courseOrder!=null){
             logger.warn("重复下单：");
-            ReturnParam.repeatOrder();
+            return ReturnParam.repeatOrder();
         }
         return ReturnParam.success(courseOrderService.create(classCourse));
     }

@@ -43,6 +43,9 @@ public class ReturnParam extends CodeParam {
     public static ReturnParam repeatOrder(){
         return new ReturnParam(repeatOrder,repeatOrderMsg,null);
     }
+    public static ReturnParam courseNotBeginning(){
+        return new ReturnParam(courseNotBeginning,courseNotBeginningMsg,null);
+    }
     public static ReturnParam repeatResource(String msg){
         return new ReturnParam(repeatResource,repeatResourceMsg+":"+msg,null);
     }

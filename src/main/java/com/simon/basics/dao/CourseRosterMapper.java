@@ -23,4 +23,6 @@ public interface CourseRosterMapper {
     int updateByAccountAndCourseSelective(CourseRoster record);
 
     int updateByPrimaryKey(CourseRoster record);
+
+    CourseRoster findTeacherCourseRoster(Long courseId, int courseCurrent);
 }

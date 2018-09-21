@@ -77,9 +77,9 @@
         JOIN seat_layout sl ON cc.seat_id=sl.seat_id
         JOIN user u ON u.account_id=cc.account_id
         JOIN course_type ct ON ct.type_id=cc.type_id
-        <if test="accountId != null">
-            LEFT JOIN course_order co ON cc.course_id=co.course_id AND co.account_id = #{accountId,jdbcType=BIGINT} AND
-            co.order_status = 1
+        <if test="studentId != null">
+            LEFT JOIN course_order co ON cc.course_id=co.course_id AND co.account_id = #{studentId,jdbcType=BIGINT} AND
+            co.order_status = '1'
         </if>
         where cc.course_id = #{courseId,jdbcType=BIGINT}
         <if test="accountId != null">
@@ -107,6 +107,9 @@
             </if>
             <if test="typeId != null">
                 AND cc.type_id = #{typeId,jdbcType=BIGINT}
+            </if>
+            <if test="teacherId != null">
+                AND cc.account_id = #{teacherId,jdbcType=BIGINT}
             </if>
             <if test="courseName != null">
                 AND cc.course_name = #{courseName,jdbcType=VARCHAR}
@@ -348,6 +351,7 @@
       cr.`course_id` AS courseId,
       cr.`roster_seat_x` AS rosterSeatX,
       cr.`roster_seat_y` AS rosterSeatY,
+      ra.`attend_type` AS attendType,
       u.`account_id` AS accountId,
       u.`name`,
       u.`parent_name` AS parentName,
@@ -358,8 +362,25 @@
       IFNULL(ra.attendance_id, FALSE) AS isAttendance
     FROM course_roster cr INNER JOIN `user` u ON cr.account_id = u.account_id
       LEFT JOIN roster_attendance ra
-        ON cr.course_id = ra.course_id AND cr.account_id = ra.account_id AND ra.attend_section_num = #{courseCurrent} AND ra.attend_type=1
+        ON cr.course_id = ra.course_id AND cr.account_id = ra.account_id AND ra.attend_section_num = #{courseCurrent} AND ra.attend_type='1'
     WHERE cr.course_id = #{courseId,jdbcType=BIGINT}
+  </select>
+
+    <select id="getAdditionalAttendanceList" resultType="com.simon.basics.model.CourseRosterAttendance">
+    SELECT
+      #{courseId,jdbcType=BIGINT} AS courseId,
+      ra.`additional_seat_x` AS rosterSeatX,
+      ra.`additional_seat_y` AS rosterSeatY,
+      ra.`attend_type` AS attendType,
+      u.`account_id`         AS accountId,
+      u.`name`,
+      u.`parent_name`        AS parentName,
+      u.`sex`,
+      u.`age`,
+      u.`phone`,
+      ra.`create_time`       AS createTime
+    FROM roster_attendance ra LEFT JOIN `user` u ON ra.account_id = u.account_id
+    WHERE ra.attend_type='3' AND ra.course_id = #{courseId,jdbcType=BIGINT} AND ra.attend_section_num =  #{courseCurrent}
   </select>
 
 </mapper>

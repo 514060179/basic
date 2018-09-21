@@ -14,9 +14,9 @@ public interface ClassCourseMapper {
 
     int insertSelective(ClassCourse classCourse);
 
-    ClassCourseWithBLOBs selectByPrimaryKey(@Param("courseId") Long courseId, @Param("accountId") Long accountId);
+    ClassCourseWithBLOBs selectByPrimaryKey(@Param("courseId") Long courseId, @Param("studentId") Long studentId, @Param("accountId") Long accountId);
 
-    List<ClassCourseWithBLOBs> findListByCondition(ClassCourse classCourse);
+    List<ClassCourseWithBLOBs> findListByCondition(@Param("classCourse")ClassCourse classCourse,@Param("teacherId")Long teacherId);
 
     int updateByPrimaryKeyAndAccountIdSelective(ClassCourse record);
 
@@ -27,4 +27,6 @@ public interface ClassCourseMapper {
     int updateStatus(@Param("courseId") Long courseId, @Param("deleted") Boolean deleted);
 
     List<CourseRosterAttendance> getAttendanceList(@Param("courseId") Long courseId, @Param("courseCurrent") int courseCurrent);
+
+    List<CourseRosterAttendance> getAdditionalAttendanceList(@Param("courseId") Long courseId, @Param("courseCurrent") int courseCurrent);
 }

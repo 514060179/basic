@@ -43,9 +43,10 @@ public class ClassCourseController {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         Long accountId = null;
         if (EnumCode.UserType.TYPE_STUDENT.getValue().equals(user.getType())) {
-            accountId = user.getAccountId();
+            return ReturnParam.success(classCourseService.findOne(courseId, accountId,null));//学生
+        }else{
+            return ReturnParam.success(classCourseService.findOne(courseId, null,null));//其他
         }
-        return ReturnParam.success(classCourseService.findOne(courseId, accountId));
     }
 
     @PostMapping("add")
@@ -64,7 +65,7 @@ public class ClassCourseController {
     @ApiOperation("老师开始开始上课")
     public ReturnParam courseStart(@RequestParam Long courseId) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        ClassCourse classCourse = classCourseService.findOne(courseId, user.getAccountId());
+        ClassCourse classCourse = classCourseService.findOne(courseId, null,user.getAccountId());
 
         if (Objects.isNull(classCourse)) {
             logger.warn("找不到资源：courseId=" + courseId);
@@ -90,22 +91,40 @@ public class ClassCourseController {
 
     @PostMapping("courseAttendance")
     @ApiOperation("老师获取考勤名单")
-    public ReturnParam courseAttendance(@RequestParam Long courseId, int courseCurrent) {
+    public ReturnParam courseAttendance(@RequestParam Long courseId, Integer courseCurrent) {
+        if (courseCurrent==null){
+            courseCurrent = classCourseService.findOne(courseId,null,null).getCourseCurrent();
+        }
         return ReturnParam.success(classCourseService.getAttendanceList(courseId, courseCurrent));
     }
 
     @PostMapping("sign")
     @ApiOperation("学生签到")
-    public ReturnParam sign(@RequestParam Long courseId, @RequestParam int courseCurrent) {
+    public ReturnParam sign(@RequestParam Long courseId) {
+        //课程是否购买
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        ClassCourseWithBLOBs classCourseWithBLOBs = (ClassCourseWithBLOBs)classCourseService.findOne(courseId,user.getAccountId(),null);
+        if (Objects.isNull(classCourseWithBLOBs)||!classCourseWithBLOBs.getBought()){
+            logger.warn("学生:{}未购买课程:{}",courseId,user.getAccountId());
+            return ReturnParam.courseNotEnoughOrNotHad();
+        }
+        int courseCurrent = classCourseWithBLOBs.getCourseCurrent();
+        //查找当前课程是否开始(老师是否签到)
+        CourseRoster courseRoster = classCourseService.findTeacherCourseRoster(courseId, classCourseWithBLOBs.getCourseCurrent());
+        if (Objects.isNull(courseRoster)) {
+            logger.warn("课程courseId={},courseCurrent={}未开始", courseId, courseCurrent);
+            return ReturnParam.courseNotBeginning();
+        }
         classCourseService.sign(courseId, courseCurrent);
         return ReturnParam.success();
     }
 
     @PostMapping("additional")
     @ApiOperation("老师添加串课名单")
-    public ReturnParam additional(@RequestParam Long courseId, @RequestParam Long accountId, @RequestParam int courseCurrent) {
+    public ReturnParam additional(@RequestParam Long courseId, @RequestParam Long accountId, @RequestParam int rosterSeatX, @RequestParam int rosterSeatY) {
         //查询是否有资格
-        ClassCourse classCourse = classCourseService.findOne(courseId,null);
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        ClassCourse classCourse = classCourseService.findOne(courseId, null,user.getAccountId());
         Long type = classCourse.getTypeId();
         CourseRoster courseRoster = classCourseService.findCourseRoster(accountId, type);
         if (!Objects.isNull(courseRoster)) {
@@ -113,19 +132,19 @@ public class ClassCourseController {
             if (rest < 1) {
                 return ReturnParam.courseNotEnoughOrNotHad();
             }
-            classCourseService.additional(accountId, courseId, courseCurrent, courseRoster.getRosterId());
+            classCourseService.additional(accountId, courseId, classCourse.getCourseCurrent(), courseRoster.getRosterId(),rosterSeatX,rosterSeatY);
+            return ReturnParam.success(classCourseService.getAttendanceList(courseId, classCourse.getCourseCurrent()));
         } else {
             logger.warn("串课失败！没有购买该类型课程或课程剩余不足！");
             return ReturnParam.courseNotEnoughOrNotHad();
         }
-        return ReturnParam.success(classCourseService.getAttendanceList(courseId, courseCurrent));
     }
 
     @GetMapping("courseEnd")
     @ApiOperation("老师结束课程（下课）")
     public ReturnParam courseEnd(@RequestParam Long courseId) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        ClassCourse classCourse = classCourseService.findOne(courseId, user.getAccountId());
+        ClassCourse classCourse = classCourseService.findOne(courseId, null,user.getAccountId());
         if (Objects.isNull(classCourse)) {
             logger.warn("找不到资源：courseId=" + courseId);
             return ReturnParam.noHandlerFound("找不到资源：courseId=" + courseId);

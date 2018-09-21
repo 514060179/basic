@@ -26,7 +26,11 @@ public class CodeParam {
 
     public final static String courseNotEnoughOrNotHadMsg = "没有购买该类型课程或课程剩余不足！";
 
-    public final static String repeatResource = "205";
+    public final static String courseNotBeginning = "205";
+
+    public final static String courseNotBeginningMsg = "老师未上课!";
+
+    public final static String repeatResource = "206";
 
     public final static String repeatResourceMsg = "重复资源！";
 

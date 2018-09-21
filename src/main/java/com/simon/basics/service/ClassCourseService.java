@@ -16,7 +16,7 @@ public interface ClassCourseService {
      * @param courseId
      * @return
      */
-    ClassCourse findOne(Long courseId, Long accountId);
+    ClassCourse findOne(Long courseId, Long studentId, Long accountId);
 
     /**
      * 列表
@@ -89,6 +89,7 @@ public interface ClassCourseService {
 
     /**
      * 学生签到
+     *
      * @param courseId
      * @param courseCurrent
      */
@@ -96,17 +97,28 @@ public interface ClassCourseService {
 
     /**
      * 获取用户课程名单
+     *
      * @param accountId
      * @param type
      * @return
      */
-    CourseRoster findCourseRoster( Long accountId, Long type);
+    CourseRoster findCourseRoster(Long accountId, Long type);
+
+    /**
+     * 获取老师签到名单
+     *
+     * @param courseId
+     * @param courseCurrent
+     * @return
+     */
+    CourseRoster findTeacherCourseRoster(Long courseId, int courseCurrent);
 
     /**
      * 串课
+     *
      * @param accountId
      * @param courseId
      * @param rosterId
      */
-    void additional(Long accountId, Long courseId, int courseCurrent, Long rosterId);
+    void additional(Long accountId, Long courseId, int courseCurrent, Long rosterId, int rosterSeatX, int rosterSeatY);
 }

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,18 +39,21 @@ public class ClassCourseServiceimpl implements ClassCourseService {
     private RosterIncomeMapper rosterIncomeMapper;
 
     @Override
-    public ClassCourse findOne(Long courseId, Long accountId) {
-        return classCourseMapper.selectByPrimaryKey(courseId, accountId);
+    public ClassCourse findOne(Long courseId, Long studentId, Long accountId) {
+        return classCourseMapper.selectByPrimaryKey(courseId,studentId, accountId);
     }
 
     @Override
     public List<ClassCourseWithBLOBs> findListByPage(ClassCourse classCourse, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        User user = (User)SecurityUtils.getSubject().getPrincipal();
-        if (EnumCode.UserType.TYPE_STUDENT.getValue().equals(user.getType())){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Long teacherId = null;
+        if (EnumCode.UserType.TYPE_STUDENT.getValue().equals(user.getType())) {//学生
             classCourse.setAccountId(user.getAccountId());
+        }else if (EnumCode.UserType.TYPE_TEACHER.getValue().equals(user.getType())){//老师获取自己课程
+            teacherId = user.getAccountId();
         }
-        return classCourseMapper.findListByCondition(classCourse);
+        return classCourseMapper.findListByCondition(classCourse,teacherId);
     }
 
     @Override
@@ -100,9 +104,14 @@ public class ClassCourseServiceimpl implements ClassCourseService {
 
     @Override
     public List<CourseRosterAttendance> getAttendanceList(Long courseId, int courseCurrent) {
+        List<CourseRosterAttendance> resultList = new ArrayList<CourseRosterAttendance>();
         //获取串课名单
-        123
-        return classCourseMapper.getAttendanceList(courseId, courseCurrent);
+        List<CourseRosterAttendance> courseAdditionalRosterAttendanceList = classCourseMapper.getAdditionalAttendanceList(courseId, courseCurrent);
+        resultList.addAll(courseAdditionalRosterAttendanceList);
+        //出勤名单
+        List<CourseRosterAttendance> courseRosterAttendanceList = classCourseMapper.getAttendanceList(courseId, courseCurrent);
+        resultList.addAll(courseRosterAttendanceList);
+        return resultList;
     }
 
     @Override
@@ -150,13 +159,13 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         }
         //更新
         int i = rosterAttendanceMapper.updateByCourseAndNum(rosterAttendanceUpdate);
-        if (i>0){
+        if (i > 0) {
             int j = rosterIncomeMapper.insertSelective(rosterIncomeInsert);
-            if (j<1){
-                throw new SqlWritePrerequisiteException("插入教师收入表条数未:"+i+JSONUtil.objectToJson(rosterIncomeInsert));
+            if (j < 1) {
+                throw new SqlWritePrerequisiteException("插入教师收入表条数未:" + i + JSONUtil.objectToJson(rosterIncomeInsert));
             }
-        }else{
-            throw new SqlWritePrerequisiteException("更新课程出勤表条数未:"+i+JSONUtil.objectToJson(rosterAttendanceUpdate));
+        } else {
+            throw new SqlWritePrerequisiteException("更新课程出勤表条数未:" + i + JSONUtil.objectToJson(rosterAttendanceUpdate));
         }
         //插入
     }
@@ -189,22 +198,29 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         return courseRosterMapper.selectByCourseType(accountId, type);
     }
 
+    @Override
+    public CourseRoster findTeacherCourseRoster(Long courseId, int courseCurrent) {
+        return courseRosterMapper.findTeacherCourseRoster(courseId,courseCurrent);
+    }
+
     @Transactional
     @Override
-    public void additional(Long accountId, Long courseId, int courseCurrent, Long rosterId) {
+    public void additional(Long accountId, Long courseId, int courseCurrent, Long rosterId, int rosterSeatX, int rosterSeatY) {
         //1签到记录
         RosterAttendance rosterAttendanceInsert = new RosterAttendance();
         rosterAttendanceInsert.setCourseId(courseId);
         rosterAttendanceInsert.setAccountId(accountId);
         rosterAttendanceInsert.setAttendType(EnumCode.AttendType.ATTEND_TYPE_ADDITIONAL.getValue());
         rosterAttendanceInsert.setAttendSectionNum(courseCurrent);
+        rosterAttendanceInsert.setAdditionalSeatX(rosterSeatX);
+        rosterAttendanceInsert.setAdditionalSeatY(rosterSeatY);
         rosterAttendanceMapper.insertSelective(rosterAttendanceInsert);
         //2学生课程课时减1
         CourseRoster courseRosterUpdate = new CourseRoster();
         courseRosterUpdate.setRosterId(rosterId);
         courseRosterUpdate.setRosterCourseCountRest(1);
         int i = courseRosterMapper.updateByPrimaryKeySelective(courseRosterUpdate);
-        if (i<1){
+        if (i < 1) {
             throw new SqlWritePrerequisiteException("update fail：" + JSONUtil.objectToJson(courseRosterUpdate) + "update success:" + i);
         }
     }

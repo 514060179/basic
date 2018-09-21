@@ -16,6 +16,8 @@ public class CourseRosterAttendance {
     private Long accountId;
     @ApiModelProperty("用户名字")
     private String name;
+    @ApiModelProperty("出勤类型")
+    private String attendType;
     @ApiModelProperty("学生家长名字")
     private String parentName;
     @ApiModelProperty("用户性别")
@@ -55,6 +57,14 @@ public class CourseRosterAttendance {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAttendType() {
+        return attendType;
+    }
+
+    public void setAttendType(String attendType) {
+        this.attendType = attendType;
     }
 
     public String getParentName() {

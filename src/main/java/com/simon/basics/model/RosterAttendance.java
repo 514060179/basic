@@ -9,6 +9,10 @@ public class RosterAttendance {
 
     private Long accountId;
 
+    private Integer additionalSeatX;
+
+    private Integer additionalSeatY;
+
     private Integer attendSectionNum;
 
     private String attendName;
@@ -49,6 +53,22 @@ public class RosterAttendance {
 
     public Integer getAttendSectionNum() {
         return attendSectionNum;
+    }
+
+    public Integer getAdditionalSeatX() {
+        return additionalSeatX;
+    }
+
+    public void setAdditionalSeatX(Integer additionalSeatX) {
+        this.additionalSeatX = additionalSeatX;
+    }
+
+    public Integer getAdditionalSeatY() {
+        return additionalSeatY;
+    }
+
+    public void setAdditionalSeatY(Integer additionalSeatY) {
+        this.additionalSeatY = additionalSeatY;
     }
 
     public void setAttendSectionNum(Integer attendSectionNum) {
