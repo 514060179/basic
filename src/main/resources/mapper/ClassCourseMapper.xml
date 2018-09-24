@@ -160,7 +160,7 @@
       #{deleted,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{courseAbstract,jdbcType=LONGVARCHAR}, #{courseRemark,jdbcType=LONGVARCHAR})
   </insert>
-    <insert id="insertSelective" parameterType="com.simon.basics.model.ClassCourseWithBLOBs">
+    <insert id="insertSelective" parameterType="com.simon.basics.model.ClassCourseWithBLOBs" keyProperty="courseId" useGeneratedKeys="true">
         insert into class_course
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="courseId != null">

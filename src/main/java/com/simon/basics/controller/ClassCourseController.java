@@ -1,9 +1,11 @@
 package com.simon.basics.controller;
 
 import com.github.pagehelper.PageHelper;
+import com.simon.basics.componet.service.JedisService;
 import com.simon.basics.model.*;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.service.ClassCourseService;
+import com.simon.basics.service.SeatLayoutService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -28,8 +30,15 @@ import java.util.Objects;
 public class ClassCourseController {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private ClassCourseService classCourseService;
+
+    @Autowired
+    private JedisService jedisService;
+
+    @Autowired
+    private SeatLayoutService seatLayoutService;
 
     @PostMapping("list")
     @ApiOperation("课程列表")
@@ -52,7 +61,16 @@ public class ClassCourseController {
     @PostMapping("add")
     @ApiOperation("课程新增")
     public ReturnParam add(ClassCourse classCourse, @RequestParam Long accountId, @RequestParam Integer courseTotal, @RequestParam Long seatId, @RequestParam Long typeId, @RequestParam Double courseCost, @RequestParam Date courseStartTime, @RequestParam @Future Date courseEndTime) {
-        return ReturnParam.success(classCourseService.add(classCourse));
+        ClassCourse classCourseRespone = classCourseService.add(classCourse);
+        if (classCourse!=null){
+            //获取座位存放缓存中
+            seatLayoutService.findAllList();
+            if (!jedisService.mapExists("seatLayoutMap",seatId+"")){
+                seatLayoutService.pullAllToRedis();
+            }
+            jedisService.put("course-seatLayout:"+classCourseRespone.getCourseId(),jedisService.mapGet("seatLayoutMap",seatId+""));
+        }
+        return ReturnParam.systemError("系统异常,请联系开发人员!");
     }
 
     @PostMapping("update")

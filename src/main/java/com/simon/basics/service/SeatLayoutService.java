@@ -1,6 +1,6 @@
 package com.simon.basics.service;
 
-import com.simon.basics.model.SeatLayout;
+import com.simon.basics.model.*;
 
 import java.util.List;
 
@@ -15,5 +15,20 @@ public interface SeatLayoutService {
      * @return
      */
     List<SeatLayout> findAllList();
+
+    /**
+     * 初始化seatLayout到redis
+     */
+    void pullAllToRedis();
+
+    /**
+     * 添加课程名单
+     * @param courseOrder
+     * @param seatX
+     * @param seatY
+     * @return
+     */
+    CourseRoster addRoster(CourseOrderWithBLOBs courseOrder , int seatX, int seatY);
+
 
 }

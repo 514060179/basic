@@ -67,8 +67,11 @@ public class ClassCourseServiceimpl implements ClassCourseService {
     }
 
     @Override
-    public int add(ClassCourse classCourse) {
-        return classCourseMapper.insertSelective(classCourse);
+    public ClassCourse add(ClassCourse classCourse) {
+        if(classCourseMapper.insertSelective(classCourse)>0){
+            return classCourse;
+        }
+        return null;
     }
 
     @Transactional

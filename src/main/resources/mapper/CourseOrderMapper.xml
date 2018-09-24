@@ -20,9 +20,11 @@
         <result column="sex" property="sex" jdbcType="CHAR" />
         <result column="age" property="age" jdbcType="INTEGER" />
         <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="seat_id" property="seatId" jdbcType="BIGINT"/>
 
         <result column="course_name" property="courseName" jdbcType="VARCHAR"/>
         <result column="course_cost" property="courseCost" jdbcType="DOUBLE"/>
+        <result column="course_total" property="courseTotal" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
     order_id, order_no, course_id, account_id, order_status, order_cost, order_pay_status, 
@@ -32,7 +34,7 @@
     <sql id="Union_Column_List">
       co.order_id, co.order_no, co.course_id, co.account_id, co.order_status, co.order_cost, co.order_pay_status,co.create_time, co.update_time,
       u.name,u.parent_name,u.sex,u.age,u.phone,
-      cc.course_name,cc.course_cost
+      cc.seat_id,cc.course_name,cc.course_cost,cc.course_total
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">

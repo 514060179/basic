@@ -4,7 +4,6 @@
   <resultMap id="BaseResultMap" type="com.simon.basics.model.CourseRoster" >
     <id column="roster_id" property="rosterId" jdbcType="BIGINT" />
     <result column="course_id" property="courseId" jdbcType="BIGINT" />
-    <result column="seat_id" property="seatId" jdbcType="BIGINT" />
     <result column="account_id" property="accountId" jdbcType="BIGINT" />
     <result column="roster_name" property="rosterName" jdbcType="VARCHAR" />
     <result column="roster_course_count_rest" property="rosterCourseCountRest" jdbcType="INTEGER" />
@@ -14,7 +13,7 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    roster_id, course_id, seat_id, account_id, roster_name, roster_course_count_rest, 
+    roster_id, course_id, account_id, roster_name, roster_course_count_rest,
     roster_seat_x, roster_seat_y, create_time, update_time
   </sql>
   <sql id="Union_Column_List" >
@@ -34,9 +33,6 @@
     <where>
       <if test="courseId != null" >
         and course_id = #{courseId,jdbcType=BIGINT}
-      </if>
-      <if test="seatId != null" >
-        and seat_id = #{seatId,jdbcType=BIGINT}
       </if>
       <if test="accountId != null" >
         and account_id = #{accountId,jdbcType=BIGINT}
@@ -74,17 +70,7 @@
     delete from course_roster
     where roster_id = #{rosterId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.simon.basics.model.CourseRoster" >
-    insert into course_roster (roster_id, course_id, seat_id, 
-      account_id, roster_name, roster_course_count_rest, 
-      roster_seat_x, roster_seat_y, create_time, 
-      update_time)
-    values (#{rosterId,jdbcType=BIGINT}, #{courseId,jdbcType=BIGINT}, #{seatId,jdbcType=BIGINT}, 
-      #{accountId,jdbcType=BIGINT}, #{rosterName,jdbcType=VARCHAR}, #{rosterCourseCountRest,jdbcType=INTEGER}, 
-      #{rosterSeatX,jdbcType=INTEGER}, #{rosterSeatY,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.simon.basics.model.CourseRoster" >
+  <insert id="insertSelective" parameterType="com.simon.basics.model.CourseRoster" useGeneratedKeys="true" keyProperty="rosterId" >
     insert into course_roster
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="rosterId != null" >
@@ -92,9 +78,6 @@
       </if>
       <if test="courseId != null" >
         course_id,
-      </if>
-      <if test="seatId != null" >
-        seat_id,
       </if>
       <if test="accountId != null" >
         account_id,
@@ -125,9 +108,6 @@
       <if test="courseId != null" >
         #{courseId,jdbcType=BIGINT},
       </if>
-      <if test="seatId != null" >
-        #{seatId,jdbcType=BIGINT},
-      </if>
       <if test="accountId != null" >
         #{accountId,jdbcType=BIGINT},
       </if>
@@ -156,9 +136,6 @@
     <set >
       <if test="courseId != null" >
         course_id = #{courseId,jdbcType=BIGINT},
-      </if>
-      <if test="seatId != null" >
-        seat_id = #{seatId,jdbcType=BIGINT},
       </if>
       <if test="accountId != null" >
         account_id = #{accountId,jdbcType=BIGINT},
@@ -194,9 +171,6 @@
       <if test="courseId != null" >
         course_id = #{courseId,jdbcType=BIGINT},
       </if>
-      <if test="seatId != null" >
-        seat_id = #{seatId,jdbcType=BIGINT},
-      </if>
       <if test="accountId != null" >
         account_id = #{accountId,jdbcType=BIGINT},
       </if>
@@ -218,7 +192,6 @@
   <update id="updateByPrimaryKey" parameterType="com.simon.basics.model.CourseRoster" >
     update course_roster
     set course_id = #{courseId,jdbcType=BIGINT},
-      seat_id = #{seatId,jdbcType=BIGINT},
       account_id = #{accountId,jdbcType=BIGINT},
       roster_name = #{rosterName,jdbcType=VARCHAR},
       roster_course_count_rest = #{rosterCourseCountRest,jdbcType=INTEGER},

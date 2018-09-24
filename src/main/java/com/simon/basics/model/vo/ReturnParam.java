@@ -49,6 +49,9 @@ public class ReturnParam extends CodeParam {
     public static ReturnParam repeatResource(String msg){
         return new ReturnParam(repeatResource,repeatResourceMsg+":"+msg,null);
     }
+    public static ReturnParam alreadyChoose(){
+        return new ReturnParam(alreadyChoose,alreadyChooseMsg,null);
+    }
 
     public static ReturnParam courseNotEnoughOrNotHad(){
         return new ReturnParam(courseNotEnoughOrNotHad,courseNotEnoughOrNotHadMsg,null);

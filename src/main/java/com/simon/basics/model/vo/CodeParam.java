@@ -34,6 +34,10 @@ public class CodeParam {
 
     public final static String repeatResourceMsg = "重复资源！";
 
+    public final static String alreadyChoose  = "207";
+
+    public final static String alreadyChooseMsg = "座位已经被选走!";
+
     public final static String missParam = "300";
 
     public final static String missParamMsg = "缺少参数！";

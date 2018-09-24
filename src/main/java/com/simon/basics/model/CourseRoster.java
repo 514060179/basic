@@ -7,8 +7,6 @@ public class CourseRoster {
 
     private Long courseId;
 
-    private Long seatId;
-
     private Long accountId;
 
     private String rosterName;
@@ -37,14 +35,6 @@ public class CourseRoster {
 
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
-    }
-
-    public Long getSeatId() {
-        return seatId;
-    }
-
-    public void setSeatId(Long seatId) {
-        this.seatId = seatId;
     }
 
     public Long getAccountId() {

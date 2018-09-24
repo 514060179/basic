@@ -8,8 +8,6 @@ import java.util.List;
 public interface CourseRosterMapper {
     int deleteByPrimaryKey(Long rosterId);
 
-    int insert(CourseRoster record);
-
     int insertSelective(CourseRoster record);
 
     CourseRoster selectByPrimaryKey(Long rosterId);

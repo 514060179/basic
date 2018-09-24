@@ -10,6 +10,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author fengtianying
@@ -129,5 +130,58 @@ public class JedisServiceImpl implements JedisService {
             returnResource(jedis);
         }
         return null;
+    }
+
+    @Override
+    public boolean exists(String key) {
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            return jedis.exists(key);
+        } finally {
+            returnResource(jedis);
+        }
+    }
+
+    @Override
+    public String mapPut(String key, Map<String,String> map) {
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            return jedis.hmset(key,map);
+        } finally {
+            returnResource(jedis);
+        }
+    }
+    @Override
+    public Long mapSet(String key, String field,String value) {
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            return jedis.hset(key,field,value);
+        } finally {
+            returnResource(jedis);
+        }
+    }
+    @Override
+    public boolean mapExists(String key,String field) {
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            return jedis.hexists(key,field);
+        } finally {
+            returnResource(jedis);
+        }
+    }
+
+    @Override
+    public String mapGet(String key,String field) {
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            return jedis.hget(key,field);
+        } finally {
+            returnResource(jedis);
+        }
     }
 }

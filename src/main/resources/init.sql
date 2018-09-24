@@ -477,3 +477,8 @@ ALTER TABLE `simon`.`roster_attendance`
 ALTER TABLE `simon`.`roster_attendance`
   ADD COLUMN `additional_seat_x` INT NULL COMMENT '串课位置x坐标' AFTER `end_time`,
   ADD COLUMN `additional_seat_y` INT NULL COMMENT '串课位置y坐标' AFTER `additional_seat_x`;
+
+
+
+  ALTER TABLE `simon`.`course_roster`
+  ADD  UNIQUE INDEX `roster_unique_key` (`course_id`, `account_id`);

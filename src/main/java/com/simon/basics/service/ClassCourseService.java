@@ -50,7 +50,7 @@ public interface ClassCourseService {
      * @param classCourse
      * @return
      */
-    int add(ClassCourse classCourse);
+    ClassCourse add(ClassCourse classCourse);
 
     /**
      * 开始上课
