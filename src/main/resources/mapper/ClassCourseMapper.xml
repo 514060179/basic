@@ -70,7 +70,7 @@
     <select id="selectByPrimaryKey" resultMap="UnionMapResult">
         select
         <include refid="Union_Column_List"/>
-        <if test="accountId != null">
+        <if test="studentId != null">
             ,IFNULL(co.order_id,FALSE ) AS bought
         </if>
         from class_course cc

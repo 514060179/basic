@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 /**
  * @Author simon.feng
  * @Date Created in 20:45 2018/9/18/018
@@ -36,6 +38,10 @@ public class CourseOrderController {
     @PostMapping("create")
     public ReturnParam create(@RequestParam Long courseId) {
         ClassCourse classCourse = classCourseService.findOne(courseId,null,null);
+        if(Objects.isNull(classCourse)){
+            logger.warn("找不到资源：courseId=" + courseId);
+            return ReturnParam.noHandlerFound("找不到资源：courseId=" + courseId);
+        }
         CourseOrder courseOrder = courseOrderService.findOneByCourseId(courseId);
         if (courseOrder!=null){
             logger.warn("重复下单：");

@@ -32,13 +32,14 @@ public class SeatLayoutServiceImpl implements SeatLayoutService {
 
     @Autowired
     private JedisService jedisService;
+
     @Override
     public List<SeatLayout> findAllList() {
 
-        if (jedisService.exists("seatLayoutList")){
+        if (jedisService.exists("seatLayoutList")) {
             List<SeatLayout> list = JSONUtil.jsonToList(jedisService.getString("seatLayoutList"));
             return list;
-        }else{
+        } else {
             pullAllToRedis();
         }
         return seatLayoutMapper.findAllList();
@@ -47,22 +48,22 @@ public class SeatLayoutServiceImpl implements SeatLayoutService {
     @Override
     public void pullAllToRedis() {
         List<SeatLayout> seatLayoutList = seatLayoutMapper.findAllList();
-        List<String> seatList = new ArrayList<String>();
         //把所有的座位结构放到redis中
-        Map<String,String> seatLayoutMap = new HashMap<String,String>();
-        for (SeatLayout seatLayout:seatLayoutList
+        Map<String, String> seatLayoutMap = new HashMap<String, String>();
+        for (SeatLayout seatLayout : seatLayoutList
                 ) {
-            int x = seatLayout.getSeatLeft()+seatLayout.getSeatMid()+seatLayout.getSeatRight();
+            List<String> seatList = new ArrayList<String>();
+            int x = seatLayout.getSeatLeft() + seatLayout.getSeatMid() + seatLayout.getSeatRight();
             int y = seatLayout.getSeatRows();
-            for (int i =0 ;i<x;i++){
-                for (int j =0;j<y;j++){
-                    seatList.add(new StringBuffer(i+"").append(",").append(j).toString());
+            for (int i = 0; i < x; i++) {
+                for (int j = 0; j < y; j++) {
+                    seatList.add(new StringBuffer(i + "").append(",").append(j).toString());
                 }
             }
-            seatLayoutMap.put(""+seatLayout.getSeatId(),JSONUtil.listToJson(seatList));
+            seatLayoutMap.put("" + seatLayout.getSeatId(), JSONUtil.listToJson(seatList));
         }
-        jedisService.mapPut("seatLayoutMap",seatLayoutMap);
-        jedisService.put("seatLayoutList",JSONUtil.listToJson(seatLayoutList));
+        jedisService.mapPut("seatLayoutMap", seatLayoutMap);
+        jedisService.put("seatLayoutList", JSONUtil.listToJson(seatLayoutList));
     }
 
     @Override
@@ -77,7 +78,7 @@ public class SeatLayoutServiceImpl implements SeatLayoutService {
         return courseRoster;
     }
 
-//    @Override
+    //    @Override
 //    public List<String> findCourseSeatLayout(Long seatId) {
 //        if (jedisService.mapExists("seatLayoutMap",seatId+"")){
 //            return JSONUtil.jsonToList(jedisService.mapGet("seatLayoutMap",""+seatId));
@@ -86,4 +87,18 @@ public class SeatLayoutServiceImpl implements SeatLayoutService {
 //            return JSONUtil.jsonToList(jedisService.mapGet("seatLayoutMap",""+seatId));
 //        }
 //    }
+    public static void main(String[] args) {
+        List<String> seatList = new ArrayList<String>();
+        for (int a = 0; a < 3; a++
+                ) {
+            int x = 9;
+            int y = 5;
+            for (int i = 0; i < x; i++) {
+                for (int j = 0; j < y; j++) {
+                    seatList.add(new StringBuffer(i + "").append(",").append(j).toString());
+                }
+            }
+            System.out.println(seatList);
+        }
+    }
 }

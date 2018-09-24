@@ -70,7 +70,7 @@ public class ClassCourseController {
             }
             jedisService.put("course-seatLayout:"+classCourseRespone.getCourseId(),jedisService.mapGet("seatLayoutMap",seatId+""));
         }
-        return ReturnParam.systemError("系统异常,请联系开发人员!");
+        return ReturnParam.success(classCourseRespone);
     }
 
     @PostMapping("update")
