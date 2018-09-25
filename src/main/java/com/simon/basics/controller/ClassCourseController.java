@@ -74,7 +74,7 @@ public class ClassCourseController {
     }
 
     @PostMapping("update")
-    @ApiOperation("课程新增")
+    @ApiOperation("课程修改")
     public ReturnParam update(ClassCourse classCourse, @RequestParam Long courseId) {
         return ReturnParam.success(classCourseService.update(classCourse));
     }
