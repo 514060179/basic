@@ -15,7 +15,7 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    attendance_id, course_id, account_id, attend_section_num,additional_seat_x,additional_seat_y attend_name, attend_remark, attend_type,
+    attendance_id, course_id, account_id, attend_section_num,additional_seat_x,additional_seat_y, attend_name, attend_remark, attend_type,
     create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -172,4 +172,12 @@
     </set>
     where  course_id = #{courseId,jdbcType=BIGINT} and attend_section_num = #{attendSectionNum,jdbcType=INTEGER}
   </update>
+
+  <select id="findTeacherRosterAttendance" resultMap="BaseResultMap">
+    select
+    ra.attendance_id, ra.course_id, ra.account_id, ra.attend_section_num,ra.additional_seat_x,ra.additional_seat_y,ra.attend_name, ra.attend_remark, ra.attend_type,
+    ra.create_time, ra.update_time
+    FROM roster_attendance ra LEFT JOIN class_course cc ON ra.`course_id`=cc.`course_id`
+    where ra.course_id = #{courseId,jdbcType=BIGINT} and ra.attend_type=2 AND ra.attend_section_num=#{courseCurrent} and ra.end_time is null
+  </select>
 </mapper>

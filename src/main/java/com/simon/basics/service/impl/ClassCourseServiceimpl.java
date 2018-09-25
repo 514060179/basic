@@ -118,6 +118,11 @@ public class ClassCourseServiceimpl implements ClassCourseService {
     }
 
     @Override
+    public RosterAttendance getTeacherAttendance(Long courseId, int courseCurrent) {
+        return rosterAttendanceMapper.selectByCourseAndNum(courseId,courseCurrent);
+    }
+
+    @Override
     public RosterAttendance findRosterAttendance(Long courseId, int courseCurrent) {
         return rosterAttendanceMapper.selectByCourseAndNum(courseId, courseCurrent);
     }
@@ -202,8 +207,8 @@ public class ClassCourseServiceimpl implements ClassCourseService {
     }
 
     @Override
-    public CourseRoster findTeacherCourseRoster(Long courseId, int courseCurrent) {
-        return courseRosterMapper.findTeacherCourseRoster(courseId,courseCurrent);
+    public RosterAttendance findTeacherRosterAttendance(Long courseId, int courseCurrent) {
+        return rosterAttendanceMapper.findTeacherRosterAttendance(courseId,courseCurrent);
     }
 
     @Transactional

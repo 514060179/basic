@@ -128,8 +128,8 @@ public class ClassCourseController {
         }
         int courseCurrent = classCourseWithBLOBs.getCourseCurrent();
         //查找当前课程是否开始(老师是否签到)
-        CourseRoster courseRoster = classCourseService.findTeacherCourseRoster(courseId, classCourseWithBLOBs.getCourseCurrent());
-        if (Objects.isNull(courseRoster)) {
+        RosterAttendance rosterAttendance = classCourseService.findTeacherRosterAttendance(courseId, classCourseWithBLOBs.getCourseCurrent());
+        if (Objects.isNull(rosterAttendance)) {
             logger.warn("课程courseId={},courseCurrent={}未开始", courseId, courseCurrent);
             return ReturnParam.courseNotBeginning();
         }
@@ -141,8 +141,21 @@ public class ClassCourseController {
     @ApiOperation("老师添加串课名单")
     public ReturnParam additional(@RequestParam Long courseId, @RequestParam Long accountId, @RequestParam int rosterSeatX, @RequestParam int rosterSeatY) {
         //查询是否有资格
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        ClassCourse classCourse = classCourseService.findOne(courseId, null,user.getAccountId());
+        User user = (User) SecurityUtils.getSubject().getPrincipal();//查找当前课程是否开始(老师是否签到)
+
+        ClassCourseWithBLOBs classCourse = (ClassCourseWithBLOBs)classCourseService.findOne(courseId, accountId,user.getAccountId());
+        RosterAttendance rosterAttendance = classCourseService.findTeacherRosterAttendance(courseId, classCourse.getCourseCurrent());
+        if (Objects.isNull(rosterAttendance)) {
+            logger.warn("课程courseId={},courseCurrent={}未开始", courseId, classCourse.getCourseCurrent());
+            return ReturnParam.courseNotBeginning();
+        }
+        if (classCourse.getBought()){
+            //课程名单内学生
+//            classCourseService.sign(courseId, classCourse.getCourseCurrent());
+//            return ReturnParam.success(classCourseService.getAttendanceList(courseId, classCourse.getCourseCurrent()));
+            logger.warn("课程名单内学生无法重复签到!");
+            return ReturnParam.repeatResource("课程名单内学生无法重复签到!");
+        }
         Long type = classCourse.getTypeId();
         CourseRoster courseRoster = classCourseService.findCourseRoster(accountId, type);
         if (!Objects.isNull(courseRoster)) {
@@ -167,6 +180,12 @@ public class ClassCourseController {
             logger.warn("找不到资源：courseId=" + courseId);
             return ReturnParam.noHandlerFound("找不到资源：courseId=" + courseId);
         }
+        //获取老师的签到情况
+        RosterAttendance rosterAttendance = classCourseService.getTeacherAttendance(courseId, classCourse.getCourseCurrent());
+        if (!Objects.isNull(rosterAttendance.getEndTime())){
+            logger.warn("老师结束课程重复操作courseId={}",courseId);
+            return ReturnParam.repeatResource("课程已经结束！");
+        }
         List<CourseRosterAttendance> courseRosterAttendanceList = classCourseService.getAttendanceList(courseId, classCourse.getCourseCurrent());
         int actualNumber = 0;//实到人数
         int mustNumber = courseRosterAttendanceList.size();//应到人数
@@ -177,7 +196,7 @@ public class ClassCourseController {
             if (courseRosterAttendance.getAttendance()) {
                 actualNumber++;
             }
-            if (user.getAccountId() == courseRosterAttendance.getAccountId()) { //老师签单单
+            if (user.getAccountId() == courseRosterAttendance.getAccountId()) { //老师签到单
                 total = new Date().getTime() - courseRosterAttendance.getCreateTime().getTime();
             }
         }

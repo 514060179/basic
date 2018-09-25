@@ -70,7 +70,13 @@ public interface ClassCourseService {
      */
     List<CourseRosterAttendance> getAttendanceList(Long courseId, int courseCurrent);
 
-
+    /**
+     *  获取老师的出勤情况
+     * @param courseId
+     * @param courseCurrent
+     * @return
+     */
+    RosterAttendance getTeacherAttendance(Long courseId, int courseCurrent);
     /**
      * 获取X课时出席名单
      *
@@ -111,7 +117,7 @@ public interface ClassCourseService {
      * @param courseCurrent
      * @return
      */
-    CourseRoster findTeacherCourseRoster(Long courseId, int courseCurrent);
+    RosterAttendance findTeacherRosterAttendance(Long courseId, int courseCurrent);
 
     /**
      * 串课

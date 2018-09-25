@@ -15,4 +15,6 @@ public interface RosterAttendanceMapper {
 
     int updateByCourseAndNum(RosterAttendance record);
 
+    RosterAttendance findTeacherRosterAttendance(@Param("courseId") Long courseId, @Param("courseCurrent") int courseCurrent);
+
 }

@@ -60,12 +60,12 @@
     where cc.type_id = #{typeId,jdbcType=BIGINT} LIMIT 0,1
   </select>
 
-  <select id="findTeacherCourseRoster" resultMap="BaseResultMap">
-    select
-    <include refid="Union_Column_List" />
-    FROM roster_attendance ra LEFT JOIN class_course cc ON ra.`course_id`=cc.`course_id`
-    where ra.course_id = #{courseId,jdbcType=BIGINT} and ra.attend_type=2 AND ra.attend_section_num=#{courseCurrent}
-  </select>
+  <!--<select id="findTeacherCourseRoster" resultMap="BaseResultMap">-->
+    <!--select-->
+    <!--<include refid="Base_Column_List" />-->
+    <!--FROM roster_attendance ra LEFT JOIN class_course cc ON ra.`course_id`=cc.`course_id`-->
+    <!--where ra.course_id = #{courseId,jdbcType=BIGINT} and ra.attend_type=2 AND ra.attend_section_num=#{courseCurrent}-->
+  <!--</select>-->
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from course_roster
     where roster_id = #{rosterId,jdbcType=BIGINT}

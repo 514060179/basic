@@ -22,5 +22,5 @@ public interface CourseRosterMapper {
 
     int updateByPrimaryKey(CourseRoster record);
 
-    CourseRoster findTeacherCourseRoster(Long courseId, int courseCurrent);
+//    CourseRoster findTeacherCourseRoster(@Param("courseId") Long courseId, @Param("courseCurrent") int courseCurrent);
 }
