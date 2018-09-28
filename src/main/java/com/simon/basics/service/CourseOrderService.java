@@ -38,4 +38,5 @@ public interface CourseOrderService {
     CourseOrder findOneByCourseId(Long courseId);
 
 
+    int paySuccess(Long orderId);
 }

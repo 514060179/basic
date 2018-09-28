@@ -7,6 +7,7 @@ import com.simon.basics.service.ClassCourseService;
 import com.simon.basics.service.CourseOrderService;
 import com.simon.basics.util.SnowflakeIdWorker;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +32,13 @@ public class CourseOrderController {
     private ClassCourseService classCourseService;
 
     @PostMapping("list")
+    @ApiOperation("查询订单列表")
     public ReturnParam list(CourseOrder courseOrder, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
         return ReturnParam.success(courseOrderService.getListByPage(courseOrder,pageNum,pageSize));
     }
 
     @PostMapping("create")
+    @ApiOperation("学生创建订单")
     public ReturnParam create(@RequestParam Long courseId) {
         ClassCourse classCourse = classCourseService.findOne(courseId,null,null);
         if(Objects.isNull(classCourse)){
@@ -48,5 +51,11 @@ public class CourseOrderController {
             return ReturnParam.repeatOrder();
         }
         return ReturnParam.success(courseOrderService.create(classCourse));
+    }
+
+    @PostMapping("orderId")
+    @ApiOperation("模拟支付成功")
+    public ReturnParam paySuccess(@RequestParam Long orderId){
+        return ReturnParam.success(courseOrderService.paySuccess(orderId));
     }
 }

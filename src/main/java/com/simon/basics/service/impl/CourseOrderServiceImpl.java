@@ -70,4 +70,12 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         }
         return findCourseOrderList.get(0);
     }
+
+    @Override
+    public int paySuccess(Long orderId) {
+        CourseOrder courseOrder = new CourseOrder();
+        courseOrder.setOrderId(orderId);
+        courseOrder.setOrderStatus(EnumCode.OrderStatus.ORDER_PAID.getValue());
+        return courseOrderMapper.updateByPrimaryKeySelective(courseOrder);
+    }
 }
