@@ -100,12 +100,12 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
         Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
-//        filters.put("token", new LoginAuthorizationFilter());
-//        filters.put("corsFilter", new RestFilter());
-//        filters.put("customRolesAuthorizationFilter", new CustomRolesAuthorizationFilter());
+        filters.put("token", new LoginAuthorizationFilter());
+        filters.put("corsFilter", new RestFilter());
+        filters.put("customRolesAuthorizationFilter", new CustomRolesAuthorizationFilter());
         shiroFilter.setFilters(filters);
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-//        filterChainDefinitionMap.putAll(roleChains());
+        filterChainDefinitionMap.putAll(roleChains());
         shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilter;
     }
