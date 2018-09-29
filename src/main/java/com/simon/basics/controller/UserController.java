@@ -1,6 +1,8 @@
 package com.simon.basics.controller;
 
 import com.simon.basics.componet.service.JedisService;
+import com.simon.basics.model.Account;
+import com.simon.basics.model.EnumCode;
 import com.simon.basics.model.User;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.service.UserService;
@@ -42,7 +44,7 @@ public class UserController {
 
     @PostMapping("list")
     @ApiOperation(value = "学生/教师/管理员列表。type：0管理员1学生2教师")
-    public ReturnParam list(User user, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "20") int pageSize,@RequestParam(defaultValue = "1") String type) {
+    public ReturnParam list(User user, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "20") int pageSize, @RequestParam(defaultValue = "1") String type) {
         return ReturnParam.success(userService.findListByPage(user, pageNum, pageSize));
     }
 
@@ -64,10 +66,10 @@ public class UserController {
     @PostMapping("add")
     @ApiOperation(value = "添加用户（学生/教师） type=1 学生 type=2教师")
     public ReturnParam add(User user, @Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！")
-                                        @RequestParam String phone, @RequestParam(defaultValue = "1") String type,@RequestParam String name,
-                                        @RequestParam Integer age, @RequestParam String username, @RequestParam String password,
-                                        @RequestParam String verification,
-                                        @Pattern(regexp="^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$",message = "身份证号码格式有误！")@RequestParam String cardNum) {
+    @RequestParam String phone, @RequestParam(defaultValue = "1") String type, @RequestParam String name,
+                           @RequestParam Integer age, @RequestParam String username, @RequestParam String password,
+                           @RequestParam String verification,
+                           @Pattern(regexp = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$", message = "身份证号码格式有误！") @RequestParam String cardNum) {
         //验证码验证
         String code = jedisService.getString(phone);
         if (StringUtils.isEmpty(code)) {
@@ -83,8 +85,18 @@ public class UserController {
             logger.warn("新增用户{}已存在", user.getName());
             return ReturnParam.userExist();
         }
-        user.setPassword(SaltEncryUtil.getMD5SaltString(username,password));
+        user.setPassword(SaltEncryUtil.getMD5SaltString(username, password));
         return ReturnParam.success(userService.add(user));
+    }
+
+    @PostMapping("addManager")
+    @ApiOperation(value = "新增管理员")
+    public ReturnParam addManager(@RequestParam String username, @RequestParam String password) {
+        Account account = new Account();
+        account.setUsername(username);
+        account.setPassword(SaltEncryUtil.getMD5SaltString(username,password));
+        account.setType(EnumCode.UserType.TYPE_MANAGER.getValue());
+        return ReturnParam.success(userService.addManager(account));
     }
 
     @PostMapping("update")

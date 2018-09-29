@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.simon.basics.dao.RoleMapper;
 import com.simon.basics.dao.UserMapper;
 import com.simon.basics.dao.UserRoleMapper;
+import com.simon.basics.model.Account;
 import com.simon.basics.model.EnumCode;
 import com.simon.basics.model.User;
 import com.simon.basics.model.UserRole;
@@ -69,6 +70,12 @@ public class UserServiceImpl implements UserService{
     public int update(User user) {
         userMapper.updateByPrimaryKeySelective(user);
         return 0;
+    }
+
+    @Override
+    public Account addManager(Account account) {
+        userMapper.insertAccountSelective(account);
+        return account;
     }
 
 

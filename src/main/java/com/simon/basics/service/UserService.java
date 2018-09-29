@@ -1,5 +1,6 @@
 package com.simon.basics.service;
 
+import com.simon.basics.model.Account;
 import com.simon.basics.model.User;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface UserService {
     int add(User user);
 
     int update(User user);
+
+    Account addManager(Account account);
 }
