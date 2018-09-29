@@ -101,7 +101,7 @@
 
   <select id="findRoleListByAccountId" resultType="string">
     SELECT role_name
-    FROM user u LEFT JOIN user_role ur ON u.user_id=ur.account_id
+    FROM user u LEFT JOIN user_role ur ON u.account_id=ur.account_id
     LEFT JOIN role r ON ur.role_id=r.role_id
      WHERE u.account_id=#{accountId}
   </select>

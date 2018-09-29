@@ -1,8 +1,12 @@
 package com.simon.basics.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.simon.basics.dao.RoleMapper;
 import com.simon.basics.dao.UserMapper;
+import com.simon.basics.dao.UserRoleMapper;
+import com.simon.basics.model.EnumCode;
 import com.simon.basics.model.User;
+import com.simon.basics.model.UserRole;
 import com.simon.basics.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserRoleMapper userRoleMapper;
 
 
     @Override
@@ -42,6 +49,19 @@ public class UserServiceImpl implements UserService{
         }else{
             throw new RuntimeException("新增用户出错！");
         }
+        String type = user.getType();
+        UserRole userRole = new UserRole();
+        userRole.setAccountId(user.getAccountId());
+        if (EnumCode.UserType.TYPE_MANAGER.getValue().equals(type)){//管理员
+            userRole.setRoleId(3L);
+        }else if(EnumCode.UserType.TYPE_TEACHER.getValue().equals(type)){//老师
+            userRole.setRoleId(2L);
+        }else if (EnumCode.UserType.TYPE_SUPER.getValue().equals(type)){//超级用户
+            userRole.setRoleId(4L);
+        }else{//学生
+            userRole.setRoleId(1L);
+        }
+        userRoleMapper.insertSelective(userRole);
         return i;
     }
 
