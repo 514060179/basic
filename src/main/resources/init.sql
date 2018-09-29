@@ -482,3 +482,8 @@ ALTER TABLE `simon`.`roster_attendance`
 
   ALTER TABLE `simon`.`course_roster`
   ADD  UNIQUE INDEX `roster_unique_key` (`course_id`, `account_id`);
+
+
+
+ALTER TABLE `simon`.`course_order`
+  CHANGE `order_status` `order_status` ENUM('0','1','2','3') CHARSET utf8mb4 COLLATE utf8mb4_bin DEFAULT '0' NOT NULL COMMENT '状态(0未支付1成功2部分退款3申请退款)';
