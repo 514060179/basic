@@ -160,8 +160,8 @@
       <if test="attendRemark != null" >
         attend_remark = #{attendRemark,jdbcType=VARCHAR},
       </if>
-      <if test="ebdTime != null" >
-        end_time = #{ebdTime,jdbcType=TIMESTAMP},
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},

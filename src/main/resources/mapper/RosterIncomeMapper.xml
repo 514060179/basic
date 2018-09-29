@@ -221,4 +221,57 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where income_id = #{incomeId,jdbcType=BIGINT}
   </update>
+
+  <select id="findListByCondition" resultMap="BaseResultMap" parameterType="com.simon.basics.model.RosterIncome" >
+    select
+    <include refid="Base_Column_List" />
+    from roster_income
+    <where>
+      <if test="accountId != null" >
+        and account_id = #{accountId,jdbcType=BIGINT}
+      </if>
+      <if test="courseId != null" >
+        and course_id = #{courseId,jdbcType=BIGINT}
+      </if>
+      <if test="incomeSectionNum != null" >
+        and income_section_num = #{incomeSectionNum,jdbcType=INTEGER}
+      </if>
+      <if test="incomeType != null" >
+        and income_type = #{incomeType,jdbcType=CHAR}
+      </if>
+      <if test="mustNumber != null" >
+        and must_number = #{mustNumber,jdbcType=INTEGER}
+      </if>
+      <if test="actualNumber != null" >
+        and actual_number = #{actualNumber,jdbcType=INTEGER}
+      </if>
+      <if test="totalHour != null" >
+        and total_hour = #{totalHour,jdbcType=DECIMAL}
+      </if>
+      <if test="averageHour != null" >
+        and average_hour = #{averageHour,jdbcType=DECIMAL}
+      </if>
+      <if test="averageHourCost != null" >
+        and average_hour_cost = #{averageHourCost,jdbcType=DECIMAL}
+      </if>
+      <if test="percentage != null" >
+        and percentage = #{percentage,jdbcType=DECIMAL}
+      </if>
+      <if test="exceedNum != null" >
+        and exceed_num = #{exceedNum,jdbcType=INTEGER}
+      </if>
+      <if test="averageCourse != null" >
+        and average_course = #{averageCourse,jdbcType=DECIMAL}
+      </if>
+      <if test="incomeAmount != null" >
+        and income_amount = #{incomeAmount,jdbcType=DECIMAL}
+      </if>
+      <if test="createTime != null" >
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null" >
+        and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
 </mapper>

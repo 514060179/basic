@@ -189,15 +189,12 @@ public class ClassCourseController {
         List<CourseRosterAttendance> courseRosterAttendanceList = classCourseService.getAttendanceList(courseId, classCourse.getCourseCurrent());
         int actualNumber = 0;//实到人数
         int mustNumber = courseRosterAttendanceList.size();//应到人数
-        Long total = 0L;
+        Long total = new Date().getTime() - rosterAttendance.getCreateTime().getTime();
         //查询名单
         for (CourseRosterAttendance courseRosterAttendance : courseRosterAttendanceList
                 ) {
-            if (courseRosterAttendance.getAttendance()) {
+            if (Objects.isNull(courseRosterAttendance.getAttendance())||courseRosterAttendance.getAttendance()) {
                 actualNumber++;
-            }
-            if (user.getAccountId() == courseRosterAttendance.getAccountId()) { //老师签到单
-                total = new Date().getTime() - courseRosterAttendance.getCreateTime().getTime();
             }
         }
         classCourseService.courseEnd(classCourse, user, actualNumber, mustNumber, total);

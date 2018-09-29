@@ -2,6 +2,8 @@ package com.simon.basics.dao;
 
 import com.simon.basics.model.RosterIncome;
 
+import java.util.List;
+
 public interface RosterIncomeMapper {
     int deleteByPrimaryKey(Long incomeId);
 
@@ -14,4 +16,6 @@ public interface RosterIncomeMapper {
     int updateByPrimaryKeySelective(RosterIncome record);
 
     int updateByPrimaryKey(RosterIncome record);
+
+    List<RosterIncome> findListByCondition(RosterIncome rosterIncome);
 }
