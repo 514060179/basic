@@ -105,8 +105,8 @@ public class ShiroConfig {
         filters.put("customRolesAuthorizationFilter", new CustomRolesAuthorizationFilter());
         shiroFilter.setFilters(filters);
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        filterChainDefinitionMap.put("/pass/*","corsFilter");
-        filterChainDefinitionMap.putAll(roleChains());
+        filterChainDefinitionMap.put("/**","corsFilter");
+//        filterChainDefinitionMap.putAll(roleChains());
         shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilter;
     }

@@ -60,7 +60,7 @@ public class UserController {
             logger.warn("重复发送验证码{}", phone);
             return ReturnParam.verifing();
         }
-        return ReturnParam.success(code);
+        return ReturnParam.success("获取成功!",code);
     }
 
     @PostMapping("add")
