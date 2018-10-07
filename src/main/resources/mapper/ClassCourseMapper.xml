@@ -90,56 +90,56 @@
     <select id="findListByCondition" resultMap="UnionMapResult" parameterType="com.simon.basics.model.ClassCourse">
         select
         <include refid="Union_Column_List"/>
-        <if test="accountId != null">
+        <if test="classCourse.accountId != null">
             ,IFNULL(co.order_id,FALSE ) AS bought
         </if>
         from class_course cc
         JOIN seat_layout sl ON cc.seat_id=sl.seat_id
         JOIN user u ON u.account_id=cc.account_id
         JOIN course_type ct ON ct.type_id=cc.type_id
-        <if test="accountId != null">
-            LEFT JOIN course_order co ON cc.course_id=co.course_id AND co.account_id = #{accountId,jdbcType=BIGINT} AND
+        <if test="classCourse.accountId != null">
+            LEFT JOIN course_order co ON cc.course_id=co.course_id AND co.account_id = #{classCourse.accountId,jdbcType=BIGINT} AND
             co.order_status = '1'
         </if>
         <where>
-            <if test="seatId != null">
-                AND cc.seat_id = #{seatId,jdbcType=BIGINT}
+            <if test="classCourse.seatId != null">
+                AND cc.seat_id = #{classCourse.seatId,jdbcType=BIGINT}
             </if>
-            <if test="typeId != null">
-                AND cc.type_id = #{typeId,jdbcType=BIGINT}
+            <if test="classCourse.typeId != null">
+                AND cc.type_id = #{classCourse.typeId,jdbcType=BIGINT}
             </if>
             <if test="teacherId != null">
                 AND cc.account_id = #{teacherId,jdbcType=BIGINT}
             </if>
-            <if test="courseName != null">
-                AND cc.course_name = #{courseName,jdbcType=VARCHAR}
+            <if test="classCourse.courseName != null">
+                AND cc.course_name = #{classCourse.courseName,jdbcType=VARCHAR}
             </if>
-            <if test="courseCost != null">
-                AND cc.course_cost = #{courseCost,jdbcType=DOUBLE}
+            <if test="classCourse.courseCost != null">
+                AND cc.course_cost = #{classCourse.courseCost,jdbcType=DOUBLE}
             </if>
-            <if test="courseStartTime != null">
-                AND cc.course_start_time = #{courseStartTime,jdbcType=TIMESTAMP}
+            <if test="classCourse.courseStartTime != null">
+                AND cc.course_start_time = #{classCourse.courseStartTime,jdbcType=TIMESTAMP}
             </if>
-            <if test="courseEndTime != null">
-                AND cc.course_end_time = #{courseEndTime,jdbcType=TIMESTAMP}
+            <if test="classCourse.courseEndTime != null">
+                AND cc.course_end_time = #{classCourse.courseEndTime,jdbcType=TIMESTAMP}
             </if>
-            <if test="courseStatus != null">
-                AND cc.course_status = #{courseStatus,jdbcType=CHAR}
+            <if test="classCourse.courseStatus != null">
+                AND cc.course_status = #{classCourse.courseStatus,jdbcType=CHAR}
             </if>
-            <if test="deleted != null">
-                AND cc.deleted = #{deleted,jdbcType=BIT}
+            <if test="classCourse.deleted != null">
+                AND cc.deleted = #{classCourse.deleted,jdbcType=BIT}
             </if>
-            <if test="createTime != null">
-                AND cc.create_time = #{createTime,jdbcType=TIMESTAMP}
+            <if test="classCourse.createTime != null">
+                AND cc.create_time = #{classCourse.createTime,jdbcType=TIMESTAMP}
             </if>
-            <if test="updateTime != null">
-                AND cc.update_time = #{updateTime,jdbcType=TIMESTAMP}
+            <if test="classCourse.updateTime != null">
+                AND cc.update_time = #{classCourse.updateTime,jdbcType=TIMESTAMP}
             </if>
-            <if test="courseAbstract != null">
-                AND cc.course_abstract = #{courseAbstract,jdbcType=LONGVARCHAR}
+            <if test="classCourse.courseAbstract != null">
+                AND cc.course_abstract = #{classCourse.courseAbstract,jdbcType=LONGVARCHAR}
             </if>
-            <if test="courseRemark != null">
-                AND cc.course_remark = #{courseRemark,jdbcType=LONGVARCHAR}
+            <if test="classCourse.courseRemark != null">
+                AND cc.course_remark = #{classCourse.courseRemark,jdbcType=LONGVARCHAR}
             </if>
         </where>
     </select>
