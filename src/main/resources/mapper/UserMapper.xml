@@ -252,7 +252,7 @@
     from account a LEFT JOIN user u ON u.account_id=a.account_id
     <where>
       <if test="accountId != null" >
-        AND u.account_id = #{accountId,jdbcType=BIGINT}
+        AND a.account_id = #{accountId,jdbcType=BIGINT}
       </if>
       <if test="name != null" >
         AND u.NAME = #{name,jdbcType=VARCHAR}
@@ -261,7 +261,7 @@
         AND u.sex = #{sex,jdbcType=CHAR}
       </if>
       <if test="type != null" >
-        AND u.type = #{type,jdbcType=CHAR}
+        AND a.type = #{type,jdbcType=CHAR}
       </if>
       <if test="age != null" >
         AND u.age = #{age,jdbcType=INTEGER}

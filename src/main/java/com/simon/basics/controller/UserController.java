@@ -48,6 +48,12 @@ public class UserController {
         return ReturnParam.success(userService.findListByPage(user, pageNum, pageSize));
     }
 
+    @PostMapping("detail")
+    @ApiOperation(value = "学生/教师/管理员详情")
+    public ReturnParam detail(@RequestParam Long accountId) {
+        return ReturnParam.success(userService.findByAccountId(accountId));
+    }
+
     @PostMapping("sendCode")
     @ApiOperation(value = "添加用户（学生/教师）发送验证码")
     public ReturnParam sendCode(@RequestParam @Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！") String phone) {

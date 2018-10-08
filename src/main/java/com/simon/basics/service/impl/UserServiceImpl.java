@@ -35,6 +35,17 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User findByAccountId(Long accountId) {
+        User user = new User();
+        user.setAccountId(accountId);
+        List<User> userList = userMapper.findListByCondition(user);
+        if (userList!=null&&userList.size()>0){
+            return userList.get(0);
+        }
+        return null;
+    }
+
+    @Override
     public List<User> findListByPage(User user, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum,pageSize);
         return userMapper.findListByCondition(user);
