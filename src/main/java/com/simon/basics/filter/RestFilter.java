@@ -32,7 +32,7 @@ public class RestFilter implements Filter {
             res.setHeader("Access-Control-Allow-Credentials", "true");
             String origin = Optional.ofNullable(req.getHeader("Origin")).orElse(req.getHeader("Referer"));
             //设置允许的请求来源
-            res.setHeader("Access-Control-Allow-Origin", "*");
+            res.setHeader("Access-Control-Allow-Origin", origin);
             //设置允许的请求方法
             res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
         }
