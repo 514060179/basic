@@ -487,3 +487,9 @@ ALTER TABLE `simon`.`roster_attendance`
 
 ALTER TABLE `simon`.`course_order`
   CHANGE `order_status` `order_status` ENUM('0','1','2','3') CHARSET utf8mb4 COLLATE utf8mb4_bin DEFAULT '0' NOT NULL COMMENT '状态(0未支付1成功2部分退款3申请退款)';
+
+
+-- 20181008
+ALTER TABLE `simon`.`user`
+CHANGE `age` `age` INT(11) NULL COMMENT '年龄',
+  ADD COLUMN `birthday` DATE NULL COMMENT '生日' AFTER `sex`;
