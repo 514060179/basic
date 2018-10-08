@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ClassCourse {
@@ -29,6 +30,15 @@ public class ClassCourse {
 
     @ApiModelProperty(value = "开始时间")
     private Date courseStartTime;
+
+    @ApiModelProperty(value = "开始日期",hidden = true)
+    private String courseStartDateStr;
+    @ApiModelProperty(value = "上课时间",hidden = true)
+    private String classStartTimeStr;
+    @ApiModelProperty(value = "结束日期",hidden = true)
+    private String courseEndDateStr;
+    @ApiModelProperty(value = "下课时间",hidden = true)
+    private String classEndTimeStr;
 
     @ApiModelProperty(value = "结束日期")
     private Date courseEndTime;
@@ -185,5 +195,49 @@ public class ClassCourse {
 
     public void setCourseRemark(String courseRemark) {
         this.courseRemark = courseRemark == null ? null : courseRemark.trim();
+    }
+
+    public String getCourseStartDateStr() {
+        if (courseStartTime!=null){
+            return new SimpleDateFormat("yyyy-MM-dd").format(courseStartTime);
+        }
+        return courseStartDateStr;
+    }
+
+    public void setCourseStartDateStr(String courseStartDateStr) {
+        this.courseStartDateStr = courseStartDateStr;
+    }
+
+    public String getClassStartTimeStr() {
+        if (courseStartTime!=null){
+            return new SimpleDateFormat("HH:mm:ss").format(courseStartTime);
+        }
+        return classStartTimeStr;
+    }
+
+    public void setClassStartTimeStr(String classStartTimeStr) {
+        this.classStartTimeStr = classStartTimeStr;
+    }
+
+    public String getCourseEndDateStr() {
+        if (courseEndTime!=null){
+            return new SimpleDateFormat("yyyy-MM-dd").format(courseEndTime);
+        }
+        return courseEndDateStr;
+    }
+
+    public void setCourseEndDateStr(String courseEndDateStr) {
+        this.courseEndDateStr = courseEndDateStr;
+    }
+
+    public String getClassEndTimeStr() {
+        if (courseEndTime!=null){
+            return new SimpleDateFormat("HH:mm:ss").format(courseEndTime);
+        }
+        return classEndTimeStr;
+    }
+
+    public void setClassEndTimeStr(String classEndTimeStr) {
+        this.classEndTimeStr = classEndTimeStr;
     }
 }
