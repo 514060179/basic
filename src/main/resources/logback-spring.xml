@@ -2,7 +2,7 @@
 <configuration>
 
     <!-- 定义日志文件 输出位置 -->
-    <property name="log.home_dir" value="F:\logs"/>
+    <property name="log.home_dir" value="/home/simon/server/logs"/>
     <!-- 日志最大的历史 30天 -->
     <property name="log.maxHistory" value="30"/>
     <!--等级-->
