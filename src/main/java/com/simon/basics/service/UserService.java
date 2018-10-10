@@ -14,6 +14,8 @@ public interface UserService {
 
     User findByUserName(String userName);
 
+    User findByAccountId(Long accountId);
+
     List<User> findListByPage(User user, int pageNum, int pageSize);
 
     int add(User user);

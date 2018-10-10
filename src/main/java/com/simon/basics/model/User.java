@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 
@@ -21,6 +22,8 @@ public class User extends Account {
     private String parentName;
     @ApiModelProperty("用户性别")
     private String sex;
+    @ApiModelProperty(value = "生日,格式:2007-01-10")
+    private java.sql.Date birthday;
     @ApiModelProperty("用户年龄")
     private Integer age;
     @ApiModelProperty("用户手机号码")
@@ -99,7 +102,18 @@ public class User extends Account {
         this.sex = sex == null ? null : sex.trim();
     }
 
+    public java.sql.Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(java.sql.Date birthday) {
+        this.birthday = birthday;
+    }
+
     public Integer getAge() {
+        if (birthday!=null){
+            return getAge(birthday);
+        }
         return age;
     }
 
@@ -201,5 +215,28 @@ public class User extends Account {
 
     public void setRoleSet(Set<String> roleSet) {
         this.roleSet = roleSet;
+    }
+
+    private int getAge(Date birthDay){
+        Calendar cal = Calendar.getInstance();
+        if (cal.before(birthDay)) {
+            throw new IllegalArgumentException("The birthDay is before Now.It's unbelievable!");
+        }
+        int yearNow = cal.get(Calendar.YEAR);
+        int monthNow = cal.get(Calendar.MONTH);
+        int dayOfMonthNow = cal.get(Calendar.DAY_OF_MONTH);
+        cal.setTime(birthDay);
+        int yearBirth = cal.get(Calendar.YEAR);
+        int monthBirth = cal.get(Calendar.MONTH);
+        int dayOfMonthBirth = cal.get(Calendar.DAY_OF_MONTH);
+        int age = yearNow - yearBirth;
+        if (monthNow <= monthBirth) {
+            if (monthNow == monthBirth) {
+                if (dayOfMonthNow < dayOfMonthBirth) age--;
+            } else {
+                age--;
+            }
+        }
+        return age;
     }
 }

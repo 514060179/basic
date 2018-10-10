@@ -13,6 +13,7 @@
     <result column="parent_name" property="parentName" jdbcType="VARCHAR" />
     <result column="sex" property="sex" jdbcType="CHAR" />
     <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
     <result column="phone" property="phone" jdbcType="VARCHAR" />
     <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
@@ -29,7 +30,7 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    a.username,a.password,u.user_id, a.account_id, u.name,u.parent_name, u.sex, u.age, u.phone, u.card_num, u.address, a.`type`, u.remark, u.create_time,
+    a.username,a.password,u.user_id, a.account_id, u.name,u.parent_name, u.sex, u.age,u.birthday, u.phone, u.card_num, u.address, a.`type`, u.remark, u.create_time,
     u.update_time,u.teacher_charge_type,u.average_hour,u.percentage,u.exceed_num,u.average_hour_cost,u.grade_name,u.school_name
   </sql>
   <insert id="insertSelective" parameterType="com.simon.basics.model.User" >
@@ -52,6 +53,9 @@
       </if>
       <if test="age != null" >
         age,
+      </if>
+      <if test="birthday != null" >
+        birthday,
       </if>
       <if test="phone != null" >
         phone,
@@ -114,6 +118,9 @@
       </if>
       <if test="age != null" >
         #{age,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
       </if>
       <if test="phone != null" >
         #{phone,jdbcType=VARCHAR},
@@ -196,6 +203,9 @@
       <if test="age != null" >
         age = #{age,jdbcType=INTEGER},
       </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
       <if test="parentName != null" >
         parent_name = #{parentName,jdbcType=VARCHAR},
       </if>
@@ -242,7 +252,7 @@
     from account a LEFT JOIN user u ON u.account_id=a.account_id
     <where>
       <if test="accountId != null" >
-        AND u.account_id = #{accountId,jdbcType=BIGINT}
+        AND a.account_id = #{accountId,jdbcType=BIGINT}
       </if>
       <if test="name != null" >
         AND u.NAME = #{name,jdbcType=VARCHAR}
@@ -251,10 +261,13 @@
         AND u.sex = #{sex,jdbcType=CHAR}
       </if>
       <if test="type != null" >
-        AND u.type = #{type,jdbcType=CHAR}
+        AND a.type = #{type,jdbcType=CHAR}
       </if>
       <if test="age != null" >
         AND u.age = #{age,jdbcType=INTEGER}
+      </if>
+      <if test="birthday != null" >
+        AND u.birthday = #{birthday,jdbcType=DATE}
       </if>
       <if test="phone != null" >
         AND u.phone = #{phone,jdbcType=VARCHAR}
