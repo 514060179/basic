@@ -13,6 +13,8 @@ public interface UserMapper {
 
     int updateByPrimaryKeySelective(User record);
 
+    int delete(Long accountId);
+
     User findByUserName(String userName);
 
     List<User> findListByCondition(User user);

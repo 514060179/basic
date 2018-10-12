@@ -23,4 +23,10 @@ public interface UserService {
     int update(User user);
 
     Account addManager(Account account);
+
+    /**
+     * 删除用户
+     * @return
+     */
+    int deleteUser(Long accountId);
 }

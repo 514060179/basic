@@ -41,7 +41,7 @@ public class AuthRealm extends AuthorizingRealm {
         User user = userService.findByUserName(userName);
         //验证密码
         //放入shiro.调用CredentialsMatcher检验密码
-        if (user!=null){
+        if (user!=null&&!user.getDeleted()){
             //获取用户权限信息
             List<String> urlList = roleAndJnService.findRoleListByAccountId(user.getAccountId());
             user.setRoleSet(new HashSet<>(urlList));

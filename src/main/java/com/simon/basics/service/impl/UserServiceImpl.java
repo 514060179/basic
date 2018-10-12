@@ -89,5 +89,10 @@ public class UserServiceImpl implements UserService{
         return account;
     }
 
+    @Override
+    public int deleteUser(Long accountId) {
+        return userMapper.delete(accountId);
+    }
+
 
 }

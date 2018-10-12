@@ -281,4 +281,8 @@
       </if>
     </where>
   </select>
+
+  <update id="delete" parameterType="long" >
+    UPDATE account SET deleted=1 WHERE account_id = #{accountId,jdbcType=BIGINT}
+  </update>
 </mapper>

@@ -110,4 +110,14 @@ public class UserController {
     public ReturnParam update(User user, @RequestParam Long accountId) {
         return ReturnParam.success(userService.update(user));
     }
+
+    @PostMapping("delete")
+    @ApiOperation(value = "修改用户（学生/教师）信息")
+    public ReturnParam delete(@RequestParam Long accountId) {
+        if (userService.deleteUser(accountId)>0){
+            return ReturnParam.success();
+        }else{
+            return ReturnParam.paramiolationException("删除失败,不存在用户"+accountId);
+        }
+    }
 }
