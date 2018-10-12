@@ -5,6 +5,7 @@
     <id column="account_id" property="accountId" jdbcType="BIGINT" />
     <result column="username" property="username" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="deleted" property="deleted" jdbcType="BIT" />
     <result column="type" property="type" jdbcType="CHAR" />
   </resultMap>
   <resultMap id="BaseResultMap" type="com.simon.basics.model.User" extends="ParentResultMap">
@@ -30,7 +31,7 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    a.username,a.password,u.user_id, a.account_id, u.name,u.parent_name, u.sex, u.age,u.birthday, u.phone, u.card_num, u.address, a.`type`, u.remark, u.create_time,
+    a.deleted,a.username,a.password,u.user_id, a.account_id, u.name,u.parent_name, u.sex, u.age,u.birthday, u.phone, u.card_num, u.address, a.`type`, u.remark, u.create_time,
     u.update_time,u.teacher_charge_type,u.average_hour,u.percentage,u.exceed_num,u.average_hour_cost,u.grade_name,u.school_name
   </sql>
   <insert id="insertSelective" parameterType="com.simon.basics.model.User" >
