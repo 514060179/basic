@@ -1,6 +1,7 @@
 package com.simon.basics.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.simon.basics.componet.exception.SqlWriteException;
 import com.simon.basics.componet.exception.SqlWritePrerequisiteException;
 import com.simon.basics.dao.ClassCourseMapper;
@@ -44,7 +45,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
     }
 
     @Override
-    public List<ClassCourseWithBLOBs> findListByPage(ClassCourse classCourse, int pageNum, int pageSize) {
+    public PageInfo<ClassCourseWithBLOBs> findListByPage(ClassCourse classCourse, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         Long teacherId = null;
@@ -53,7 +54,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         }else if (EnumCode.UserType.TYPE_TEACHER.getValue().equals(user.getType())){//老师获取自己课程
             teacherId = user.getAccountId();
         }
-        return classCourseMapper.findListByCondition(classCourse,teacherId);
+        return new PageInfo<ClassCourseWithBLOBs>(classCourseMapper.findListByCondition(classCourse,teacherId));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.simon.basics.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.simon.basics.dao.CourseOrderMapper;
 import com.simon.basics.model.ClassCourse;
 import com.simon.basics.model.CourseOrder;
@@ -26,7 +27,7 @@ public class CourseOrderServiceImpl implements CourseOrderService {
     private CourseOrderMapper courseOrderMapper;
 
     @Override
-    public List<CourseOrder> getListByPage(CourseOrder courseOrder, int pageNum, int pageSize) {
+    public PageInfo<CourseOrder> getListByPage(CourseOrder courseOrder, int pageNum, int pageSize) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if (EnumCode.UserType.TYPE_STUDENT.getValue().equals(user.getType())){//学生 查询自己
             courseOrder.setAccountId(user.getAccountId());
@@ -36,7 +37,7 @@ public class CourseOrderServiceImpl implements CourseOrderService {
             courseOrder.setAccountId(null);
         }
         PageHelper.startPage(pageNum,pageSize);
-        return courseOrderMapper.findListByCondition(courseOrder);
+        return new PageInfo<>(courseOrderMapper.findListByCondition(courseOrder));
     }
 
     @Override

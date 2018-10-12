@@ -1,5 +1,6 @@
 package com.simon.basics.service;
 
+import com.github.pagehelper.PageInfo;
 import com.simon.basics.model.Account;
 import com.simon.basics.model.User;
 
@@ -16,7 +17,7 @@ public interface UserService {
 
     User findByAccountId(Long accountId);
 
-    List<User> findListByPage(User user, int pageNum, int pageSize);
+    PageInfo<User> findListByPage(User user, int pageNum, int pageSize);
 
     int add(User user);
 

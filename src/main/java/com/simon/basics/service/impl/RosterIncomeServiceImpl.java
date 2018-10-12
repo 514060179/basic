@@ -1,6 +1,7 @@
 package com.simon.basics.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.simon.basics.dao.RosterIncomeMapper;
 import com.simon.basics.model.EnumCode;
 import com.simon.basics.model.RosterIncome;
@@ -24,12 +25,12 @@ public class RosterIncomeServiceImpl implements RosterIncomeService {
     private RosterIncomeMapper rosterIncomeMapper;
 
     @Override
-    public List<RosterIncome> findListByPage(RosterIncome rosterIncome, Integer pageNum, Integer pageSize) {
+    public PageInfo<RosterIncome> findListByPage(RosterIncome rosterIncome, Integer pageNum, Integer pageSize) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if (EnumCode.UserType.TYPE_TEACHER.getValue().equals(user.getType())) {
             rosterIncome.setAccountId(user.getAccountId());
         }
         PageHelper.startPage(pageNum, pageSize);
-        return rosterIncomeMapper.findListByCondition(rosterIncome);
+        return new PageInfo<RosterIncome>(rosterIncomeMapper.findListByCondition(rosterIncome));
     }
 }

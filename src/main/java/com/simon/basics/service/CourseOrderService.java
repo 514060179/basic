@@ -1,5 +1,6 @@
 package com.simon.basics.service;
 
+import com.github.pagehelper.PageInfo;
 import com.simon.basics.model.ClassCourse;
 import com.simon.basics.model.CourseOrder;
 
@@ -20,7 +21,7 @@ public interface CourseOrderService {
      * @param pageSize    页数
      * @return
      */
-    List<CourseOrder> getListByPage(CourseOrder courseOrder, int pageNum, int pageSize);
+    PageInfo<CourseOrder> getListByPage(CourseOrder courseOrder, int pageNum, int pageSize);
 
     /**
      * 创建订单

@@ -1,5 +1,6 @@
 package com.simon.basics.service;
 
+import com.github.pagehelper.PageInfo;
 import com.simon.basics.model.*;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public interface ClassCourseService {
      * @param pageSize
      * @return
      */
-    List<ClassCourseWithBLOBs> findListByPage(ClassCourse classCourse, int pageNum, int pageSize);
+    PageInfo<ClassCourseWithBLOBs> findListByPage(ClassCourse classCourse, int pageNum, int pageSize);
 
     /**
      * 更新

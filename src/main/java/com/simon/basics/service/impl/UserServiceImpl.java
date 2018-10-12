@@ -1,6 +1,7 @@
 package com.simon.basics.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.simon.basics.dao.RoleMapper;
 import com.simon.basics.dao.UserMapper;
 import com.simon.basics.dao.UserRoleMapper;
@@ -46,9 +47,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> findListByPage(User user, int pageNum, int pageSize) {
+    public PageInfo<User> findListByPage(User user, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum,pageSize);
-        return userMapper.findListByCondition(user);
+        return new PageInfo<User>(userMapper.findListByCondition(user));
     }
 
 
