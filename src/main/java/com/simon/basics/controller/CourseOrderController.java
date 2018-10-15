@@ -2,6 +2,7 @@ package com.simon.basics.controller;
 
 import com.simon.basics.model.ClassCourse;
 import com.simon.basics.model.CourseOrder;
+import com.simon.basics.model.EnumCode;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.service.ClassCourseService;
 import com.simon.basics.service.CourseOrderService;
@@ -44,6 +45,10 @@ public class CourseOrderController {
         if(Objects.isNull(classCourse)){
             logger.warn("找不到资源：courseId=" + courseId);
             return ReturnParam.noHandlerFound("找不到资源：courseId=" + courseId);
+        }
+        if(EnumCode.CourseStatus.COURSE_ACTION.getValue().equals(classCourse.getCourseStatus())){
+            logger.warn("课程已开始或未发布：courseId=" + courseId);
+            return ReturnParam.courseActite();
         }
         CourseOrder courseOrder = courseOrderService.findOneByCourseId(courseId);
         if (courseOrder!=null){

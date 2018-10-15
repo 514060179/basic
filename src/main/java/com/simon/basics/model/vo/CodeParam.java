@@ -38,6 +38,14 @@ public class CodeParam {
 
     public final static String alreadyChooseMsg = "座位已经被选走!";
 
+    public final static String courseActing  = "208";
+
+    public final static String courseActingMsg = "课程已经发布!";
+
+    public final static String courseActite  = "209";
+
+    public final static String courseActiteMsg = "课程已开始或未发布!";
+
     public final static String missParam = "300";
 
     public final static String missParamMsg = "缺少参数！";

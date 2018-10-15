@@ -200,5 +200,26 @@ public class ClassCourseController {
         classCourseService.courseEnd(classCourse, user, actualNumber, mustNumber, total);
         return ReturnParam.success();
     }
-
+    @PostMapping("publish")
+    @ApiOperation("发布课程")
+    public ReturnParam publish(@RequestParam Long courseId){
+        ClassCourse classCourse = classCourseService.findOne(courseId, null,null);
+        if (Objects.isNull(classCourse)) {
+            logger.warn("找不到资源：courseId=" + courseId);
+            return ReturnParam.noHandlerFound("找不到资源：courseId=" + courseId);
+        }
+        if (!EnumCode.CourseStatus.COURSE_INIT.getValue().equals(classCourse.getCourseStatus())){
+            logger.warn("课程重复发布：courseId=" + courseId);
+            return ReturnParam.courseActing();
+        }
+        ClassCourse course = new ClassCourse();
+        classCourse.setCourseId(courseId);
+        classCourse.setCourseStatus(EnumCode.CourseStatus.COURSE_ACTION.getValue());
+        int i = classCourseService.update(course);
+        if (i>0){
+            return ReturnParam.success();
+        }else{
+            return ReturnParam.noHandlerFound("更新失败!courseId=" + courseId);
+        }
+    }
 }

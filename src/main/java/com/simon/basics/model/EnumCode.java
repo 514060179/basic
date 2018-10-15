@@ -39,8 +39,9 @@ public class EnumCode {
      */
     public enum CourseStatus {
 
-        COURSE_CANCEL("-1"),// 取消
-        COURSE_ACTION("0"),// 新建、开始
+        COURSE_CANCEL("999"),// 新建
+        COURSE_INIT("-1"),// 新建
+        COURSE_ACTION("0"),// 开始
         COURSE_IN("1"),// 进行中
         COURSE_END("2");// 结束
 

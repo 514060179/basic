@@ -53,6 +53,14 @@ public class ReturnParam extends CodeParam {
         return new ReturnParam(alreadyChoose,alreadyChooseMsg,null);
     }
 
+    public static ReturnParam courseActing(){
+        return new ReturnParam(courseActing,courseActingMsg,null);
+    }
+
+    public static ReturnParam courseActite(){
+        return new ReturnParam(courseActite,courseActiteMsg,null);
+    }
+
     public static ReturnParam courseNotEnoughOrNotHad(){
         return new ReturnParam(courseNotEnoughOrNotHad,courseNotEnoughOrNotHadMsg,null);
     }

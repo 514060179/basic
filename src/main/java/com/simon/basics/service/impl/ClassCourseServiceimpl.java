@@ -11,6 +11,7 @@ import com.simon.basics.dao.RosterIncomeMapper;
 import com.simon.basics.model.*;
 import com.simon.basics.service.ClassCourseService;
 import com.simon.basics.util.JSONUtil;
+import com.simon.basics.util.SnowflakeIdWorker;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,6 +70,8 @@ public class ClassCourseServiceimpl implements ClassCourseService {
 
     @Override
     public ClassCourse add(ClassCourse classCourse) {
+        classCourse.setCourseId(new SnowflakeIdWorker().nextId());
+        classCourse.setCourseStatus(EnumCode.CourseStatus.COURSE_INIT.getValue());
         if(classCourseMapper.insertSelective(classCourse)>0){
             return classCourse;
         }
