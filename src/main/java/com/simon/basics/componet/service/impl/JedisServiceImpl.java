@@ -43,7 +43,7 @@ public class JedisServiceImpl implements JedisService {
     @Override
     public void returnResource(Jedis jedis) {
         if (jedis!=null&&jedisPool!=null){
-            jedisPool.returnResource(jedis);
+            jedis.close();
         }
     }
 

@@ -44,6 +44,7 @@ public class RedisCacheConfiguration extends CachingConfigurerSupport {
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
         jedisPoolConfig.setMaxIdle(maxIdle);
         jedisPoolConfig.setMaxWaitMillis(maxWaitMillis);
+        jedisPoolConfig.setTestOnBorrow(true);
         JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, password);
         logger.info("JedisPool注入成功！！");
         logger.info("redis地址：" + host + ":" + port);
