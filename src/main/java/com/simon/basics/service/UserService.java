@@ -27,7 +27,8 @@ public interface UserService {
 
     /**
      * 删除用户
+     *
      * @return
      */
-    int deleteUser(Long accountId);
+    int deleteUser(Long accountId, Boolean deleted);
 }

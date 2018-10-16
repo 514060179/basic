@@ -213,8 +213,8 @@ public class ClassCourseController {
             return ReturnParam.courseActing();
         }
         ClassCourse course = new ClassCourse();
-        classCourse.setCourseId(courseId);
-        classCourse.setCourseStatus(EnumCode.CourseStatus.COURSE_ACTION.getValue());
+        course.setCourseId(courseId);
+        course.setCourseStatus(EnumCode.CourseStatus.COURSE_ACTION.getValue());
         int i = classCourseService.update(course);
         if (i>0){
             return ReturnParam.success();

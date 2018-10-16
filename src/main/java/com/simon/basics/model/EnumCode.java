@@ -38,12 +38,12 @@ public class EnumCode {
      * 课程状态
      */
     public enum CourseStatus {
-
-        COURSE_CANCEL("999"),// 新建
-        COURSE_INIT("-1"),// 新建
-        COURSE_ACTION("0"),// 开始
-        COURSE_IN("1"),// 进行中
-        COURSE_END("2");// 结束
+        //-1取消0新建未发布1已发布2进行中3结束
+        COURSE_CANCEL("-1"),// 取消
+        COURSE_INIT("0"),// 新建,未发布
+        COURSE_ACTION("1"),// 开始
+        COURSE_IN("2"),// 进行中
+        COURSE_END("3");// 结束
 
         private String value;
 

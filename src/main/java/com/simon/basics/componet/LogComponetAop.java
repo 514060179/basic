@@ -3,6 +3,7 @@
  */
 package com.simon.basics.componet;
 
+import com.simon.basics.util.JSONUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -69,6 +70,7 @@ public class LogComponetAop {
         clock.stop();
 
         logger.info("请求路径requestUrl {},\n所在的类是：{} ，调用的方法是：{}",requestUrl,className,method);
+        logger.info("请求参数：{}"+ JSONUtil.objectToJson(parameterMap));
 
         return result;
     }

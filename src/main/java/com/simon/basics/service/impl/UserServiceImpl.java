@@ -10,6 +10,7 @@ import com.simon.basics.model.EnumCode;
 import com.simon.basics.model.User;
 import com.simon.basics.model.UserRole;
 import com.simon.basics.service.UserService;
+import com.simon.basics.util.SnowflakeIdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +57,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     @Override
     public int add(User user) {
+        user.setAccountId(new SnowflakeIdWorker().nextId());
         int i = userMapper.insertAccountSelective(user);
         if (i>0){
             userMapper.insertSelective(user);
@@ -86,13 +88,14 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Account addManager(Account account) {
+        account.setAccountId(new SnowflakeIdWorker().nextId());
         userMapper.insertAccountSelective(account);
         return account;
     }
 
     @Override
-    public int deleteUser(Long accountId) {
-        return userMapper.delete(accountId);
+    public int deleteUser(Long accountId, Boolean deleted) {
+        return userMapper.delete(accountId,deleted);
     }
 
 

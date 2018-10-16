@@ -170,6 +170,9 @@
   <insert id="insertAccountSelective" parameterType="com.simon.basics.model.Account" keyProperty="accountId" useGeneratedKeys="true" >
     insert into account
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="accountId != null" >
+        account_id,
+      </if>
       <if test="username != null" >
         username,
       </if>
@@ -181,6 +184,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="accountId != null" >
+        #{accountId,jdbcType=BIGINT},
+      </if>
       <if test="username != null" >
         #{username,jdbcType=VARCHAR},
       </if>
@@ -256,7 +262,7 @@
         AND a.account_id = #{accountId,jdbcType=BIGINT}
       </if>
       <if test="name != null" >
-        AND u.NAME = #{name,jdbcType=VARCHAR}
+        AND u.NAME like concat('%',#{name,jdbcType=VARCHAR},'%')
       </if>
       <if test="sex != null" >
         AND u.sex = #{sex,jdbcType=CHAR}
@@ -279,10 +285,13 @@
       <if test="address != null" >
         AND u.address = #{address,jdbcType=VARCHAR}
       </if>
+      <if test="deleted != null">
+        AND a.deleted = #{deleted,jdbcType=BIT}
+      </if>
     </where>
   </select>
 
-  <update id="delete" parameterType="long" >
-    UPDATE account SET deleted=1 WHERE account_id = #{accountId,jdbcType=BIGINT}
+  <update id="delete">
+    UPDATE account a LEFT JOIN `user` u ON a.`account_id`=u.`account_id` SET a.`deleted`=#{deleted,jdbcType=BIT},u.`deleted`=#{deleted,jdbcType=BIT} WHERE a.account_id = #{accountId,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -20,6 +20,8 @@ public class CourseOrder {
     private BigDecimal orderCost;
     @ApiModelProperty(value = "支付状态",hidden = true)
     private String orderPayStatus;
+    @ApiModelProperty(value = "支付状态",hidden = true)
+    private String orderPayWay;
     @ApiModelProperty(value = "创建时间",hidden = true)
     private Date createTime;
     @ApiModelProperty(value = "更新时间",hidden = true)
@@ -79,6 +81,14 @@ public class CourseOrder {
 
     public void setOrderPayStatus(String orderPayStatus) {
         this.orderPayStatus = orderPayStatus == null ? null : orderPayStatus.trim();
+    }
+
+    public String getOrderPayWay() {
+        return orderPayWay;
+    }
+
+    public void setOrderPayWay(String orderPayWay) {
+        this.orderPayWay = orderPayWay;
     }
 
     public Date getCreateTime() {

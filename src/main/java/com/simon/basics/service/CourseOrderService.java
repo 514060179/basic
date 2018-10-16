@@ -30,6 +30,7 @@ public interface CourseOrderService {
      * @return
      */
     CourseOrder create(ClassCourse classCourse);
+
     /**
      * 根据课程id查询订单
      *
@@ -38,6 +39,14 @@ public interface CourseOrderService {
      */
     CourseOrder findOneByCourseId(Long courseId);
 
+    /**
+     * 根据订单id查询订单
+     *
+     * @param orderId
+     * @return
+     */
+    CourseOrder findOneByOrderId(Long orderId);
 
-    int paySuccess(Long orderId);
+
+    int paySuccess(Long orderId, String orderNo, String payWay);
 }

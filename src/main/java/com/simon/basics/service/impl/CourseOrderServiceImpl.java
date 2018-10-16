@@ -46,7 +46,7 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         CourseOrder courseOrder = new CourseOrder();
         courseOrder.setAccountId(user.getAccountId());
         courseOrder.setCourseId(classCourse.getCourseId());
-        courseOrder.setOrderNo(new SnowflakeIdWorker().nextId()+"");
+        courseOrder.setOrderId(new SnowflakeIdWorker().nextId());
         courseOrder.setOrderCost(classCourse.getCourseCost());
         int i = courseOrderMapper.insertSelective(courseOrder);
         if(i>0){
@@ -73,10 +73,21 @@ public class CourseOrderServiceImpl implements CourseOrderService {
     }
 
     @Override
-    public int paySuccess(Long orderId) {
+    public CourseOrder findOneByOrderId(Long orderId) {
+        return courseOrderMapper.selectByPrimaryKey(orderId);
+    }
+
+    @Override
+    public int paySuccess(Long orderId, String orderNo, String payWay) {
         CourseOrder courseOrder = new CourseOrder();
         courseOrder.setOrderId(orderId);
         courseOrder.setOrderStatus(EnumCode.OrderStatus.ORDER_PAID.getValue());
+        courseOrder.setOrderNo(orderNo);
+        if ("101".equals(payWay)){
+            courseOrder.setOrderPayWay("alipay");
+        }else{
+            courseOrder.setOrderPayWay("wechat");
+        }
         return courseOrderMapper.updateByPrimaryKeySelective(courseOrder);
     }
 }

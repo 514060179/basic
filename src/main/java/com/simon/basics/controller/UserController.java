@@ -112,12 +112,13 @@ public class UserController {
     }
 
     @PostMapping("delete")
-    @ApiOperation(value = "修改用户（学生/教师）信息")
+    @ApiOperation(value = "删除或恢复用户信息")
     public ReturnParam delete(@RequestParam Long accountId) {
-        if (userService.deleteUser(accountId)>0){
+        User user = userService.findByAccountId(accountId);
+        if (user!=null&&userService.deleteUser(accountId,user.getDeleted()?false:true)>0){
             return ReturnParam.success();
         }else{
-            return ReturnParam.paramiolationException("删除失败,不存在用户"+accountId);
+            return ReturnParam.noHandlerFound("删除失败,不存在用户"+accountId);
         }
     }
 }
