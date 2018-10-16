@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.UUID;
 
 
-
 @Service
 public class QianyingPayService {
 
@@ -49,7 +48,7 @@ public class QianyingPayService {
     @Value("${QIANYING_CHARSET}")
     private String QIANYING_CHARSET;
 
-    public void submitOrder(HttpServletResponse response, String amount, String orderid, String token, String type) {
+    public void submitOrder(HttpServletResponse response, String amount, String orderid, String token, String type, String gotrue, String gofalse) {
         if (orderid == null || orderid.trim().equals("")) orderid = UUID.randomUUID().toString();
         Map<String, String[]> params = new LinkedHashMap<>();
         params.put("uid", new String[]{QIANYING_UID});
@@ -64,8 +63,8 @@ public class QianyingPayService {
         //uuid商户的玩家id
         params.put("uuid", new String[]{QIANYING_UUID});
         params.put("sign", new String[]{_sign});
-        params.put("gofalse", new String[]{QIANYING_GO_FALSE});
-        params.put("gotrue", new String[]{QIANYING_GO_TRUE});
+        params.put("gofalse", new String[]{gofalse});
+        params.put("gotrue", new String[]{gotrue});
         params.put("charset", new String[]{QIANYING_CHARSET});
 
         //token是用户自定义的字段，千应服务器会原址返回，请自定义此字段

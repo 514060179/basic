@@ -13,12 +13,17 @@ import com.simon.basics.util.JSONUtil;
 import com.simon.basics.util.SnowflakeIdWorker;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -71,6 +76,40 @@ public class CourseOrderController {
     public ReturnParam paySuccess(@RequestParam Long orderId){
         return ReturnParam.success(courseOrderService.paySuccess(orderId,new SnowflakeIdWorker().nextId()+"","101"));
     }
+
+    @GetMapping("pay")
+    @ApiOperation("调起支付. ps:使用浏览器调用")
+    public void pay(HttpServletResponse response, @RequestParam Long orderId,
+                    @ApiParam(value = "支付类型:alipay,wechat",name = "type" ,required = true)@RequestParam String type,
+                    @ApiParam(value = "成功跳转url",name = "gotrue" ,required = true)@RequestParam String gotrue,@ApiParam(value = "失败跳转url",name = "gofalse" ,required = true)@RequestParam String gofalse) throws NoHandlerFoundException {
+        CourseOrder courseOrder = courseOrderService.findOneByOrderId(orderId);
+        if (courseOrder==null){
+            throw new NoHandlerFoundException("资源不存在!","资源不存在!",null);
+        }
+        if (!EnumCode.OrderStatus.ORDER_NOPAY.getValue().equals(courseOrder.getOrderStatus())){
+            PrintWriter printWriter = null;
+            try {
+                response.setCharacterEncoding("UTF-8");
+                response.setHeader("content-type", "text/html;charset=UTF-8");
+                printWriter = new PrintWriter(response.getOutputStream());
+                printWriter.print("<h1>订单已支付或已经取消</h1>");
+                printWriter.flush();
+                printWriter.close();
+                return;
+            } catch (IOException e) {
+                logger.error("获取流异常！",e);
+                e.printStackTrace();
+            }
+        }
+        if ("alipay".equals(type)){
+            type = "101";
+        }else{
+            type = "102";
+        }
+        String qianyingPayNo = new SnowflakeIdWorker().nextId()+"";//支付订单
+        qianyingPayService.submitOrder(response,courseOrder.getOrderCost().intValue()+"",qianyingPayNo,courseOrder.getOrderId()+"",type,gotrue,gofalse);
+    }
+
     @GetMapping("callback")
     @ApiOperation(value = "支付回调",hidden = true)
     public void callback(HttpServletRequest request){
