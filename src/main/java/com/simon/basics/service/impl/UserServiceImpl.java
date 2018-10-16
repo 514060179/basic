@@ -88,8 +88,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Account addManager(Account account) {
-        account.setAccountId(new SnowflakeIdWorker().nextId());
+        Long accountId = new SnowflakeIdWorker().nextId();
+        account.setAccountId(accountId);
         userMapper.insertAccountSelective(account);
+        UserRole userRole = new UserRole();
+        userRole.setAccountId(accountId);
+        userRole.setRoleId(3L);
+        userRoleMapper.insertSelective(userRole);
         return account;
     }
 

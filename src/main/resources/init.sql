@@ -493,3 +493,8 @@ ALTER TABLE `simon`.`course_order`
 ALTER TABLE `simon`.`user`
 CHANGE `age` `age` INT(11) NULL COMMENT '年龄',
   ADD COLUMN `birthday` DATE NULL COMMENT '生日' AFTER `sex`;
+
+
+
+ALTER TABLE `simon`.`course_order`
+  ADD COLUMN `order_pay_way` VARCHAR(20) NULL COMMENT '支付方式' AFTER `order_cost`;
