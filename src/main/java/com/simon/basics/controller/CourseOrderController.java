@@ -74,8 +74,8 @@ public class CourseOrderController {
     @GetMapping("callback")
     @ApiOperation(value = "支付回调",hidden = true)
     public void callback(HttpServletRequest request){
+        Map<String, String[]> parameterMap = request.getParameterMap();
         try{
-            Map<String, String[]> parameterMap = request.getParameterMap();
             String requestParam = JSONUtil.objectToJson(parameterMap);
             logger.warn("千应支付回调:"+ requestParam);
             //oid=39138668413190144,status=1,m1=1.00,mInt=1,sign=F60E0F08C2A1984625EADFCD765F29E7,
@@ -97,17 +97,17 @@ public class CourseOrderController {
             //验证签名
             if (!sign.equalsIgnoreCase(MD5.convert("oid="+oid+"&status="+status+"&m="+m+qianyingPayService.getQIANYING_KEY()))){
                 logger.error("千应回调签名错误！"+sign);
-                throw new PayExcetion("签名验证失败:request param:"+requestParam);
+                throw new PayExcetion("签名验证失败!;"+requestParam);
             }
             int i = courseOrderService.paySuccess(Long.parseLong(token),oid,tid);
             if (i<=0){
                 logger.error("千应回调更新订单异常！"+sign);
-                throw new PayExcetion("更新订单异常！");
+                throw new PayExcetion("更新订单异常!;"+parameterMap);
             }
             logger.info("支付回调业务处理成功！");
         }catch (Exception e){
             logger.error(e.getMessage(),e);
-            throw new PayExcetion("支付回调异常！",e);
+            throw new PayExcetion("回调运行时异常!;"+JSONUtil.objectToJson(parameterMap),e);
         }
     }
 }

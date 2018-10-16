@@ -1,5 +1,6 @@
 package com.simon.basics.componet;
 
+import com.simon.basics.componet.exception.PayExcetion;
 import com.simon.basics.componet.exception.SqlWritePrerequisiteException;
 import com.simon.basics.model.vo.ReturnParam;
 import org.slf4j.Logger;
@@ -71,6 +72,11 @@ public class GlobalExceptionHandler {
         return ReturnParam.sqlWritePrerequisiteException();
     }
 
+    @ExceptionHandler(value = PayExcetion.class)
+    public void payExcetionHandler(Exception e) {
+        logger.error(">>>> system error： ", e);
+        logger.warn(e.getMessage(),e);
+    }
     @ExceptionHandler(value = Exception.class)
     public ReturnParam exceptionHandler(Exception e) {
         logger.error(">>>> system error： ", e);
