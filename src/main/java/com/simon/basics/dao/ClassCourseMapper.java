@@ -16,7 +16,7 @@ public interface ClassCourseMapper {
 
     ClassCourseWithBLOBs selectByPrimaryKey(@Param("courseId") Long courseId, @Param("studentId") Long studentId, @Param("accountId") Long accountId);
 
-    List<ClassCourseWithBLOBs> findListByCondition(@Param("classCourse")ClassCourse classCourse,@Param("teacherId")Long teacherId);
+    List<ClassCourseWithBLOBs> findListByCondition(@Param("classCourse")ClassCourse classCourse,@Param("teacherId")Long teacherId,@Param("bought")Boolean bought);
 
     int updateByPrimaryKeyAndAccountIdSelective(ClassCourse record);
 

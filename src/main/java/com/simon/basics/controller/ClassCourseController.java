@@ -42,8 +42,8 @@ public class ClassCourseController {
 
     @PostMapping("list")
     @ApiOperation("课程列表")
-    public ReturnParam list(ClassCourse classCourse, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
-        return ReturnParam.success(classCourseService.findListByPage(classCourse, pageNum, pageSize));
+    public ReturnParam list(ClassCourse classCourse, Boolean bought, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
+        return ReturnParam.success(classCourseService.findListByPage(classCourse, bought, pageNum, pageSize));
     }
 
     @PostMapping("detail")

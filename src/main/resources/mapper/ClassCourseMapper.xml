@@ -102,6 +102,12 @@
             co.order_status = '1'
         </if>
         <where>
+            <if test="classCourse.accountId != null and bought==1">
+                AND co.order_id IS NOT NULL
+            </if>
+            <if test="classCourse.accountId != null and bought==0">
+                AND co.order_id IS NULL
+            </if>
             <if test="classCourse.seatId != null">
                 AND cc.seat_id = #{classCourse.seatId,jdbcType=BIGINT}
             </if>

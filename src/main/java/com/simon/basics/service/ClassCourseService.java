@@ -27,7 +27,7 @@ public interface ClassCourseService {
      * @param pageSize
      * @return
      */
-    PageInfo<ClassCourseWithBLOBs> findListByPage(ClassCourse classCourse, int pageNum, int pageSize);
+    PageInfo<ClassCourseWithBLOBs> findListByPage(ClassCourse classCourse, Boolean bought, int pageNum, int pageSize);
 
     /**
      * 更新
