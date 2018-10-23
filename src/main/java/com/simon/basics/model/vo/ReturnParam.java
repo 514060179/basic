@@ -4,19 +4,19 @@ package com.simon.basics.model.vo;
  * @author fengtianying
  * @date 2018/9/4 13:25
  */
-public class ReturnParam extends CodeParam {
+public class ReturnParam<T> extends CodeParam {
 
     private String code;
 
     private String msg;
 
-    private Object data;
+    private T data;
 
     public ReturnParam() {
         super();
     }
 
-    public ReturnParam(String code, String msg, Object data) {
+    public ReturnParam(String code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
@@ -132,11 +132,11 @@ public class ReturnParam extends CodeParam {
         this.msg = msg;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 

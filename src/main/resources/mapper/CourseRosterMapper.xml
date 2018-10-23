@@ -12,6 +12,20 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <resultMap id="BaseWithUserResultMap" type="com.simon.basics.model.CourseRoster" extends="BaseResultMap">
+    <association property="user" javaType="com.simon.basics.model.User">
+      <result column="name" property="name" jdbcType="VARCHAR" />
+      <result column="parent_name" property="parentName" jdbcType="VARCHAR" />
+      <result column="sex" property="sex" jdbcType="CHAR" />
+      <result column="age" property="age" jdbcType="INTEGER" />
+      <result column="birthday" property="birthday" jdbcType="DATE" />
+      <result column="phone" property="phone" jdbcType="VARCHAR" />
+      <result column="address" property="address" jdbcType="VARCHAR" />
+      <result column="grade_name" property="gradeName" jdbcType="VARCHAR" />
+      <result column="school_name" property="schoolName" jdbcType="VARCHAR" />
+      <result column="remark" property="remark" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
   <sql id="Base_Column_List" >
     roster_id, course_id, account_id, roster_name, roster_course_count_rest,
     roster_seat_x, roster_seat_y, create_time, update_time
@@ -20,34 +34,41 @@
     cr.roster_id, cr.course_id, cc.seat_id, cr.account_id, cr.roster_name, cr.roster_course_count_rest,
     cr.roster_seat_x, cr.roster_seat_y, cr.create_time, cr.update_time
   </sql>
+
+  <sql id="Union_User_Column_List">
+    u.name,u.parent_name, u.sex, u.age,u.birthday, u.phone, u.address,u.grade_name,u.school_name,u.remark,
+    cr.roster_id, cr.course_id, cr.account_id, cr.roster_name, cr.roster_course_count_rest,
+    cr.roster_seat_x, cr.roster_seat_y, cr.create_time, cr.update_time
+  </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from course_roster
     where roster_id = #{rosterId,jdbcType=BIGINT}
   </select>
-  <select id="findOneByConditon" resultMap="BaseResultMap" parameterType="com.simon.basics.model.CourseRoster" >
+  <select id="findOneByConditon" resultMap="BaseWithUserResultMap" parameterType="com.simon.basics.model.CourseRoster" >
     select
-    <include refid="Base_Column_List" />
-    from course_roster
+    <include refid="Union_User_Column_List" />
+    from course_roster cr
+    inner join user u on cr.account_id=u.account_id
     <where>
       <if test="courseId != null" >
-        and course_id = #{courseId,jdbcType=BIGINT}
+        and cr.course_id = #{courseId,jdbcType=BIGINT}
       </if>
       <if test="accountId != null" >
-        and account_id = #{accountId,jdbcType=BIGINT}
+        and cr.account_id = #{accountId,jdbcType=BIGINT}
       </if>
       <if test="rosterName != null" >
-        and roster_name = #{rosterName,jdbcType=VARCHAR}
+        and cr.roster_name = #{rosterName,jdbcType=VARCHAR}
       </if>
       <if test="rosterCourseCountRest != null" >
-        and roster_course_count_rest = #{rosterCourseCountRest,jdbcType=INTEGER}
+        and cr.roster_course_count_rest = #{rosterCourseCountRest,jdbcType=INTEGER}
       </if>
       <if test="rosterSeatX != null" >
-        and roster_seat_x = #{rosterSeatX,jdbcType=INTEGER}
+        and cr.roster_seat_x = #{rosterSeatX,jdbcType=INTEGER}
       </if>
       <if test="rosterSeatY != null" >
-        and roster_seat_y = #{rosterSeatY,jdbcType=INTEGER}
+        and cr.roster_seat_y = #{rosterSeatY,jdbcType=INTEGER}
       </if>
     </where>
   </select>

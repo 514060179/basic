@@ -1,25 +1,42 @@
 package com.simon.basics.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 public class CourseRoster {
+    @ApiModelProperty("id")
     private Long rosterId;
 
+    @ApiModelProperty("课程id")
     private Long courseId;
 
+    @ApiModelProperty("账户id")
     private Long accountId;
 
+    @ApiModelProperty("名单名称")
     private String rosterName;
 
+    @ApiModelProperty("课程剩余数量")
     private Integer rosterCourseCountRest;
 
+    @ApiModelProperty("座位坐标x")
     private Integer rosterSeatX;
 
+    @ApiModelProperty("座位坐标y")
     private Integer rosterSeatY;
 
+    @ApiModelProperty("创建时间")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
+    @ApiModelProperty("更新时间")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+
+    @ApiModelProperty("用户model")
+    private User user;
 
     public Long getRosterId() {
         return rosterId;
@@ -91,5 +108,13 @@ public class CourseRoster {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -48,10 +48,10 @@ public class User extends Account {
     @ApiModelProperty(value = "角色集合",hidden = true)
     private Set<String> roleSet;
     @ApiModelProperty(hidden = true)
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     @ApiModelProperty(hidden = true)
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     public Long getUserId() {

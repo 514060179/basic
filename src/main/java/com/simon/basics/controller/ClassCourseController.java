@@ -1,6 +1,7 @@
 package com.simon.basics.controller;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.simon.basics.componet.service.JedisService;
 import com.simon.basics.model.*;
 import com.simon.basics.model.vo.ReturnParam;
@@ -42,7 +43,7 @@ public class ClassCourseController {
 
     @PostMapping("list")
     @ApiOperation("课程列表")
-    public ReturnParam list(ClassCourse classCourse, Boolean bought, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
+    public ReturnParam<PageInfo<ClassCourseWithBLOBs>> list(ClassCourse classCourse, Boolean bought, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
         return ReturnParam.success(classCourseService.findListByPage(classCourse, bought, pageNum, pageSize));
     }
 
