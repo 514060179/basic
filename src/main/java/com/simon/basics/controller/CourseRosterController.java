@@ -1,14 +1,11 @@
 package com.simon.basics.controller;
 
-import com.simon.basics.model.ClassCourse;
 import com.simon.basics.model.ClassCourseWithBLOBs;
 import com.simon.basics.model.CourseRoster;
 import com.simon.basics.model.SeatLayout;
-import com.simon.basics.model.vo.Result;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.service.ClassCourseService;
 import com.simon.basics.service.CourseRosterService;
-import com.simon.basics.service.CourseTypeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
