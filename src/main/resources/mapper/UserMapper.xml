@@ -20,10 +20,6 @@
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="CHAR" />
     <result column="teacher_charge_type" property="teacherChargeType" jdbcType="CHAR" />
-    <result column="average_hour" property="averageHour" jdbcType="DECIMAL" />
-    <result column="percentage" property="percentage" jdbcType="DECIMAL" />
-    <result column="exceed_num" property="exceedNum" jdbcType="INTEGER" />
-    <result column="average_hour_cost" property="averageHourCost" jdbcType="DECIMAL" />
     <result column="grade_name" property="gradeName" jdbcType="VARCHAR" />
     <result column="school_name" property="schoolName" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
@@ -32,7 +28,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     a.deleted,a.username,a.password,u.user_id, a.account_id, u.name,u.parent_name, u.sex, u.age,u.birthday, u.phone, u.card_num, u.address, a.`type`, u.remark, u.create_time,
-    u.update_time,u.teacher_charge_type,u.average_hour,u.percentage,u.exceed_num,u.average_hour_cost,u.grade_name,u.school_name
+    u.update_time,u.teacher_charge_type,u.grade_name,u.school_name
   </sql>
   <insert id="insertSelective" parameterType="com.simon.basics.model.User" >
     insert into user
@@ -88,18 +84,6 @@
       <if test="teacherChargeType != null" >
         teacher_charge_type,
       </if>
-      <if test="averageHour != null" >
-        average_hour,
-      </if>
-      <if test="percentage != null" >
-        percentage,
-      </if>
-      <if test="exceedNum != null" >
-        exceed_num,
-      </if>
-      <if test="averageHourCost != null" >
-        average_hour_cost,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
@@ -152,18 +136,6 @@
       </if>
       <if test="teacherChargeType != null" >
         #{teacherChargeType,jdbcType=CHAR},
-      </if>
-      <if test="averageHour != null" >
-        #{averageHour,jdbcType=DECIMAL},
-      </if>
-      <if test="percentage != null" >
-        #{percentage,jdbcType=DECIMAL},
-      </if>
-      <if test="exceedNum != null" >
-        #{exceedNum,jdbcType=INTEGER},
-      </if>
-      <if test="averageHourCost != null" >
-        #{averageHourCost,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -230,18 +202,6 @@
       </if>
       <if test="teacherChargeType != null" >
         teacher_charge_type = #{teacherChargeType,jdbcType=CHAR},
-      </if>
-      <if test="averageHour != null" >
-        average_hour = #{averageHour,jdbcType=DECIMAL},
-      </if>
-      <if test="percentage != null" >
-        percentage = #{percentage,jdbcType=DECIMAL},
-      </if>
-      <if test="exceedNum != null" >
-        exceed_num = #{exceedNum,jdbcType=INTEGER},
-      </if>
-      <if test="averageHourCost != null" >
-        average_hour_cost = #{averageHourCost,jdbcType=DECIMAL},
       </if>
     </set>
     where account_id = #{accountId,jdbcType=BIGINT}

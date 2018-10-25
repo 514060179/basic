@@ -69,6 +69,19 @@ public class ClassCourse {
     @ApiModelProperty(value = "课程备注")
     private String courseRemark;
 
+
+    @ApiModelProperty(value = "(默认半小时,暂不用)收费类型为1时：按【averageHour】小时收费",hidden = true)
+    private BigDecimal averageHour;
+    @ApiModelProperty(value = "收费类型为2时:每节课提成点",required = true)
+    private BigDecimal percentage;
+    @ApiModelProperty(value = "收费类型为1时：超过人数【exceedNum】才有提成【extraCharge】",required = true)
+    private Integer exceedNum;
+    @ApiModelProperty(value = "收费类型为1时 按【averageHour】小时收费【averageHourCost】",required = true)
+    private BigDecimal averageHourCost;
+    @ApiModelProperty(value = "收费类型为1时 超过【exceedNum】提成【extraCharge】元",required = true)
+    private BigDecimal extraCharge;
+
+
     public Long getCourseId() {
         return courseId;
     }
@@ -235,6 +248,46 @@ public class ClassCourse {
             return new SimpleDateFormat("HH:mm:ss").format(courseEndTime);
         }
         return classEndTimeStr;
+    }
+
+    public BigDecimal getAverageHour() {
+        return averageHour;
+    }
+
+    public void setAverageHour(BigDecimal averageHour) {
+        this.averageHour = averageHour;
+    }
+
+    public BigDecimal getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(BigDecimal percentage) {
+        this.percentage = percentage;
+    }
+
+    public Integer getExceedNum() {
+        return exceedNum;
+    }
+
+    public void setExceedNum(Integer exceedNum) {
+        this.exceedNum = exceedNum;
+    }
+
+    public BigDecimal getAverageHourCost() {
+        return averageHourCost;
+    }
+
+    public void setAverageHourCost(BigDecimal averageHourCost) {
+        this.averageHourCost = averageHourCost;
+    }
+
+    public BigDecimal getExtraCharge() {
+        return extraCharge;
+    }
+
+    public void setExtraCharge(BigDecimal extraCharge) {
+        this.extraCharge = extraCharge;
     }
 
     public void setClassEndTimeStr(String classEndTimeStr) {

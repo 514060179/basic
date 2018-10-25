@@ -498,3 +498,11 @@ CHANGE `age` `age` INT(11) NULL COMMENT '年龄',
 
 ALTER TABLE `simon`.`course_order`
   ADD COLUMN `order_pay_way` VARCHAR(20) NULL COMMENT '支付方式' AFTER `order_cost`;
+
+
+ ALTER TABLE `simon`.`class_course`
+  ADD COLUMN `average_hour` DECIMAL(6,1) DEFAULT 0.5 NOT NULL COMMENT '(默认半小时,暂不用)收费类型为1时：按【averageHour】小时收费'  AFTER `course_abstract`,
+  ADD COLUMN `percentage` DECIMAL(2,2) NOT NULL COMMENT '收费类型为2时:每节课提成点' AFTER `average_hour`,
+  ADD COLUMN `exceed_num` INT(11) NOT NULL COMMENT '收费类型为1时：超过人数【exceedNum】才有提成【extraCharge】' AFTER `percentage`,
+  ADD COLUMN `average_hour_cost`DECIMAL(12,2) NOT NULL COMMENT '收费类型为1时 按【averageHour】小时收费【averageHourCost】' AFTER `exceed_num`,
+  ADD COLUMN `extra_charge` DECIMAL(12,2) NOT NULL COMMENT '收费类型为1时 超过【exceedNum】提成【extraCharge】元' AFTER `average_hour_cost`;

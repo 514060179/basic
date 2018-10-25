@@ -34,14 +34,14 @@ public class User extends Account {
     private String address;
     @ApiModelProperty(value = "教师收费类型:1按时2按提成",allowableValues = "range[1,2]")
     private String teacherChargeType;
-    @ApiModelProperty(value = "收费类型为1时（必填）：按【averageHour】小时收费")
-    private BigDecimal averageHour;
-    @ApiModelProperty(value = "提成点")
-    private BigDecimal percentage;
-    @ApiModelProperty(value = "收费类型为1时：超过【exceedNum】人数提成【percentage】;收费类型为2时：每节课提成点")
-    private Integer exceedNum;
-    @ApiModelProperty(value = "收费类型为1时（必填）按【averageHour】小时收费【averageHourCost】")
-    private BigDecimal averageHourCost;
+//    @ApiModelProperty(value = "收费类型为1时（必填）：按【averageHour】小时收费")
+//    private BigDecimal averageHour;
+//    @ApiModelProperty(value = "提成点")
+//    private BigDecimal percentage;
+//    @ApiModelProperty(value = "收费类型为1时：超过【exceedNum】人数提成【percentage】;收费类型为2时：每节课提成点")
+//    private Integer exceedNum;
+//    @ApiModelProperty(value = "收费类型为1时（必填）按【averageHour】小时收费【averageHourCost】")
+//    private BigDecimal averageHourCost;
     @ApiModelProperty(value = "备注")
     private String remark;
     @JsonIgnore
@@ -151,38 +151,6 @@ public class User extends Account {
 
     public void setTeacherChargeType(String teacherChargeType) {
         this.teacherChargeType = teacherChargeType;
-    }
-
-    public BigDecimal getAverageHour() {
-        return averageHour;
-    }
-
-    public void setAverageHour(BigDecimal averageHour) {
-        this.averageHour = averageHour;
-    }
-
-    public BigDecimal getPercentage() {
-        return percentage;
-    }
-
-    public void setPercentage(BigDecimal percentage) {
-        this.percentage = percentage;
-    }
-
-    public Integer getExceedNum() {
-        return exceedNum;
-    }
-
-    public void setExceedNum(Integer exceedNum) {
-        this.exceedNum = exceedNum;
-    }
-
-    public BigDecimal getAverageHourCost() {
-        return averageHourCost;
-    }
-
-    public void setAverageHourCost(BigDecimal averageHourCost) {
-        this.averageHourCost = averageHourCost;
     }
 
     public String getRemark() {

@@ -154,22 +154,22 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         rosterIncomeInsert.setIncomeSectionNum(classCourse.getCourseCurrent());//章节数
         BigDecimal averageCourse = classCourse.getCourseCost().divide(new BigDecimal(classCourse.getCourseTotal()), 2, BigDecimal.ROUND_CEILING);
         rosterIncomeInsert.setAverageCourse(averageCourse);//每节收费
-        rosterIncomeInsert.setPercentage(user.getPercentage());//提成百分比
+        rosterIncomeInsert.setPercentage(classCourse.getPercentage());//提成百分比
         String teacherChargeType = user.getTeacherChargeType();
         rosterIncomeInsert.setIncomeType(teacherChargeType);//收费类型
         if (EnumCode.TeacherChargeType.CHARGE_TYPE_TIME.getValue().equals(teacherChargeType)) {//按时
-            BigDecimal averageHour = user.getAverageHour();
+            BigDecimal averageHour = classCourse.getAverageHour();
             int unit = new BigDecimal(costTime).divide(averageHour.multiply(new BigDecimal(1000 * 60 * 60))).intValue();//花费总单位时间
             rosterIncomeInsert.setAverageHour(averageHour);//平均X小时起收费。收费单位
-            BigDecimal averageHourCost = user.getAverageHourCost().multiply(new BigDecimal(unit)).setScale(2, BigDecimal.ROUND_HALF_UP);//基本收入
-            if (actualNumber > user.getExceedNum()) {//提成
-                averageHourCost = averageHourCost.add(user.getPercentage());
+            BigDecimal averageHourCost = classCourse.getAverageHourCost().multiply(new BigDecimal(unit)).setScale(2, BigDecimal.ROUND_HALF_UP);//基本收入
+            if (actualNumber > classCourse.getExceedNum()) {//提成
+                averageHourCost = averageHourCost.add(classCourse.getExtraCharge());
             }
-            rosterIncomeInsert.setAverageHourCost(user.getAverageHourCost());//每个收费单位收取费用
-            rosterIncomeInsert.setExceedNum(user.getExceedNum());//超过人数提成
+            rosterIncomeInsert.setAverageHourCost(classCourse.getAverageHourCost());//每个收费单位收取费用
+            rosterIncomeInsert.setExceedNum(classCourse.getExceedNum());//超过人数提成
             rosterIncomeInsert.setIncomeAmount(averageHourCost);//收入金额
         } else if (EnumCode.TeacherChargeType.CHARGE_TYPE_PERCENTAGE.getValue().equals(teacherChargeType)) {//按提成
-            rosterIncomeInsert.setIncomeAmount(user.getPercentage().multiply(averageCourse).setScale(2, BigDecimal.ROUND_HALF_UP));//收入金额
+            rosterIncomeInsert.setIncomeAmount(classCourse.getPercentage().multiply(averageCourse).setScale(2, BigDecimal.ROUND_HALF_UP));//收入金额
         }
         //更新
         int i = rosterAttendanceMapper.updateByCourseAndNum(rosterAttendanceUpdate);
