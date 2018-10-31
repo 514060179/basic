@@ -82,8 +82,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public int update(User user) {
-        userMapper.updateByPrimaryKeySelective(user);
-        return 0;
+        return userMapper.updateByPrimaryKeySelective(user);
     }
 
     @Override
@@ -101,6 +100,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public int deleteUser(Long accountId, Boolean deleted) {
         return userMapper.delete(accountId,deleted);
+    }
+
+    @Override
+    public int updatePassword(Long accountId, String password) {
+        return userMapper.updatePassword(accountId,password);
     }
 
 

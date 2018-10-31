@@ -16,6 +16,8 @@ public interface UserMapper {
 
     int delete(@Param("accountId") Long accountId, @Param("deleted") Boolean deleted);
 
+    int updatePassword(@Param("accountId") Long accountId, @Param("password") String password);
+
     User findByUserName(String userName);
 
     List<User> findListByCondition(User user);

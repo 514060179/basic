@@ -10,11 +10,13 @@ import com.simon.basics.util.SaltEncryUtil;
 import com.simon.basics.util.UtilToString;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
+import java.util.Objects;
 
 /**
  * @Author simon.feng
@@ -77,15 +80,15 @@ public class UserController {
                            @RequestParam String verification,
                            @Pattern(regexp = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$", message = "身份证号码格式有误！") @RequestParam String cardNum) {
         //验证码验证
-//        String code = jedisService.getString(phone);
-//        if (StringUtils.isEmpty(code)) {
-//            logger.warn("新增用户未获取验证码{}", phone);
-//            return ReturnParam.noVerification();
-//        }
-//        if (code.equals(verification)) {
-//            logger.warn("新增用户{}验证码{}验证错误！", phone, verification);
-//            return ReturnParam.noVerification();
-//        }
+        String code = jedisService.getString(phone);
+        if (StringUtils.isEmpty(code)) {
+            logger.warn("新增用户未获取验证码{}", phone);
+            return ReturnParam.noVerification();
+        }
+        if (code.equals(verification)) {
+            logger.warn("新增用户{}验证码{}验证错误！", phone, verification);
+            return ReturnParam.noVerification();
+        }
         User u = userService.findByUserName(user.getName());
         if (u != null) {
             logger.warn("新增用户{}已存在", user.getName());
@@ -109,6 +112,34 @@ public class UserController {
     @ApiOperation(value = "修改用户（学生/教师）信息")
     public ReturnParam update(User user, @RequestParam Long accountId) {
         return ReturnParam.success(userService.update(user));
+    }
+
+    @PostMapping("updPassword")
+    @ApiOperation(value = "修改密码(学生,老师只能修改自己的密码(accountId不用传,oldPassword必传);管理员可以修改任意用户密码,oldPassword不用传,accountId可选传[不传代表自己])")
+    public ReturnParam updPassword(Long accountId,String oldPassword,@RequestParam String newPassword) throws MissingServletRequestParameterException {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        String salt =null;
+        if (EnumCode.UserType.TYPE_SUPER.getValue().equals(user.getType())||EnumCode.UserType.TYPE_MANAGER.getValue().equals(user.getType())) {//管理员可以修改其他用户密码
+            if (Objects.isNull(accountId)){
+                salt = user.getUsername();
+                accountId = user.getAccountId();
+            }else{
+                User other = userService.findByAccountId(accountId);
+                salt = other.getUsername();
+            }
+        }else{  //修改自己密码
+            salt = user.getUsername();
+            if (Objects.isNull(oldPassword)){
+                throw new MissingServletRequestParameterException("oldPassword","String type [oldPassword] is misss");
+            }
+            String old = SaltEncryUtil.getMD5SaltString(salt, oldPassword);
+            if (!old.equalsIgnoreCase(user.getPassword())){
+                return ReturnParam.incorrectCredentials();
+            }
+        }
+        String password = SaltEncryUtil.getMD5SaltString(salt, newPassword);
+
+        return ReturnParam.success(userService.updatePassword(accountId,password));
     }
 
     @PostMapping("delete")

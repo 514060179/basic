@@ -31,4 +31,12 @@ public interface UserService {
      * @return
      */
     int deleteUser(Long accountId, Boolean deleted);
+
+    /**
+     *
+     * @param accountId 用户id
+     * @param password 新密码
+     * @return
+     */
+    int updatePassword(Long accountId, String password);
 }

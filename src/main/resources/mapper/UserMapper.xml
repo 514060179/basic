@@ -206,6 +206,10 @@
     </set>
     where account_id = #{accountId,jdbcType=BIGINT}
   </update>
+  <update id="updatePassword"  >
+    update account set password = #{password,jdbcType=VARCHAR}
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </update>
   <select id="findByUserName" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
