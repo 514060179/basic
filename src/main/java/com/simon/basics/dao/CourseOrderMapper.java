@@ -14,6 +14,8 @@ public interface CourseOrderMapper {
 
     CourseOrder selectByPrimaryKey(Long orderId);
 
+    CourseOrder selectByOrderNo(String orderNo);
+
     List<CourseOrder> findListByCondition(CourseOrder record);
 
     int updateByPrimaryKeySelective(CourseOrder record);

@@ -78,6 +78,11 @@ public class CourseOrderServiceImpl implements CourseOrderService {
     }
 
     @Override
+    public CourseOrder findOneByOrderNo(String orderNo) {
+        return courseOrderMapper.selectByOrderNo(orderNo);
+    }
+
+    @Override
     public int paySuccess(Long orderId, String orderNo, String payWay) {
         CourseOrder courseOrder = new CourseOrder();
         courseOrder.setOrderId(orderId);

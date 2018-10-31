@@ -47,6 +47,14 @@ public interface CourseOrderService {
      */
     CourseOrder findOneByOrderId(Long orderId);
 
+    /**
+     * 根据订单编号查询订单
+     *
+     * @param orderNo
+     * @return
+     */
+    CourseOrder findOneByOrderNo(String orderNo);
+
 
     int paySuccess(Long orderId, String orderNo, String payWay);
 }

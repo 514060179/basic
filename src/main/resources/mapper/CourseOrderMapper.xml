@@ -44,6 +44,12 @@
         from course_order
         where order_id = #{orderId,jdbcType=BIGINT}
     </select>
+    <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from course_order
+        where order_no = #{orderNo,jdbcType=VARCHAR}
+    </select>
     <select id="findListByCondition" resultMap="UnionResultMap" parameterType="com.simon.basics.model.CourseOrder">
         select
         <include refid="Union_Column_List"/>
