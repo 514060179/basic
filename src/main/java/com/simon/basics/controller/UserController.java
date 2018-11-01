@@ -7,6 +7,7 @@ import com.simon.basics.model.User;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.service.UserService;
 import com.simon.basics.util.SaltEncryUtil;
+import com.simon.basics.util.SmsUtil;
 import com.simon.basics.util.UtilToString;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -65,11 +66,16 @@ public class UserController {
         if (StringUtils.isEmpty(verification)) {
             jedisService.put(phone, code, 60 * 10);
             //发送验证码
+            new Thread(() -> {
+                if (!SmsUtil.sendSMS(phone,code)){
+                    logger.error("发送验证码失败，tel={}",phone);
+                }
+            }).start();
         } else {
             logger.warn("重复发送验证码{}", phone);
             return ReturnParam.verifing();
         }
-        return ReturnParam.success("获取成功!",code);
+        return ReturnParam.success("获取成功!");
     }
 
     @PostMapping("add")
