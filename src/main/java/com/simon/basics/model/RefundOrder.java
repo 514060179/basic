@@ -1,33 +1,52 @@
 package com.simon.basics.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class RefundOrder {
+
+    @ApiModelProperty(value = "id")
     private Long refundId;
 
+    @ApiModelProperty(value = "订单id")
     private Long orderId;
 
+    @ApiModelProperty(value = "课程id")
     private Long courseId;
 
+    @ApiModelProperty(value = "用户id")
     private Long accountId;
 
+    @ApiModelProperty(value = "申请退款金额")
     private BigDecimal amount;
 
+    @ApiModelProperty(value = "实际退款金额")
     private BigDecimal actualAmount;
 
+    @ApiModelProperty(value = "课程总额")
     private BigDecimal courseAmount;
 
+    @ApiModelProperty(value = "订单支付方式")
     private String orderPayWay;
 
+    @ApiModelProperty(value = "总课时")
     private Integer courseTotal;
 
+    @ApiModelProperty(value = "回退课时")
     private Integer refundCourseTotal;
 
+    @ApiModelProperty(value = "状态2申请中3退款成功")
     private String refundStatus;
 
+    @ApiModelProperty(value = "创建时间")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 
     public Long getRefundId() {

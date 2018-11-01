@@ -104,7 +104,7 @@ public class CourseOrderServiceImpl implements CourseOrderService {
 
     @Transactional
     @Override
-    public int applyback(ClassCourse classCourse, CourseOrder courseOrder, CourseRoster courseRoster) {
+    public RefundOrder applyback(ClassCourse classCourse, CourseOrder courseOrder, CourseRoster courseRoster) {
         //2 删除课程名单
         //3 更新订单状态
         //4 添加退款记录
@@ -130,6 +130,6 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         refundOrder.setOrderPayWay(courseOrder.getOrderPayWay());
         refundOrder.setRefundCourseTotal(rest);
         refundOrderMapper.insertSelective(refundOrder);
-        return 1;
+        return refundOrder;
     }
 }

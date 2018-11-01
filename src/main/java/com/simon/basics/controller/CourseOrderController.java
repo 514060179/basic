@@ -113,7 +113,7 @@ public class CourseOrderController {
     }
     @PostMapping("applyback")
     @ApiOperation("学生申请退款")
-    public ReturnParam applyback(@RequestParam Long orderId) throws NoHandlerFoundException {
+    public ReturnParam<RefundOrder> applyback(@RequestParam Long orderId) throws NoHandlerFoundException {
         //1 查询订单是否存在
         CourseOrder courseOrder = courseOrderService.findOneByOrderId(orderId);
         if (Objects.isNull(courseOrder)){
@@ -128,7 +128,7 @@ public class CourseOrderController {
             if (courseRoster.getRosterCourseCountRest()<=0){
                 return ReturnParam.courseNoAllowReback();
             }
-            courseOrderService.applyback(classCourse,courseOrder,courseRoster);
+            return ReturnParam.success(courseOrderService.applyback(classCourse,courseOrder,courseRoster));
         }else{
             return ReturnParam.courseNoAllowReback();
         }
@@ -136,7 +136,6 @@ public class CourseOrderController {
         //3 更新订单状态
         //4 添加退款记录
 
-        return ReturnParam.success();
     }
 
     @GetMapping("callback")

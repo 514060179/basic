@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.simon.basics.model.ClassCourse;
 import com.simon.basics.model.CourseOrder;
 import com.simon.basics.model.CourseRoster;
+import com.simon.basics.model.RefundOrder;
 
 import java.util.List;
 
@@ -66,5 +67,5 @@ public interface CourseOrderService {
      * @param courseRoster
      * @return
      */
-    int applyback(ClassCourse classCourse, CourseOrder courseOrder, CourseRoster courseRoster);
+    RefundOrder applyback(ClassCourse classCourse, CourseOrder courseOrder, CourseRoster courseRoster);
 }
