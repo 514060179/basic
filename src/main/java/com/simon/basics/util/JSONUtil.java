@@ -3,12 +3,17 @@ package com.simon.basics.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.simon.basics.model.vo.MyBase64;
+import com.simon.basics.model.vo.PayOrderDetail;
 import com.simon.basics.model.vo.ReturnParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * springboot下的jackon 处理json
@@ -61,9 +66,30 @@ public class JSONUtil {
         }
     }
     public static void main(String[] args) {
-        ReturnParam returnParam = new ReturnParam();
-        String json = "{\"code\":12,\"msg\":12,\"data\":213}";
-        System.out.println(objectToJson(returnParam));
-        System.out.println(jsonToObject(json,ReturnParam.class));
+//        ReturnParam returnParam = new ReturnParam();
+//        String json = "{\"code\":12,\"msg\":12,\"data\":213}";
+//        System.out.println(objectToJson(returnParam));
+//        System.out.println(jsonToObject(json,ReturnParam.class));
+        PayOrderDetail payOrderDetail = new PayOrderDetail();
+        payOrderDetail.setAmount("1");
+        payOrderDetail.setBody("22ceshishiyiong");
+        payOrderDetail.setClientIp("127.0.0.1");
+        payOrderDetail.setCurrency("cny");
+        Map map = new HashMap();
+        map.put("productId","1245678954");
+        map.put("openId","oeHXkwvzKANWbsHyl2FaZxCU8iQ8");
+        payOrderDetail.setExtra(JSONUtil.objectToJson(map));
+        payOrderDetail.setMchId("20001229");
+        payOrderDetail.setChannelId("ALIPAY_WAP");
+        payOrderDetail.setMchOrderNo(""+new SnowflakeIdWorker().nextId());
+        payOrderDetail.setSubject("ceshi");
+        payOrderDetail.setParam1("额外字段1");
+        payOrderDetail.setParam2("额外字段2");
+        payOrderDetail.setTimestamp("-1");
+        payOrderDetail.setNotifyUrl("http://pay.taichuan.com:6000/pay/aliPayNotifyRes.htm");
+        payOrderDetail.setSign("sign");
+        String eecode = MyBase64.encode(objectToJson(payOrderDetail).getBytes());
+        System.out.println(eecode);
+        System.out.println(new String(MyBase64.decode(eecode)));
     }
 }
