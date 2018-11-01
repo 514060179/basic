@@ -24,12 +24,12 @@ public class CourseRosterServiceImpl implements CourseRosterService {
     private CourseRosterMapper courseRosterMapper;
     @Override
     public List<CourseRoster> findListByCourseId(Long courseId) {
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+//        User user = (User) SecurityUtils.getSubject().getPrincipal();
         CourseRoster courseRoster = new CourseRoster();
         courseRoster.setCourseId(courseId);
-        if (EnumCode.UserType.TYPE_STUDENT.getValue().equals(user.getType())) {
-            courseRoster.setAccountId(user.getAccountId());
-        }
+//        if (EnumCode.UserType.TYPE_STUDENT.getValue().equals(user.getType())) {
+//            courseRoster.setAccountId(user.getAccountId());
+//        }
         return courseRosterMapper.findOneByConditon(courseRoster);
     }
 
