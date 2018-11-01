@@ -46,6 +46,12 @@
     from course_roster
     where roster_id = #{rosterId,jdbcType=BIGINT}
   </select>
+  <select id="findByCourseIdAndAccountId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course_roster
+    where course_id = #{courseId,jdbcType=BIGINT} and account_id = #{accountId,jdbcType=BIGINT}
+  </select>
   <select id="findOneByConditon" resultMap="BaseWithUserResultMap" parameterType="com.simon.basics.model.CourseRoster" >
     select
     <include refid="Union_User_Column_List" />
@@ -90,6 +96,10 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from course_roster
     where roster_id = #{rosterId,jdbcType=BIGINT}
+  </delete>
+  <delete id="delByCourseIdAndAccountId">
+    delete from course_roster
+    where course_id = #{courseId,jdbcType=BIGINT} and account_id = #{accountId,jdbcType=BIGINT}
   </delete>
   <insert id="insertSelective" parameterType="com.simon.basics.model.CourseRoster" useGeneratedKeys="true" keyProperty="rosterId" >
     insert into course_roster

@@ -14,6 +14,8 @@ public class CourseOrder {
     private Long courseId;
     @ApiModelProperty(value = "用户（老师）id")
     private Long accountId;
+    @ApiModelProperty(value = "总课时")
+    private Integer courseTotal;
     @ApiModelProperty(value = "订单状态")
     private String orderStatus;
     @ApiModelProperty(value = "支付金额")
@@ -57,6 +59,14 @@ public class CourseOrder {
 
     public void setAccountId(Long accountId) {
         this.accountId = accountId;
+    }
+
+    public Integer getCourseTotal() {
+        return courseTotal;
+    }
+
+    public void setCourseTotal(Integer courseTotal) {
+        this.courseTotal = courseTotal;
     }
 
     public String getOrderStatus() {

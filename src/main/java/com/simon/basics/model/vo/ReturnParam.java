@@ -60,6 +60,9 @@ public class ReturnParam<T> extends CodeParam {
     public static ReturnParam courseActite(){
         return new ReturnParam(courseActite,courseActiteMsg,null);
     }
+    public static ReturnParam courseNoAllowReback(){
+        return new ReturnParam(courseNoAllowReback,courseNoAllowRebackMsg,null);
+    }
 
     public static ReturnParam courseNotEnoughOrNotHad(){
         return new ReturnParam(courseNotEnoughOrNotHad,courseNotEnoughOrNotHadMsg,null);

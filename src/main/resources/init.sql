@@ -506,3 +506,32 @@ ALTER TABLE `simon`.`course_order`
   ADD COLUMN `exceed_num` INT(11) NOT NULL COMMENT '收费类型为1时：超过人数【exceedNum】才有提成【extraCharge】' AFTER `percentage`,
   ADD COLUMN `average_hour_cost`DECIMAL(12,2) NOT NULL COMMENT '收费类型为1时 按【averageHour】小时收费【averageHourCost】' AFTER `exceed_num`,
   ADD COLUMN `extra_charge` DECIMAL(12,2) NOT NULL COMMENT '收费类型为1时 超过【exceedNum】提成【extraCharge】元' AFTER `average_hour_cost`;
+
+
+
+
+ALTER TABLE `simon`.`course_order`
+  ADD COLUMN `course_total` INT(11) NULL COMMENT '购买总课时' AFTER `order_status`
+
+
+CREATE TABLE `simon`.`refund_order`(
+  `refund_id` BIGINT NOT NULL,
+  `order_id` BIGINT NOT NULL COMMENT '订单id',
+  `course_id` BIGINT NOT NULL COMMENT '课程id',
+  `account_id` BIGINT NOT NULL COMMENT '用户id',
+  `amount` DECIMAL(12,2) DEFAULT 0 COMMENT '申请退款金额',
+  `actual_amount` DECIMAL(12,2) DEFAULT 0 COMMENT '实际退款金额',
+  `course_amount` DECIMAL(12,2) DEFAULT 0 COMMENT '课程总额',
+  `order_pay_way` ENUM('alipay','wechat') DEFAULT 'wechat' COMMENT '订单支付方式',
+  `course_total` INT(11) COMMENT '总课时',
+  `refund_course_total` INT(11) COMMENT '回退课时',
+  `refund_status` ENUM('2','3') DEFAULT '2' COMMENT '状态2申请中3退款成功',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`refund_id`),
+  UNIQUE INDEX `order_key_unique` (`order_id`)
+);
+
+
+ALTER TABLE `simon`.`course_order`
+  CHANGE `order_status` `order_status` ENUM('0','1','2','3') CHARSET utf8mb4 COLLATE utf8mb4_bin DEFAULT '0' NOT NULL COMMENT '状态(0未支付1成功2申请退款3退款)';

@@ -47,4 +47,14 @@ public class CourseRosterServiceImpl implements CourseRosterService {
         }
         return result;
     }
+
+    @Override
+    public int delByCourseIdAndAccountId(Long courseId, Long accountId) {
+        return courseRosterMapper.delByCourseIdAndAccountId(courseId,accountId);
+    }
+
+    @Override
+    public CourseRoster findByCourseIdAndAccountId(Long courseId, Long accountId) {
+        return courseRosterMapper.findByCourseIdAndAccountId(courseId,accountId);
+    }
 }

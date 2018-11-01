@@ -46,6 +46,10 @@ public class CodeParam {
 
     public final static String courseActiteMsg = "课程已开始或未发布!";
 
+    public final static String courseNoAllowReback  = "210";
+
+    public final static String courseNoAllowRebackMsg = "课程已结束或剩余课时为0,不允许退款！";
+
     public final static String missParam = "300";
 
     public final static String missParamMsg = "缺少参数！";

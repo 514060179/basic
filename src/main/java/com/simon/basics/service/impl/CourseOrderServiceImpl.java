@@ -3,16 +3,17 @@ package com.simon.basics.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.simon.basics.dao.CourseOrderMapper;
-import com.simon.basics.model.ClassCourse;
-import com.simon.basics.model.CourseOrder;
-import com.simon.basics.model.EnumCode;
-import com.simon.basics.model.User;
+import com.simon.basics.dao.RefundOrderMapper;
+import com.simon.basics.model.*;
 import com.simon.basics.service.CourseOrderService;
+import com.simon.basics.service.CourseRosterService;
 import com.simon.basics.util.SnowflakeIdWorker;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -25,6 +26,10 @@ public class CourseOrderServiceImpl implements CourseOrderService {
 
     @Autowired
     private CourseOrderMapper courseOrderMapper;
+    @Autowired
+    private CourseRosterService courseRosterMapper;
+    @Autowired
+    private RefundOrderMapper refundOrderMapper;
 
     @Override
     public PageInfo<CourseOrder> getListByPage(CourseOrder courseOrder, int pageNum, int pageSize) {
@@ -48,6 +53,7 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         courseOrder.setCourseId(classCourse.getCourseId());
         courseOrder.setOrderId(new SnowflakeIdWorker().nextId());
         courseOrder.setOrderCost(classCourse.getCourseCost());
+        courseOrder.setCourseTotal(classCourse.getCourseTotal()-classCourse.getCourseCurrent());
         int i = courseOrderMapper.insertSelective(courseOrder);
         if(i>0){
             return courseOrder;
@@ -94,5 +100,36 @@ public class CourseOrderServiceImpl implements CourseOrderService {
             courseOrder.setOrderPayWay("wechat");
         }
         return courseOrderMapper.updateByPrimaryKeySelective(courseOrder);
+    }
+
+    @Transactional
+    @Override
+    public int applyback(ClassCourse classCourse, CourseOrder courseOrder, CourseRoster courseRoster) {
+        //2 删除课程名单
+        //3 更新订单状态
+        //4 添加退款记录
+        courseRosterMapper.delByCourseIdAndAccountId(courseRoster.getCourseId(),courseRoster.getAccountId());
+        CourseOrder update = new CourseOrder();
+        update.setOrderStatus(EnumCode.OrderStatus.ORDER_APPLY_REBACK.getValue());
+        update.setOrderId(courseOrder.getOrderId());
+        courseOrderMapper.updateByPrimaryKeySelective(update);//refundOrderMapper
+        RefundOrder refundOrder = new RefundOrder();
+        refundOrder.setRefundId(new SnowflakeIdWorker().nextId());
+        refundOrder.setAccountId(courseRoster.getAccountId());
+        refundOrder.setCourseId(classCourse.getCourseId());
+        refundOrder.setOrderId(courseOrder.getOrderId());
+        //剩余课程
+        int rest = courseRoster.getRosterCourseCountRest();
+        int courseTotal = courseOrder.getCourseTotal();//购买时的总课时
+        BigDecimal orderCost = courseOrder.getOrderCost();//购买时的总费用
+        BigDecimal amount = orderCost.divide(new BigDecimal(courseTotal)).multiply(new BigDecimal(rest));//退款金额
+        refundOrder.setAmount(amount);
+        refundOrder.setCourseAmount(orderCost);//课程金额
+        refundOrder.setCourseTotal(courseTotal);
+        refundOrder.setRefundStatus(EnumCode.OrderStatus.ORDER_APPLY_REBACK.getValue());
+        refundOrder.setOrderPayWay(courseOrder.getOrderPayWay());
+        refundOrder.setRefundCourseTotal(rest);
+        refundOrderMapper.insertSelective(refundOrder);
+        return 1;
     }
 }

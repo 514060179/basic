@@ -12,6 +12,7 @@
         <result column="order_pay_way" property="orderPayWay" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="course_total" property="courseTotal" jdbcType="INTEGER"/>
     </resultMap>
 
     <resultMap id="UnionResultMap" type="com.simon.basics.model.CourseOrderWithBLOBs" extends="BaseResultMap">
@@ -28,12 +29,12 @@
         <result column="course_total" property="courseTotal" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    order_id, order_no, course_id, account_id, order_status, order_cost, order_pay_status, order_pay_way,
+    order_id, order_no, course_id, account_id, order_status, order_cost, order_pay_status, order_pay_way,course_total,
     create_time, update_time
   </sql>
 
     <sql id="Union_Column_List">
-      co.order_id, co.order_no, co.course_id, co.account_id, co.order_status, co.order_cost, co.order_pay_status,co.order_pay_way,co.create_time, co.update_time,
+      co.order_id, co.order_no, co.course_id, co.account_id, co.order_status, co.order_cost, co.order_pay_status,co.order_pay_way,co.course_total,co.create_time, co.update_time,
       u.name,u.parent_name,u.sex,u.age,u.phone,
       cc.seat_id,cc.course_name,cc.course_cost,cc.course_total
     </sql>
@@ -101,6 +102,9 @@
             keyProperty="orderId">
         insert into course_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseTotal != null">
+                course_total,
+            </if>
             <if test="orderId != null">
                 order_id,
             </if>
@@ -133,6 +137,9 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseTotal != null">
+                #{courseTotal,jdbcType=INTEGER},
+            </if>
             <if test="orderId != null">
                 #{orderId,jdbcType=BIGINT},
             </if>

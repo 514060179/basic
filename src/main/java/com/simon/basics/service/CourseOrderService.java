@@ -3,6 +3,7 @@ package com.simon.basics.service;
 import com.github.pagehelper.PageInfo;
 import com.simon.basics.model.ClassCourse;
 import com.simon.basics.model.CourseOrder;
+import com.simon.basics.model.CourseRoster;
 
 import java.util.List;
 
@@ -57,4 +58,13 @@ public interface CourseOrderService {
 
 
     int paySuccess(Long orderId, String orderNo, String payWay);
+
+    /**
+     * 申请退款
+     * @param classCourse
+     * @param courseOrder
+     * @param courseRoster
+     * @return
+     */
+    int applyback(ClassCourse classCourse, CourseOrder courseOrder, CourseRoster courseRoster);
 }

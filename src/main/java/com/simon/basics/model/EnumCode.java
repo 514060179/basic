@@ -67,10 +67,11 @@ public class EnumCode {
      */
     public enum OrderStatus {
 
-        // 0未支付1成功2部分退款
+        // 0未支付1成功2部分退款3退款
         ORDER_NOPAY("0"),
         ORDER_PAID("1"),
-        ORDER_REBACK("2");
+        ORDER_APPLY_REBACK("2"),
+        ORDER_REBACK("3");
 
         private String value;
 

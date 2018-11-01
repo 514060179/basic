@@ -1,19 +1,19 @@
 package com.simon.basics.controller;
 
 import com.simon.basics.componet.exception.PayExcetion;
-import com.simon.basics.model.ClassCourse;
-import com.simon.basics.model.CourseOrder;
-import com.simon.basics.model.EnumCode;
+import com.simon.basics.model.*;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.qianying.pay.QianyingPayService;
 import com.simon.basics.qianying.pay.tools.MD5;
 import com.simon.basics.service.ClassCourseService;
 import com.simon.basics.service.CourseOrderService;
+import com.simon.basics.service.CourseRosterService;
 import com.simon.basics.util.JSONUtil;
 import com.simon.basics.util.SnowflakeIdWorker;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +42,8 @@ public class CourseOrderController {
     private CourseOrderService courseOrderService;
     @Autowired
     private ClassCourseService classCourseService;
+    @Autowired
+    private CourseRosterService courseRosterService;
     @Autowired
     private QianyingPayService qianyingPayService;
 
@@ -108,6 +110,33 @@ public class CourseOrderController {
         }
         String qianyingPayNo = new SnowflakeIdWorker().nextId()+"";//支付订单
         qianyingPayService.submitOrder(response,courseOrder.getOrderCost().intValue()+"",qianyingPayNo,courseOrder.getOrderId()+"",type,gotrue,gofalse);
+    }
+    @PostMapping("applyback")
+    @ApiOperation("学生申请退款")
+    public ReturnParam applyback(@RequestParam Long orderId) throws NoHandlerFoundException {
+        //1 查询订单是否存在
+        CourseOrder courseOrder = courseOrderService.findOneByOrderId(orderId);
+        if (Objects.isNull(courseOrder)){
+            throw new NoHandlerFoundException("资源不存在!","资源不存在!",null);
+        }
+        ClassCourse classCourse = classCourseService.findOne(courseOrder.getCourseId(),null,null);
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        //开始以及进行中的才可以退款
+        if(EnumCode.CourseStatus.COURSE_ACTION.getValue().equals(classCourse.getCourseStatus()) || EnumCode.CourseStatus.COURSE_IN.getValue().equals(classCourse.getCourseStatus())){
+            //获取剩余课程
+            CourseRoster courseRoster = courseRosterService.findByCourseIdAndAccountId(classCourse.getCourseId(),user.getAccountId());
+            if (courseRoster.getRosterCourseCountRest()<=0){
+                return ReturnParam.courseNoAllowReback();
+            }
+            courseOrderService.applyback(classCourse,courseOrder,courseRoster);
+        }else{
+            return ReturnParam.courseNoAllowReback();
+        }
+        //2 删除课程名单
+        //3 更新订单状态
+        //4 添加退款记录
+
+        return ReturnParam.success();
     }
 
     @GetMapping("callback")

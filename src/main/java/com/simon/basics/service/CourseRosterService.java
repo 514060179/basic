@@ -23,4 +23,21 @@ public interface CourseRosterService {
      * @return
      */
     int updateCourseRosterByList(List<CourseRoster> courseRosterList);
+
+    /**
+     * 删除课程名单
+     * @param courseId
+     * @param accountId
+     * @return
+     */
+    int delByCourseIdAndAccountId(Long courseId,Long accountId);
+
+    /**
+     * 获取课程名单
+     * @param courseId
+     * @param accountId
+     * @return
+     */
+    CourseRoster findByCourseIdAndAccountId(Long courseId,Long accountId);
+
 }
