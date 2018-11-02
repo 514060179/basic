@@ -128,4 +128,10 @@ public interface ClassCourseService {
      * @param rosterId
      */
     void additional(Long accountId, Long courseId, int courseCurrent, Long rosterId, int rosterSeatX, int rosterSeatY);
+
+    /**
+     * 发送短信
+     * @param courseRosterAttendanceList
+     */
+    void endCourseSendMsg(List<CourseRosterAttendance> courseRosterAttendanceList);
 }

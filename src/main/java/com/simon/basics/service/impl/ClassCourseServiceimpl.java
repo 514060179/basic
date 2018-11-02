@@ -11,6 +11,7 @@ import com.simon.basics.dao.RosterIncomeMapper;
 import com.simon.basics.model.*;
 import com.simon.basics.service.ClassCourseService;
 import com.simon.basics.util.JSONUtil;
+import com.simon.basics.util.SmsUtil;
 import com.simon.basics.util.SnowflakeIdWorker;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -237,5 +238,18 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         if (i < 1) {
             throw new SqlWritePrerequisiteException("update fail：" + JSONUtil.objectToJson(courseRosterUpdate) + "update success:" + i);
         }
+    }
+
+    @Override
+    public void endCourseSendMsg(List<CourseRosterAttendance> courseRosterAttendanceList) {
+        courseRosterAttendanceList.forEach(item->{
+            String parentName = item.getParentName();
+            String name = item.getName();
+            String phone = item.getPhone();.
+            String msg = parentName+"您的孩子"+name+"已经上完课";
+            new Thread(()->{
+                SmsUtil.sendSMS(phone,msg);
+            }).start();
+        });
     }
 }

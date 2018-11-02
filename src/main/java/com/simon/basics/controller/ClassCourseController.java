@@ -199,6 +199,8 @@ public class ClassCourseController {
             }
         }
         classCourseService.courseEnd(classCourse, user, actualNumber, mustNumber, total);
+        //发送短信
+        classCourseService.endCourseSendMsg(classCourseService.getAttendanceList(courseId, classCourse.getCourseCurrent()));
         return ReturnParam.success();
     }
     @PostMapping("publish")
