@@ -245,11 +245,11 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         courseRosterAttendanceList.forEach(item->{
             String parentName = item.getParentName();
             String name = item.getName();
-            String phone = item.getPhone();.
+            String phone = item.getPhone();
             String msg = parentName+"您的孩子"+name+"已经上完课";
-            new Thread(()->{
-                SmsUtil.sendSMS(phone,msg);
-            }).start();
+            new Thread(()->
+                SmsUtil.sendSMS(phone,msg)
+            ).start();
         });
     }
 }
