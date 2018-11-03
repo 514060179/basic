@@ -25,8 +25,6 @@ public class CourseOrderWithBLOBs extends CourseOrder {
     private String phone;
     @ApiModelProperty(value = "课程名字")
     private String courseName;
-    @ApiModelProperty(value = "总课程数")
-    private Integer courseTotal;
     @ApiModelProperty(value = "座位id")
     private Long seatId;
     @ApiModelProperty(value = "课程价格")
@@ -86,14 +84,6 @@ public class CourseOrderWithBLOBs extends CourseOrder {
 
     public void setCourseName(String courseName) {
         this.courseName = courseName;
-    }
-
-    public Integer getCourseTotal() {
-        return courseTotal;
-    }
-
-    public void setCourseTotal(Integer courseTotal) {
-        this.courseTotal = courseTotal;
     }
 
     public Long getSeatId() {
