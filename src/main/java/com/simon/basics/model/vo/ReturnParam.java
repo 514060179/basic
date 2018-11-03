@@ -86,8 +86,8 @@ public class ReturnParam<T> extends CodeParam {
     public static ReturnParam paramiolationException(String msg){
         return new ReturnParam(paramiolationException,msg,null);
     }
-    public static ReturnParam illegalKeyIdException(){
-        return new ReturnParam(illegalKeyIdException,illegalKeyIdExceptionMsg,null);
+    public static ReturnParam illegalKeyIdException(String msg){
+        return new ReturnParam(illegalKeyIdException,illegalKeyIdExceptionMsg+"、"+msg,null);
     }
     public static ReturnParam sqlWritePrerequisiteException(){
         return new ReturnParam(sqlWritePrerequisiteException,sqlWritePrerequisiteExceptionMsg,null);

@@ -64,7 +64,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = DataIntegrityViolationException.class)
     public ReturnParam dataIntegrityViolationExceptionHandler(Exception e) {
         logger.error(">>>> system error： ", e);
-        return ReturnParam.illegalKeyIdException();
+        return ReturnParam.illegalKeyIdException(e.getMessage());
     }
     @ExceptionHandler(value = SqlWritePrerequisiteException.class)
     public ReturnParam sqlWritePrerequisiteExceptionnHandler(Exception e) {
