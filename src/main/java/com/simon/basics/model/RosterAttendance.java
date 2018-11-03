@@ -1,34 +1,48 @@
 package com.simon.basics.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
 public class RosterAttendance {
+
+    @ApiModelProperty(value = "id")
     private Long attendanceId;
 
+    @ApiModelProperty(value = "课程id")
     private Long courseId;
 
+    @ApiModelProperty(value = "用户id")
     private Long accountId;
 
+    @ApiModelProperty(value = "串课x坐标")
     private Integer additionalSeatX;
 
+    @ApiModelProperty(value = "串课y坐标")
     private Integer additionalSeatY;
 
+    @ApiModelProperty(value = "课程的节数")
     private Integer attendSectionNum;
 
+    @ApiModelProperty(value = "考勤名字")
     private String attendName;
 
+    @ApiModelProperty(value = "备注")
     private String attendRemark;
 
+    @ApiModelProperty(value = "出勤类型:1学生2老师3串课4缺席")
     private String attendType;
 
+    @ApiModelProperty(value = "下课时间",hidden = true)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
+    @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
+    @ApiModelProperty(value = "更新时间")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 

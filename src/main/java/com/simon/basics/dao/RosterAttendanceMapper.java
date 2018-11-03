@@ -3,6 +3,8 @@ package com.simon.basics.dao;
 import com.simon.basics.model.RosterAttendance;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface RosterAttendanceMapper {
 
     int insertSelective(RosterAttendance record);
@@ -17,4 +19,5 @@ public interface RosterAttendanceMapper {
 
     RosterAttendance findTeacherRosterAttendance(@Param("courseId") Long courseId, @Param("courseCurrent") int courseCurrent);
 
+    List<RosterAttendance> findByCondition(RosterAttendance rosterAttendance);
 }

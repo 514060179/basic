@@ -103,6 +103,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
             RosterAttendance rosterAttendanceInsert = new RosterAttendance();
             rosterAttendanceInsert.setAccountId(user.getAccountId());
             rosterAttendanceInsert.setAttendSectionNum(classCourse.getCourseCurrent() + 1);
+            rosterAttendanceInsert.setAttendName(classCourse.getCourseName()+"【第+" +(classCourse.getCourseCurrent()+1)+"节课签到】");
             rosterAttendanceInsert.setCourseId(classCourse.getCourseId());
             rosterAttendanceInsert.setAttendType(EnumCode.AttendType.ATTEND_TYPE_TEACHER.getValue());
             rosterAttendanceMapper.insertSelective(rosterAttendanceInsert);
@@ -194,6 +195,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         RosterAttendance rosterAttendanceInsert = new RosterAttendance();
         rosterAttendanceInsert.setCourseId(courseId);
         rosterAttendanceInsert.setAttendSectionNum(courseCurrent);
+        rosterAttendanceInsert.setAttendName("【第+" +courseCurrent+"节课签到】");
         rosterAttendanceInsert.setAccountId(user.getAccountId());
         rosterAttendanceInsert.setAttendType(EnumCode.AttendType.ATTEND_TYPE_STUDENT.getValue());
         rosterAttendanceMapper.insertSelective(rosterAttendanceInsert);
@@ -227,6 +229,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         rosterAttendanceInsert.setAccountId(accountId);
         rosterAttendanceInsert.setAttendType(EnumCode.AttendType.ATTEND_TYPE_ADDITIONAL.getValue());
         rosterAttendanceInsert.setAttendSectionNum(courseCurrent);
+        rosterAttendanceInsert.setAttendName("【第+" +courseCurrent+"节课签到】");
         rosterAttendanceInsert.setAdditionalSeatX(rosterSeatX);
         rosterAttendanceInsert.setAdditionalSeatY(rosterSeatY);
         rosterAttendanceMapper.insertSelective(rosterAttendanceInsert);

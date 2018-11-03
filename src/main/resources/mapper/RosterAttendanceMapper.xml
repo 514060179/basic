@@ -12,17 +12,50 @@
     <result column="attend_remark" property="attendRemark" jdbcType="VARCHAR" />
     <result column="attend_type" property="attendType" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    attendance_id, course_id, account_id, attend_section_num,additional_seat_x,additional_seat_y, attend_name, attend_remark, attend_type,
+    attendance_id, course_id, account_id, attend_section_num,additional_seat_x,additional_seat_y, attend_name, attend_remark, attend_type,end_time,
     create_time, update_time
+  </sql>
+  <sql id="Column_List" >
+    ra.attendance_id, ra.course_id, ra.account_id, ra.attend_section_num,ra.additional_seat_x,ra.additional_seat_y, ra.attend_name, ra.attend_remark, IFNULL(ra1.attend_type,'4') as attend_type,
+    ra.create_time, ra.update_time, ra.end_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select
     <include refid="Base_Column_List" />
     from roster_attendance
     where attendance_id = #{attendanceId,jdbcType=BIGINT}
+  </select>
+  <select id="findByCondition" resultMap="BaseResultMap" parameterType="com.simon.basics.model.RosterAttendance" >
+    select
+    <include refid="Column_List" />
+    FROM roster_attendance ra LEFT JOIN roster_attendance ra1 ON ra.course_id=ra1.course_id AND ra.attend_type='2' AND ra1.attend_type='1'
+    <where>
+      <if test="courseId != null" >
+        and ra.course_id = #{courseId,jdbcType=BIGINT}
+      </if>
+      <if test="accountId != null" >
+        and ra1.account_id = #{accountId,jdbcType=BIGINT}
+      </if>
+      <if test="attendSectionNum != null" >
+        and ra.attend_section_num = #{attendSectionNum,jdbcType=INTEGER}
+      </if>
+      <if test="additionalSeatX != null" >
+        and ra.additional_seat_x = #{additionalSeatX,jdbcType=INTEGER}
+      </if>
+      <if test="additionalSeatY != null" >
+        and ra.additional_seat_y = #{additionalSeatY,jdbcType=INTEGER}
+      </if>
+      <if test="attendName != null" >
+        and ra.attend_name = #{attendName,jdbcType=VARCHAR}
+      </if>
+      <if test="attendRemark != null" >
+        and ra.attend_remark = #{attendRemark,jdbcType=VARCHAR}
+      </if>
+    </where>
   </select>
   <select id="selectByCourseAndNum" resultMap="BaseResultMap">
     select
