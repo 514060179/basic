@@ -1,5 +1,6 @@
 package com.simon.basics.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.simon.basics.componet.exception.PayExcetion;
 import com.simon.basics.model.*;
 import com.simon.basics.model.vo.ReturnParam;
@@ -49,13 +50,13 @@ public class CourseOrderController {
 
     @PostMapping("list")
     @ApiOperation("查询订单列表")
-    public ReturnParam list(CourseOrder courseOrder, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
+    public ReturnParam<PageInfo<CourseOrder>> list(CourseOrder courseOrder, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
         return ReturnParam.success(courseOrderService.getListByPage(courseOrder,pageNum,pageSize));
     }
 
     @PostMapping("create")
     @ApiOperation("学生创建订单")
-    public ReturnParam create(@RequestParam Long courseId) {
+    public ReturnParam<CourseOrder> create(@RequestParam Long courseId) {
         ClassCourse classCourse = classCourseService.findOne(courseId,null,null);
         if(Objects.isNull(classCourse)){
             logger.warn("找不到资源：courseId=" + courseId);

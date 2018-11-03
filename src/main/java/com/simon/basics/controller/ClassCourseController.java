@@ -49,7 +49,7 @@ public class ClassCourseController {
 
     @PostMapping("detail")
     @ApiOperation("课程详情")
-    public ReturnParam detail(@RequestParam Long courseId) {
+    public ReturnParam<ClassCourseWithBLOBs> detail(@RequestParam Long courseId) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         Long accountId = null;
         if (EnumCode.UserType.TYPE_STUDENT.getValue().equals(user.getType())) {
@@ -61,7 +61,7 @@ public class ClassCourseController {
 
     @PostMapping("add")
     @ApiOperation("课程新增")
-    public ReturnParam add(ClassCourse classCourse, @RequestParam Long accountId, @RequestParam Integer courseTotal, @RequestParam Long seatId, @RequestParam Long typeId, @RequestParam Double courseCost, @RequestParam Date courseStartTime, @RequestParam @Future Date courseEndTime) {
+    public ReturnParam<ClassCourse> add(ClassCourse classCourse, @RequestParam Long accountId, @RequestParam Integer courseTotal, @RequestParam Long seatId, @RequestParam Long typeId, @RequestParam Double courseCost, @RequestParam Date courseStartTime, @RequestParam @Future Date courseEndTime) {
         ClassCourse classCourseRespone = classCourseService.add(classCourse);
         if (classCourse!=null){
             //获取座位存放缓存中
@@ -82,7 +82,7 @@ public class ClassCourseController {
 
     @GetMapping("courseStart")
     @ApiOperation("老师开始开始上课")
-    public ReturnParam courseStart(@RequestParam Long courseId) {
+    public ReturnParam<ClassCourseWithBLOBs> courseStart(@RequestParam Long courseId) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         ClassCourse classCourse = classCourseService.findOne(courseId, null,user.getAccountId());
 
@@ -110,7 +110,7 @@ public class ClassCourseController {
 
     @PostMapping("courseAttendance")
     @ApiOperation("老师获取考勤名单")
-    public ReturnParam courseAttendance(@RequestParam Long courseId, Integer courseCurrent) {
+    public ReturnParam<List<CourseRosterAttendance>> courseAttendance(@RequestParam Long courseId, Integer courseCurrent) {
         if (courseCurrent==null){
             courseCurrent = classCourseService.findOne(courseId,null,null).getCourseCurrent();
         }
@@ -140,7 +140,7 @@ public class ClassCourseController {
 
     @PostMapping("additional")
     @ApiOperation("老师添加串课名单")
-    public ReturnParam additional(@RequestParam Long courseId, @RequestParam Long accountId, @RequestParam int rosterSeatX, @RequestParam int rosterSeatY) {
+    public ReturnParam<List<CourseRosterAttendance>> additional(@RequestParam Long courseId, @RequestParam Long accountId, @RequestParam int rosterSeatX, @RequestParam int rosterSeatY) {
         //查询是否有资格
         User user = (User) SecurityUtils.getSubject().getPrincipal();//查找当前课程是否开始(老师是否签到)
 

@@ -1,5 +1,6 @@
 package com.simon.basics.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.simon.basics.componet.service.JedisService;
 import com.simon.basics.model.Account;
 import com.simon.basics.model.EnumCode;
@@ -48,13 +49,13 @@ public class UserController {
 
     @PostMapping("list")
     @ApiOperation(value = "学生/教师/管理员列表。type：0管理员1学生2教师")
-    public ReturnParam list(User user, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "20") int pageSize, @RequestParam(defaultValue = "1") String type) {
+    public ReturnParam<PageInfo<User>> list(User user, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "20") int pageSize, @RequestParam(defaultValue = "1") String type) {
         return ReturnParam.success(userService.findListByPage(user, pageNum, pageSize));
     }
 
     @PostMapping("detail")
     @ApiOperation(value = "学生/教师/管理员详情")
-    public ReturnParam detail(@RequestParam Long accountId) {
+    public ReturnParam<User> detail(@RequestParam Long accountId) {
         return ReturnParam.success(userService.findByAccountId(accountId));
     }
 
@@ -80,7 +81,7 @@ public class UserController {
 
     @PostMapping("add")
     @ApiOperation(value = "添加用户（学生/教师） type=1 学生 type=2教师")
-    public ReturnParam add(User user, @Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！")
+    public ReturnParam<User> add(User user, @Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！")
     @RequestParam String phone, @RequestParam(defaultValue = "1") String type, @RequestParam String name,
                            @RequestParam String username, @RequestParam String password,
                            @RequestParam String verification,
@@ -106,7 +107,7 @@ public class UserController {
 
     @PostMapping("addManager")
     @ApiOperation(value = "新增管理员")
-    public ReturnParam addManager(@RequestParam String username, @RequestParam String password) {
+    public ReturnParam<Account> addManager(@RequestParam String username, @RequestParam String password) {
         Account account = new Account();
         account.setUsername(username);
         account.setPassword(SaltEncryUtil.getMD5SaltString(username,password));

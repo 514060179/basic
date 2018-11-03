@@ -48,7 +48,7 @@ public class SeatLayoutController {
 
     @PostMapping("choice")
     @ApiOperation("选择座位")
-    public ReturnParam choice(@RequestParam Long courseId, @RequestParam int seatX, @RequestParam int seatY) {
+    public ReturnParam<CourseRoster> choice(@RequestParam Long courseId, @RequestParam int seatX, @RequestParam int seatY) {
         //redis 存储
         //获取课程
         CourseOrderWithBLOBs courseOrder = (CourseOrderWithBLOBs)courseOrderService.findOneByCourseId(courseId);

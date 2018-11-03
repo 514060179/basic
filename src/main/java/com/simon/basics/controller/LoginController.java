@@ -41,7 +41,7 @@ public class LoginController {
     @Autowired
     private JedisService jedisService;
     @PostMapping("/toLogin")
-    public ReturnParam login(@RequestParam String userName, @RequestParam String password){
+    public ReturnParam<User> login(@RequestParam String userName, @RequestParam String password){
 
         // 获取主体
         Subject subject = SecurityUtils.getSubject();

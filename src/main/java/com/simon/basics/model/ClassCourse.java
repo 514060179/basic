@@ -46,7 +46,7 @@ public class ClassCourse {
     @ApiModelProperty(value = "结束日期")
     private Date courseEndTime;
 
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty(value = "课程状态：-1取消0新建未发布1已发布2进行中3结束")
     private String courseStatus;
 
     @ApiModelProperty(value = "当前课时")
