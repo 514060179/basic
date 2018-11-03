@@ -1,5 +1,7 @@
 package com.simon.basics.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class CourseType {
@@ -10,9 +12,9 @@ public class CourseType {
     private Long typeSeries;
 
     private Boolean deleted;
-
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
-
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     public Long getTypeId() {

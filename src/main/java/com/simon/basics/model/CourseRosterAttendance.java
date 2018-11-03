@@ -1,5 +1,6 @@
 package com.simon.basics.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
@@ -31,6 +32,7 @@ public class CourseRosterAttendance {
     @ApiModelProperty("用户座位x坐标")
     private Integer rosterSeatY;
     @ApiModelProperty("签到时间")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     @ApiModelProperty("是否已经出勤")
     private Boolean isAttendance;

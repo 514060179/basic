@@ -1,5 +1,6 @@
 package com.simon.basics.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,6 +29,7 @@ public class ClassCourse {
     @ApiModelProperty(value = "课程价格")
     private BigDecimal courseCost;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "开始时间")
     private Date courseStartTime;
 
@@ -40,6 +42,7 @@ public class ClassCourse {
     @ApiModelProperty(value = "下课时间",hidden = true)
     private String classEndTimeStr;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "结束日期")
     private Date courseEndTime;
 
@@ -56,6 +59,7 @@ public class ClassCourse {
     private Boolean deleted;
 
     @ApiModelProperty(hidden = true)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     @JsonIgnore

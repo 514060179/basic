@@ -1,5 +1,6 @@
 package com.simon.basics.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -25,7 +26,9 @@ public class CourseOrder {
     @ApiModelProperty(value = "支付状态",hidden = true)
     private String orderPayWay;
     @ApiModelProperty(value = "创建时间",hidden = true)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "更新时间",hidden = true)
     private Date updateTime;
 
