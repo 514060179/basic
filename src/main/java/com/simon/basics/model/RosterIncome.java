@@ -1,39 +1,61 @@
 package com.simon.basics.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class RosterIncome {
+
+    @ApiModelProperty(value = "id")
     private Long incomeId;
 
+    @ApiModelProperty(value = "id")
     private Long accountId;
 
+    @ApiModelProperty(value = "id")
     private Long courseId;
 
+    @ApiModelProperty(value = "课程章节数")
     private Integer incomeSectionNum;
 
+    @ApiModelProperty(value = "收入类型:1按时收入2按分成")
     private String incomeType;
 
+    @ApiModelProperty(value = "需到人数")
     private Integer mustNumber;
 
+    @ApiModelProperty(value = "实到人数")
     private Integer actualNumber;
 
+    @ApiModelProperty(value = "总上课时长")
     private BigDecimal totalHour;
 
+    @ApiModelProperty(value = "收费类型为1时,每【average_hour】时为一个收费单位,固定0.5小时为一个单位",hidden = true)
     private BigDecimal averageHour;
 
+    @ApiModelProperty(value = "收费类型为1时,每一个收费单位(0.5小时)收取的费用")
     private BigDecimal averageHourCost;
 
+    @ApiModelProperty(value = "收费类型为1时,超过【exceedNum】人数,提成【percentage】个点;收费类型为2时,每节课提成点")
     private BigDecimal percentage;
 
+    @ApiModelProperty(value = "收费类型为1时,提成条件:超过【exceedNum】人数")
     private Integer exceedNum;
 
+    @ApiModelProperty(value = "课程每节收费")
     private BigDecimal averageCourse;
 
+    @ApiModelProperty(value = "收入费用")
     private BigDecimal incomeAmount;
 
+    @ApiModelProperty(value = "创建时间")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 
     public Long getIncomeId() {

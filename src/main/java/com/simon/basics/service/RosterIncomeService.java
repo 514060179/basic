@@ -2,6 +2,7 @@ package com.simon.basics.service;
 
 import com.github.pagehelper.PageInfo;
 import com.simon.basics.model.RosterIncome;
+import com.simon.basics.model.RosterIncomeWithOther;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public interface RosterIncomeService {
 
-    PageInfo<RosterIncome> findListByPage(RosterIncome rosterIncome, Integer pageNum, Integer pageSize);
+    PageInfo<RosterIncomeWithOther> findListByPage(RosterIncome rosterIncome, Integer pageNum, Integer pageSize);
 
 
 }

@@ -19,10 +19,19 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <resultMap id="WithOtherResultMap" type="com.simon.basics.model.RosterIncomeWithOther" extends="BaseResultMap">
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
-    income_id, account_id, course_id, income_section_num, income_type, must_number, actual_number, 
+    income_id, account_id, course_id, income_section_num, income_type, must_number, actual_number,
     total_hour, average_hour, average_hour_cost, percentage, exceed_num, average_course, 
     income_amount, create_time, update_time
+  </sql>
+  <sql id="With_Other_Column_List" >
+    ri.income_id, ri.account_id, ri.course_id, ri.income_section_num, ri.income_type, ri.must_number, ri.actual_number,
+    ri.total_hour, ri.average_hour, ri.average_hour_cost, ri.percentage, ri.exceed_num, ri.average_course,
+    ri.income_amount, ri.create_time, ri.update_time,
+    cc.course_name
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -222,55 +231,61 @@
     where income_id = #{incomeId,jdbcType=BIGINT}
   </update>
 
-  <select id="findListByCondition" resultMap="BaseResultMap" parameterType="com.simon.basics.model.RosterIncome" >
+  <select id="findListByCondition" resultMap="WithOtherResultMap" parameterType="com.simon.basics.model.RosterIncomeWithOther" >
     select
-    <include refid="Base_Column_List" />
-    from roster_income
+    <include refid="With_Other_Column_List" />
+    from roster_income ri
+    inner join class_course cc on ri.course_id=cc.course_id
     <where>
+      <if test="date != null" >
+        <foreach collection="date" item="d" separator="or" open="(" close=")">
+          DATE_FORMAT(ri.create_time,'%Y/%m')= #{d}
+        </foreach>
+      </if>
       <if test="accountId != null" >
-        and account_id = #{accountId,jdbcType=BIGINT}
+        and ri.account_id = #{accountId,jdbcType=BIGINT}
       </if>
       <if test="courseId != null" >
-        and course_id = #{courseId,jdbcType=BIGINT}
+        and ri.course_id = #{courseId,jdbcType=BIGINT}
       </if>
       <if test="incomeSectionNum != null" >
-        and income_section_num = #{incomeSectionNum,jdbcType=INTEGER}
+        and ri.income_section_num = #{incomeSectionNum,jdbcType=INTEGER}
       </if>
       <if test="incomeType != null" >
-        and income_type = #{incomeType,jdbcType=CHAR}
+        and ri.income_type = #{incomeType,jdbcType=CHAR}
       </if>
       <if test="mustNumber != null" >
-        and must_number = #{mustNumber,jdbcType=INTEGER}
+        and ri.must_number = #{mustNumber,jdbcType=INTEGER}
       </if>
       <if test="actualNumber != null" >
-        and actual_number = #{actualNumber,jdbcType=INTEGER}
+        and ri.actual_number = #{actualNumber,jdbcType=INTEGER}
       </if>
       <if test="totalHour != null" >
-        and total_hour = #{totalHour,jdbcType=DECIMAL}
+        and ri.total_hour = #{totalHour,jdbcType=DECIMAL}
       </if>
       <if test="averageHour != null" >
-        and average_hour = #{averageHour,jdbcType=DECIMAL}
+        and ri.average_hour = #{averageHour,jdbcType=DECIMAL}
       </if>
       <if test="averageHourCost != null" >
-        and average_hour_cost = #{averageHourCost,jdbcType=DECIMAL}
+        and ri.average_hour_cost = #{averageHourCost,jdbcType=DECIMAL}
       </if>
       <if test="percentage != null" >
-        and percentage = #{percentage,jdbcType=DECIMAL}
+        and ri.percentage = #{percentage,jdbcType=DECIMAL}
       </if>
       <if test="exceedNum != null" >
-        and exceed_num = #{exceedNum,jdbcType=INTEGER}
+        and ri.exceed_num = #{exceedNum,jdbcType=INTEGER}
       </if>
       <if test="averageCourse != null" >
-        and average_course = #{averageCourse,jdbcType=DECIMAL}
+        and ri.average_course = #{averageCourse,jdbcType=DECIMAL}
       </if>
       <if test="incomeAmount != null" >
-        and income_amount = #{incomeAmount,jdbcType=DECIMAL}
+        and ri.income_amount = #{incomeAmount,jdbcType=DECIMAL}
       </if>
       <if test="createTime != null" >
-        and create_time = #{createTime,jdbcType=TIMESTAMP}
+        and ri.create_time = #{createTime,jdbcType=TIMESTAMP}
       </if>
       <if test="updateTime != null" >
-        and update_time = #{updateTime,jdbcType=TIMESTAMP}
+        and ri.update_time = #{updateTime,jdbcType=TIMESTAMP}
       </if>
     </where>
   </select>
