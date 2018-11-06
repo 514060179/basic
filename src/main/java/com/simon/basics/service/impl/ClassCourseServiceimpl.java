@@ -161,7 +161,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         rosterIncomeInsert.setIncomeType(teacherChargeType);//收费类型
         if (EnumCode.TeacherChargeType.CHARGE_TYPE_TIME.getValue().equals(teacherChargeType)) {//按时
             BigDecimal averageHour = classCourse.getAverageHour();
-            int unit = new BigDecimal(costTime).divide(averageHour.multiply(new BigDecimal(1000 * 60 * 60))).intValue();//花费总单位时间
+            int unit = new BigDecimal(costTime).divide(averageHour.multiply(new BigDecimal(1000 * 60 * 60)),2, BigDecimal.ROUND_HALF_UP).intValue();//花费总单位时间
             rosterIncomeInsert.setAverageHour(averageHour);//平均X小时起收费。收费单位
             BigDecimal averageHourCost = classCourse.getAverageHourCost().multiply(new BigDecimal(unit)).setScale(2, BigDecimal.ROUND_HALF_UP);//基本收入
             if (actualNumber > classCourse.getExceedNum()) {//提成

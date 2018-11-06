@@ -48,6 +48,7 @@ public class LoginController {
         AuthenticationToken token = new UsernamePasswordToken(userName, SaltEncryUtil.getMD5SaltString(userName,password));
         if (!subject.isAuthenticated()) {
             try {
+                SecurityUtils.getSubject().logout();
                 subject.login(token);//验证角色和权限
             } catch (IncorrectCredentialsException e1) {
                 logger.error("密码验证失败！",e1);
