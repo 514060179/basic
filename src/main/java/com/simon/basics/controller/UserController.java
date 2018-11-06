@@ -65,7 +65,7 @@ public class UserController {
         String verification = jedisService.getString(phone);
         String code = UtilToString.getRandomString(6);
         if (StringUtils.isEmpty(verification)) {
-            jedisService.put(phone, code, 60 * 10);
+            jedisService.put(phone, code, 60);
             //发送验证码
             new Thread(() -> {
                 if (!SmsUtil.sendSMS(phone,code)){
