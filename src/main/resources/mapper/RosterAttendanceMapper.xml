@@ -32,7 +32,9 @@
   <select id="findByCondition" resultMap="BaseResultMap" parameterType="com.simon.basics.model.RosterAttendance" >
     select
     <include refid="Column_List" />
-    FROM roster_attendance ra LEFT JOIN roster_attendance ra1 ON ra.course_id=ra1.course_id AND ra.attend_type='2' AND ra1.attend_type='1'
+    FROM roster_attendance ra
+    INNER JOIN course_order co ON ra.`course_id`=co.`course_id` AND co.`account_id`=#{accountId,jdbcType=BIGINT} AND ra.attend_type='2'
+    LEFT JOIN roster_attendance ra1 ON ra.course_id=ra1.course_id AND ra1.attend_type='1'
     <where>
       <if test="courseId != null" >
         and ra.course_id = #{courseId,jdbcType=BIGINT}
