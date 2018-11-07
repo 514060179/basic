@@ -2,6 +2,7 @@ package com.simon.basics.service;
 
 import com.github.pagehelper.PageInfo;
 import com.simon.basics.model.RefundOrder;
+import com.simon.basics.model.RefundOrderWithUser;
 
 /**
  * @author fengtianying
@@ -16,7 +17,7 @@ public interface RefundOrderService {
      * @param pageSize
      * @return
      */
-    PageInfo<RefundOrder> getListByPage(RefundOrder refundOrder, int pageNum, int pageSize);
+    PageInfo<RefundOrderWithUser> getListByPage(RefundOrder refundOrder, int pageNum, int pageSize);
 
     /**
      *  refundId 查询详情

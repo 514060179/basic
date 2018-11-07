@@ -4,10 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.simon.basics.dao.CourseOrderMapper;
 import com.simon.basics.dao.RefundOrderMapper;
-import com.simon.basics.model.CourseOrder;
-import com.simon.basics.model.EnumCode;
-import com.simon.basics.model.RefundOrder;
-import com.simon.basics.model.User;
+import com.simon.basics.model.*;
 import com.simon.basics.service.CourseOrderService;
 import com.simon.basics.service.RefundOrderService;
 import org.apache.shiro.SecurityUtils;
@@ -29,7 +26,7 @@ public class RefundOrderServiceImpl implements RefundOrderService {
     @Autowired
     private CourseOrderMapper courseOrderMapper;
     @Override
-    public PageInfo<RefundOrder> getListByPage(RefundOrder refundOrder, int pageNum, int pageSize) {
+    public PageInfo<RefundOrderWithUser> getListByPage(RefundOrder refundOrder, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum,pageSize);
         return new PageInfo<>(refundOrderMapper.findListByCondition(refundOrder));
     }

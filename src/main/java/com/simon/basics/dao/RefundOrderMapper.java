@@ -1,6 +1,7 @@
 package com.simon.basics.dao;
 
 import com.simon.basics.model.RefundOrder;
+import com.simon.basics.model.RefundOrderWithUser;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,5 +21,5 @@ public interface RefundOrderMapper {
 
     int updateByPrimaryKey(RefundOrder record);
 
-    List<RefundOrder> findListByCondition(RefundOrder record);
+    List<RefundOrderWithUser> findListByCondition(RefundOrder record);
 }
