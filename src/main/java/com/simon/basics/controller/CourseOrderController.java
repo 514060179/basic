@@ -62,10 +62,10 @@ public class CourseOrderController {
             logger.warn("找不到资源：courseId=" + courseId);
             return ReturnParam.noHandlerFound("找不到资源：courseId=" + courseId);
         }
-        if(!EnumCode.CourseStatus.COURSE_ACTION.getValue().equals(classCourse.getCourseStatus())){
-            logger.warn("课程已开始或未发布：courseId=" + courseId);
-            return ReturnParam.courseActite();
-        }
+//        if(!EnumCode.CourseStatus.COURSE_ACTION.getValue().equals(classCourse.getCourseStatus())){
+//            logger.warn("课程已开始或未发布：courseId=" + courseId);
+//            return ReturnParam.courseActite();
+//        }
         CourseOrder courseOrder = courseOrderService.findOneByCourseId(courseId);
         if (courseOrder!=null){
             logger.warn("重复下单：");

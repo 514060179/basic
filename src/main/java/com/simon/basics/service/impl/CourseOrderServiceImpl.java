@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -94,6 +95,7 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         courseOrder.setOrderId(orderId);
         courseOrder.setOrderStatus(EnumCode.OrderStatus.ORDER_PAID.getValue());
         courseOrder.setOrderNo(orderNo);
+        courseOrder.setOrderPayTime(new Date());
         if ("101".equals(payWay)){
             courseOrder.setOrderPayWay("alipay");
         }else{

@@ -49,6 +49,9 @@ public class ClassCourse {
     @ApiModelProperty(value = "课程状态：-1取消0新建未发布1已发布2进行中3结束")
     private String courseStatus;
 
+    @ApiModelProperty(value = "上下课状态：0上课1下课")
+    private String classStatus;
+
     @ApiModelProperty(value = "当前课时")
     private Integer courseCurrent;
 
@@ -156,6 +159,14 @@ public class ClassCourse {
 
     public void setCourseStatus(String courseStatus) {
         this.courseStatus = courseStatus == null ? null : courseStatus.trim();
+    }
+
+    public String getClassStatus() {
+        return classStatus;
+    }
+
+    public void setClassStatus(String classStatus) {
+        this.classStatus = classStatus;
     }
 
     public Integer getCourseCurrent() {

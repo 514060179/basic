@@ -96,9 +96,9 @@ public class ClassCourseController {
             logger.warn("上节课程未结束，结束上节课程才课开始上课" + courseId + classCourse.getCourseCurrent());
             return ReturnParam.lastCourseNoEnding();
         }
-        if (EnumCode.CourseStatus.COURSE_END.getValue().equals(classCourse.getCourseStatus())
+        if (EnumCode.CourseStatus.COURSE_CANCEL.getValue().equals(classCourse.getCourseStatus())||EnumCode.CourseStatus.COURSE_INIT.getValue().equals(classCourse.getCourseStatus())
                 || EnumCode.CourseStatus.COURSE_END.getValue().equals(classCourse.getCourseStatus())) {//课程结束或取消
-            logger.warn("课程结束或取消，无法开始上课" + courseId);
+            logger.warn("课程结束或取消或未发布，无法开始上课" + courseId);
             return ReturnParam.courseEnding();
         }
         classCourse = classCourseService.courseStart(classCourse);

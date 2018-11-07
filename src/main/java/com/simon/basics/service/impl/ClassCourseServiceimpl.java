@@ -97,6 +97,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         update.setCourseCurrent(1);
         update.setAccountId(user.getAccountId());
+        update.setClassStatus(EnumCode.ClassStatus.CLASS_BEGINS.getValue());
         int i = classCourseMapper.updateByPrimaryKeyAndAccountIdSelective(update);
         if (i > 0) {
             //新增签到
@@ -175,6 +176,10 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         }
         //更新
         int i = rosterAttendanceMapper.updateByCourseAndNum(rosterAttendanceUpdate);
+        ClassCourse update = new ClassCourse();
+        update.setCourseId(classCourse.getCourseId());
+        update.setClassStatus(EnumCode.ClassStatus.CLASS_OVER.getValue());
+        classCourseMapper.updateByPrimaryKeyAndAccountIdSelective(update);
         if (i > 0) {
             int j = rosterIncomeMapper.insertSelective(rosterIncomeInsert);
             if (j < 1) {

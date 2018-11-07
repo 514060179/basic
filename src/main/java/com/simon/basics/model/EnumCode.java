@@ -63,11 +63,36 @@ public class EnumCode {
         }
     }
     /**
+     * 上下课状态
+     */
+    public enum ClassStatus {
+        //-1取消0新建未发布1已发布2进行中3结束
+        CLASS_OVER("1"),
+        CLASS_BEGINS("0");
+
+        private String value;
+
+        /**
+         * 构造函数
+         * @param value
+         */
+        private ClassStatus(String value) {
+            this.value = value;
+        }
+
+        /**
+         * @return the value
+         */
+        public String getValue() {
+            return value;
+        }
+    }
+    /**
      * 课程订单状态
      */
     public enum OrderStatus {
 
-        // 0未支付1成功2部分退款3退款
+        // 0未支付1成功2申请退款3退款
         ORDER_NOPAY("0"),
         ORDER_PAID("1"),
         ORDER_APPLY_REBACK("2"),

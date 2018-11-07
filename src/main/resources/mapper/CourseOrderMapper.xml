@@ -10,6 +10,7 @@
         <result column="order_cost" property="orderCost" jdbcType="DECIMAL"/>
         <result column="order_pay_status" property="orderPayStatus" jdbcType="CHAR"/>
         <result column="order_pay_way" property="orderPayWay" jdbcType="VARCHAR"/>
+        <result column="order_pay_time" property="orderPayTime" jdbcType="TIMESTAMP"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
         <result column="course_total" property="courseTotal" jdbcType="INTEGER"/>
@@ -29,11 +30,11 @@
     </resultMap>
     <sql id="Base_Column_List">
     order_id, order_no, course_id, account_id, order_status, order_cost, order_pay_status, order_pay_way,course_total,
-    create_time, update_time
+    create_time,order_pay_time, update_time
   </sql>
 
     <sql id="Union_Column_List">
-      co.order_id, co.order_no, co.course_id, co.account_id, co.order_status, co.order_cost, co.order_pay_status,co.order_pay_way,co.course_total,co.create_time, co.update_time,
+      co.order_id, co.order_no, co.course_id, co.account_id, co.order_status, co.order_cost, co.order_pay_status,co.order_pay_way,co.course_total,co.create_time,co.order_pay_time, co.update_time,
       u.name,u.parent_name,u.sex,u.age,u.phone,
       cc.seat_id,cc.course_name,cc.course_cost
     </sql>
@@ -63,6 +64,11 @@
             LEFT JOIN course_roster cr ON co.course_id = cr.course_id AND cr.account_id = #{accountId,jdbcType=BIGINT}
         </if>
         <where>
+            <if test="date != null" >
+                <foreach collection="date" item="d" separator="or" open="(" close=")">
+                    DATE_FORMAT(co.order_pay_time,'%Y/%m')= #{d}
+                </foreach>
+            </if>
             <if test="orderId != null">
                 AND co.order_id=#{orderId,jdbcType=BIGINT}
             </if>
@@ -90,11 +96,11 @@
     <insert id="insert" parameterType="com.simon.basics.model.CourseOrder">
     insert into course_order (order_id, order_no, course_id, 
       account_id, order_status, order_cost, 
-      order_pay_status,order_pay_way, create_time, update_time
+      order_pay_status,order_pay_way, create_time,order_pay_time, update_time
       )
     values (#{orderId,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{courseId,jdbcType=BIGINT}, 
       #{accountId,jdbcType=BIGINT}, #{orderStatus,jdbcType=CHAR}, #{orderCost,jdbcType=DECIMAL}, 
-      #{orderPayStatus,jdbcType=CHAR},#{orderPayWay,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      #{orderPayStatus,jdbcType=CHAR},#{orderPayWay,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},#{orderPayTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
     <insert id="insertSelective" parameterType="com.simon.basics.model.CourseOrder" useGeneratedKeys="true"
@@ -131,6 +137,9 @@
             <if test="createTime != null">
                 create_time,
             </if>
+            <if test="orderPayTime != null">
+                order_pay_time,
+            </if>
             <if test="updateTime != null">
                 update_time,
             </if>
@@ -166,6 +175,9 @@
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="orderPayTime != null">
+                #{orderPayTime,jdbcType=TIMESTAMP},
+            </if>
             <if test="updateTime != null">
                 #{updateTime,jdbcType=TIMESTAMP},
             </if>
@@ -198,6 +210,9 @@
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="orderPayTime != null">
+                order_pay_time = #{orderPayTime,jdbcType=TIMESTAMP},
+            </if>
             <if test="updateTime != null">
                 update_time = #{updateTime,jdbcType=TIMESTAMP},
             </if>
@@ -214,6 +229,7 @@
       order_pay_status = #{orderPayStatus,jdbcType=CHAR},
       order_pay_way = #{orderPayWay,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
+      order_pay_time = #{orderPayTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>

@@ -17,7 +17,7 @@ public class CourseOrder {
     private Long accountId;
     @ApiModelProperty(value = "总课时")
     private Integer courseTotal;
-    @ApiModelProperty(value = "订单状态")
+    @ApiModelProperty(value = "订单状态:0未支付1成功2申请退款3退款")
     private String orderStatus;
     @ApiModelProperty(value = "支付金额")
     private BigDecimal orderCost;
@@ -31,6 +31,29 @@ public class CourseOrder {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "更新时间",hidden = true)
     private Date updateTime;
+
+    @ApiModelProperty(value = "支付时间",hidden = true)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date orderPayTime;
+
+    @ApiModelProperty(value = "筛选条件:日期.格式:2018/10")
+    private String[] date;
+
+    public Date getOrderPayTime() {
+        return orderPayTime;
+    }
+
+    public void setOrderPayTime(Date orderPayTime) {
+        this.orderPayTime = orderPayTime;
+    }
+
+    public String[] getDate() {
+        return date;
+    }
+
+    public void setDate(String[] date) {
+        this.date = date;
+    }
 
     public Long getOrderId() {
         return orderId;

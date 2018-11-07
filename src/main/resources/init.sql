@@ -535,3 +535,10 @@ CREATE TABLE `simon`.`refund_order`(
 
 ALTER TABLE `simon`.`course_order`
   CHANGE `order_status` `order_status` ENUM('0','1','2','3') CHARSET utf8mb4 COLLATE utf8mb4_bin DEFAULT '0' NOT NULL COMMENT '状态(0未支付1成功2申请退款3退款)';
+
+
+ALTER TABLE `simon`.`course_order`
+  ADD COLUMN `order_pay_time` DATETIME NULL COMMENT '支付时间' AFTER `order_pay_status`;
+|
+ALTER TABLE `simon`.`class_course`
+  ADD COLUMN `class_status` ENUM('-1','0','1') NULL DEFAULT '-1' COMMENT '-1未开始0上课1下课' AFTER `course_status`;
