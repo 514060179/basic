@@ -17,7 +17,7 @@
         <result column="percentage" property="percentage" jdbcType="DECIMAL" />
         <result column="exceed_num" property="exceedNum" jdbcType="INTEGER" />
         <result column="average_hour_cost" property="averageHourCost" jdbcType="DECIMAL" />
-        <result column="extra_charge" property="exceedNum" jdbcType="DECIMAL" />
+        <result column="extra_charge" property="extraCharge" jdbcType="DECIMAL" />
         <result column="deleted" property="deleted" jdbcType="BIT"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
@@ -63,7 +63,7 @@
     course_abstract, course_remark
   </sql>
     <sql id="Union_Column_List">
-      cc.course_id,cc.course_name, cc.course_cost,cc.course_status,cc.course_current,cc.course_total,cc.average_hour,cc.percentage,cc.exceed_num,cc.average_hour_cost,cc.course_start_time,cc.course_end_time,cc.course_abstract, cc.course_remark,
+      cc.course_id,cc.course_name, cc.course_cost,cc.course_status,cc.course_current,cc.course_total,cc.average_hour,cc.percentage,cc.exceed_num,cc.extra_charge,cc.average_hour_cost,cc.course_start_time,cc.course_end_time,cc.course_abstract, cc.course_remark,
       sl.seat_id, sl.seat_left, sl.seat_mid, sl.seat_right, sl.seat_rows, sl.deleted AS seat_layout_deleted,
       u.user_id,u.account_id, u.name, u.sex, u.age, u.phone, u.address,u.remark,u.teacher_charge_type,
       ct.type_id, ct.type_name, ct.type_series, ct.deleted AS course_type_deleted
