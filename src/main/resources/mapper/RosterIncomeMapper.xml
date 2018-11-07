@@ -21,6 +21,14 @@
   </resultMap>
   <resultMap id="WithOtherResultMap" type="com.simon.basics.model.RosterIncomeWithOther" extends="BaseResultMap">
     <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <association property="user" javaType="com.simon.basics.model.User">
+      <result column="name" property="name" jdbcType="VARCHAR" />
+      <result column="sex" property="sex" jdbcType="CHAR" />
+      <result column="age" property="age" jdbcType="INTEGER" />
+      <result column="birthday" property="birthday" jdbcType="DATE" />
+      <result column="phone" property="phone" jdbcType="VARCHAR" />
+      <result column="address" property="address" jdbcType="VARCHAR" />
+    </association>
   </resultMap>
   <sql id="Base_Column_List" >
     income_id, account_id, course_id, income_section_num, income_type, must_number, actual_number,
@@ -31,7 +39,8 @@
     ri.income_id, ri.account_id, ri.course_id, ri.income_section_num, ri.income_type, ri.must_number, ri.actual_number,
     ri.total_hour, ri.average_hour, ri.average_hour_cost, ri.percentage, ri.exceed_num, ri.average_course,
     ri.income_amount, ri.create_time, ri.update_time,
-    cc.course_name
+    cc.course_name,
+    u.`name`,u.sex,u.age,u.birthday,u.phone,u.address
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -235,6 +244,7 @@
     select
     <include refid="With_Other_Column_List" />
     from roster_income ri
+    inner join `user` u on ri.account_id=u.account_id
     inner join class_course cc on ri.course_id=cc.course_id
     <where>
       <if test="date != null" >

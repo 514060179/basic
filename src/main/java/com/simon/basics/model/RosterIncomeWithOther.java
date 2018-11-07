@@ -25,6 +25,16 @@ public class RosterIncomeWithOther extends RosterIncome{
     @ApiModelProperty(value = "时间字符串")
     private String timeStr;
 
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public String getDateStr() {
         if (getCreateTime()!=null){
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
