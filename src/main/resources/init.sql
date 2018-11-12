@@ -542,3 +542,7 @@ ALTER TABLE `simon`.`course_order`
 |
 ALTER TABLE `simon`.`class_course`
   ADD COLUMN `class_status` ENUM('-1','0','1') NULL DEFAULT '-1' COMMENT '-1未开始0上课1下课' AFTER `course_status`;
+
+
+ALTER TABLE `simon`.`refund_order`
+  ADD COLUMN `course_name` VARCHAR(100) NULL COMMENT '课程名字' AFTER `course_amount`;

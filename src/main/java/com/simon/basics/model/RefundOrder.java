@@ -32,6 +32,9 @@ public class RefundOrder {
     @ApiModelProperty(value = "订单支付方式")
     private String orderPayWay;
 
+    @ApiModelProperty(value = "课程名字")
+    private String courseName;
+
     @ApiModelProperty(value = "总课时")
     private Integer courseTotal;
 
@@ -111,6 +114,14 @@ public class RefundOrder {
 
     public void setOrderPayWay(String orderPayWay) {
         this.orderPayWay = orderPayWay == null ? null : orderPayWay.trim();
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
     public Integer getCourseTotal() {

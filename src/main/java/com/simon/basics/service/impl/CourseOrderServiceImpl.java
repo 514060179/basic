@@ -131,6 +131,7 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         refundOrder.setRefundStatus(EnumCode.OrderStatus.ORDER_APPLY_REBACK.getValue());
         refundOrder.setOrderPayWay(courseOrder.getOrderPayWay());
         refundOrder.setRefundCourseTotal(rest);
+        refundOrder.setCourseName(classCourse.getCourseName());
         refundOrderMapper.insertSelective(refundOrder);
         return refundOrder;
     }
