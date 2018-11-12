@@ -191,6 +191,16 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         //插入
     }
 
+    @Override
+    public void courseCancel(Long courseId) {
+        ClassCourse classCourse = new ClassCourse();
+        classCourse.setCourseId(courseId);
+        classCourse.setCourseStatus(EnumCode.CourseStatus.COURSE_END.getValue());
+        if (classCourseMapper.updateByPrimaryKeyAndAccountIdSelective(classCourse)<=0){
+            throw new RuntimeException("结束课程失败!");
+        };
+    }
+
     @Transactional
     @Override
     public void sign(Long courseId, int courseCurrent) {

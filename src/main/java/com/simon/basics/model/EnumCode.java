@@ -66,7 +66,7 @@ public class EnumCode {
      * 上下课状态
      */
     public enum ClassStatus {
-        //-1取消0新建未发布1已发布2进行中3结束
+        //-1新建 0上课1下课
         CLASS_OVER("1"),
         CLASS_BEGINS("0");
 

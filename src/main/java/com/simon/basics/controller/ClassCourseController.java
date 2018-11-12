@@ -203,6 +203,24 @@ public class ClassCourseController {
         classCourseService.endCourseSendMsg(classCourseService.getAttendanceList(courseId, classCourse.getCourseCurrent()));
         return ReturnParam.success();
     }
+    @GetMapping("courseCancel")
+    @ApiOperation("老师结束(取消)课程")
+    public ReturnParam courseCancel(@RequestParam Long courseId) {
+        ClassCourse classCourse = classCourseService.findOne(courseId, null,null);
+        if (classCourse==null){
+            logger.warn("找不到资源：courseId=" + courseId);
+            return ReturnParam.noHandlerFound("找不到资源：courseId=" + courseId);
+        }
+        if(EnumCode.ClassStatus.CLASS_BEGINS.getValue().equals(classCourse.getClassStatus())){
+            logger.warn("找不到资源：courseId=" + courseId);
+            return ReturnParam.courseStarting();
+        }
+        if (EnumCode.CourseStatus.COURSE_CANCEL.getValue().equals(classCourse.getCourseStatus())){
+            return ReturnParam.success("再次结束课程成功!");
+        }
+        classCourseService.courseCancel(courseId);
+        return ReturnParam.success("结束课程操作成功!");
+    }
     @PostMapping("publish")
     @ApiOperation("发布课程")
     public ReturnParam publish(@RequestParam Long courseId){

@@ -88,11 +88,17 @@ public interface ClassCourseService {
     RosterAttendance findRosterAttendance(Long courseId, int courseCurrent);
 
     /**
-     * 结束课程
+     * 结束课程(下课)
      *
      * @param classCourse
      */
     void courseEnd(ClassCourse classCourse, User user, int actualNumber, int mustNumber, Long costTime);
+    /**
+     * 结束课程(取消)
+     *
+     * @param courseId
+     */
+    void courseCancel(Long courseId);
 
     /**
      * 学生签到
