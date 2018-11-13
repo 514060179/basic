@@ -421,7 +421,7 @@
       cr.`course_id` AS courseId,
       cr.`roster_seat_x` AS rosterSeatX,
       cr.`roster_seat_y` AS rosterSeatY,
-      ra.`attend_type` AS attendType,
+      IFNULL(ra.`attend_type`, 4) AS attendType,
       u.`account_id` AS accountId,
       u.`name`,
       u.`parent_name` AS parentName,

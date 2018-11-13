@@ -8,6 +8,7 @@ import com.simon.basics.service.ClassCourseService;
 import com.simon.basics.service.CourseRosterService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,8 @@ public class CourseRosterController {
         return ReturnParam.success(courseRosterService.findListByCourseId(courseId));
     }
     @PostMapping("update")
-    public ReturnParam<List<CourseRoster>> update(@RequestParam Long courseId, @RequestParam String[] ids){
+    @ApiOperation("更新座位名单.ids格式:rosterId,seatX,sertY")
+    public ReturnParam<List<CourseRoster>> update(@RequestParam Long courseId, @ApiParam(name = "ids", value = "rosterId,seatX,sertY这样字符串数组", required = true) @RequestParam String[] ids){
         ClassCourseWithBLOBs classCourseWithBLOBs = (ClassCourseWithBLOBs)classCourseService.findOne(courseId,null,null);
         if (Objects.isNull(classCourseWithBLOBs)){
             logger.warn("更新课程名单失败,无效资源courseId="+courseId);
