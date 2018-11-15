@@ -56,7 +56,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         }else if (EnumCode.UserType.TYPE_TEACHER.getValue().equals(user.getType())){//老师获取自己课程
             teacherId = user.getAccountId();
         }else{
-//            classCourse.setAccountId(null);
+            classCourse.setAccountId(studentId);
         }
         return new PageInfo<ClassCourseWithBLOBs>(classCourseMapper.findListByCondition(classCourse,teacherId,bought));
     }
