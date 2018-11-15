@@ -47,7 +47,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
     }
 
     @Override
-    public PageInfo<ClassCourseWithBLOBs> findListByPage(ClassCourse classCourse, Boolean bought, int pageNum, int pageSize) {
+    public PageInfo<ClassCourseWithBLOBs> findListByPage(ClassCourse classCourse, Boolean bought,Long studentId, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         Long teacherId = null;
@@ -56,7 +56,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         }else if (EnumCode.UserType.TYPE_TEACHER.getValue().equals(user.getType())){//老师获取自己课程
             teacherId = user.getAccountId();
         }else{
-            classCourse.setAccountId(null);
+//            classCourse.setAccountId(null);
         }
         return new PageInfo<ClassCourseWithBLOBs>(classCourseMapper.findListByCondition(classCourse,teacherId,bought));
     }
