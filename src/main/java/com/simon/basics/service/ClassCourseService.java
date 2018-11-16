@@ -102,11 +102,11 @@ public interface ClassCourseService {
 
     /**
      * 学生签到
-     *
+     *  改老师签到
      * @param courseId
      * @param courseCurrent
      */
-    void sign(Long courseId, int courseCurrent);
+    void sign(Long courseId,Long accountId, int courseCurrent);
 
     /**
      * 获取用户课程名单

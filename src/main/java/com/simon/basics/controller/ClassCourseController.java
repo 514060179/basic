@@ -139,13 +139,12 @@ public class ClassCourseController {
     }
 
     @PostMapping("sign")
-    @ApiOperation("学生签到")
-    public ReturnParam sign(@RequestParam Long courseId) {
+    @ApiOperation("老师签到")
+    public ReturnParam sign(@RequestParam Long courseId,@RequestParam Long studentId) {
         //课程是否购买
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        ClassCourseWithBLOBs classCourseWithBLOBs = (ClassCourseWithBLOBs)classCourseService.findOne(courseId,user.getAccountId(),null);
+        ClassCourseWithBLOBs classCourseWithBLOBs = (ClassCourseWithBLOBs)classCourseService.findOne(courseId,studentId,null);
         if (Objects.isNull(classCourseWithBLOBs)||!classCourseWithBLOBs.getBought()){
-            logger.warn("学生:{}未购买课程:{}",courseId,user.getAccountId());
+            logger.warn("学生:{}未购买课程:{}",courseId,studentId);
             return ReturnParam.courseNotEnoughOrNotHad();
         }
         int courseCurrent = classCourseWithBLOBs.getCourseCurrent();
@@ -155,7 +154,7 @@ public class ClassCourseController {
             logger.warn("课程courseId={},courseCurrent={}未开始", courseId, courseCurrent);
             return ReturnParam.courseNotBeginning();
         }
-        classCourseService.sign(courseId, courseCurrent);
+        classCourseService.sign(courseId,studentId,courseCurrent);
         return ReturnParam.success();
     }
 

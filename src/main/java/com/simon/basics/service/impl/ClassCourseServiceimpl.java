@@ -204,22 +204,22 @@ public class ClassCourseServiceimpl implements ClassCourseService {
 
     @Transactional
     @Override
-    public void sign(Long courseId, int courseCurrent) {
+    public void sign(Long courseId,Long accountId, int courseCurrent) {
         //签到
         //减少学生课堂数
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+//        User user = (User) SecurityUtils.getSubject().getPrincipal();
         RosterAttendance rosterAttendanceInsert = new RosterAttendance();
         rosterAttendanceInsert.setCourseId(courseId);
         rosterAttendanceInsert.setAttendSectionNum(courseCurrent);
         rosterAttendanceInsert.setAttendName("【第+" +courseCurrent+"节课签到】");
-        rosterAttendanceInsert.setAccountId(user.getAccountId());
+        rosterAttendanceInsert.setAccountId(accountId);
         rosterAttendanceInsert.setAttendType(EnumCode.AttendType.ATTEND_TYPE_STUDENT.getValue());
         rosterAttendanceMapper.insertSelective(rosterAttendanceInsert);
 
         CourseRoster courseRosterUpdate = new CourseRoster();
         courseRosterUpdate.setCourseId(courseId);
         courseRosterUpdate.setRosterCourseCountRest(1);
-        courseRosterUpdate.setAccountId(user.getAccountId());
+        courseRosterUpdate.setAccountId(accountId);
         int i = courseRosterMapper.updateByAccountAndCourseSelective(courseRosterUpdate);
         if (i <= 0) {
             throw new SqlWritePrerequisiteException("update fail：" + JSONUtil.objectToJson(courseRosterUpdate) + "update success:" + i);
