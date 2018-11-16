@@ -158,7 +158,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         BigDecimal averageCourse = classCourse.getCourseCost().divide(new BigDecimal(classCourse.getCourseTotal()), 2, BigDecimal.ROUND_CEILING);
         rosterIncomeInsert.setAverageCourse(averageCourse);//每节收费
         rosterIncomeInsert.setPercentage(classCourse.getPercentage());//提成百分比
-        String teacherChargeType = user.getTeacherChargeType();
+        String teacherChargeType = classCourse.getChargeType();
         rosterIncomeInsert.setIncomeType(teacherChargeType);//收费类型
         if (EnumCode.TeacherChargeType.CHARGE_TYPE_TIME.getValue().equals(teacherChargeType)) {//按时
             BigDecimal averageHour = classCourse.getAverageHour();

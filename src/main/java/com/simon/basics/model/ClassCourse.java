@@ -52,6 +52,9 @@ public class ClassCourse {
     @ApiModelProperty(value = "上下课状态：0上课1下课")
     private String classStatus;
 
+    @ApiModelProperty(value = "收费类型：1按时2按提成")
+    private String chargeType;
+
     @ApiModelProperty(value = "当前课时")
     private Integer courseCurrent;
 
@@ -163,6 +166,14 @@ public class ClassCourse {
 
     public String getClassStatus() {
         return classStatus;
+    }
+
+    public String getChargeType() {
+        return chargeType;
+    }
+
+    public void setChargeType(String chargeType) {
+        this.chargeType = chargeType;
     }
 
     public void setClassStatus(String classStatus) {

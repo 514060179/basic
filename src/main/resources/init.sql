@@ -541,8 +541,20 @@ ALTER TABLE `simon`.`course_order`
   ADD COLUMN `order_pay_time` DATETIME NULL COMMENT '支付时间' AFTER `order_pay_status`;
 |
 ALTER TABLE `simon`.`class_course`
-  ADD COLUMN `class_status` ENUM('-1','0','1') NULL DEFAULT '-1' COMMENT '-1未开始0上课1下课' AFTER `course_status`;
+  ADD COLUMN `class_status` ENUM('-1','0','1') NULL DEFAULT '1' COMMENT '-1未开始0上课1下课' AFTER `course_status`;
 
 
 ALTER TABLE `simon`.`refund_order`
   ADD COLUMN `course_name` VARCHAR(100) NULL COMMENT '课程名字' AFTER `course_amount`;
+
+-- 20181115
+ALTER TABLE `simon`.`class_course`
+  CHANGE `percentage` `percentage` DECIMAL(2,2) DEFAULT 0.00 NULL COMMENT '收费类型为2时:每节课提成点',
+  CHANGE `exceed_num` `exceed_num` INT(11) DEFAULT 0 NULL COMMENT '收费类型为1时：超过人数【exceedNum】才有提成【extraCharge】',
+  CHANGE `average_hour_cost` `average_hour_cost` DECIMAL(12,2) DEFAULT 0.00 NULL COMMENT '收费类型为1时 按【averageHour】小时收费【averageHourCost】',
+  CHANGE `extra_charge` `extra_charge` DECIMAL(12,2) DEFAULT 0.00 NULL COMMENT '收费类型为1时 超过【exceedNum】提成【extraCharge】元';
+
+
+
+ALTER TABLE `simon`.`class_course`
+  ADD COLUMN `charge_type` ENUM('1','2') DEFAULT '1' NOT NULL COMMENT '收费类型1按人头2按提成' AFTER `course_abstract`;

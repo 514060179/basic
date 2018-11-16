@@ -12,6 +12,7 @@
         <result column="course_end_time" property="courseEndTime" jdbcType="TIMESTAMP"/>
         <result column="course_status" property="courseStatus" jdbcType="CHAR"/>
         <result column="class_status" property="classStatus" jdbcType="CHAR"/>
+        <result column="charge_type" property="chargeType" jdbcType="CHAR"/>
         <result column="course_current" property="courseCurrent" jdbcType="INTEGER"/>
         <result column="course_total" property="courseTotal" jdbcType="INTEGER"/>
         <result column="average_hour" property="averageHour" jdbcType="DECIMAL" />
@@ -58,13 +59,13 @@
     </resultMap>
     <sql id="Base_Column_List">
     course_id, seat_id, account_id, type_id, course_name, course_cost, course_start_time, 
-    course_end_time, course_status,class_status, deleted, create_time, update_time
+    course_end_time, course_status,class_status,charge_type, deleted, create_time, update_time
   </sql>
     <sql id="Blob_Column_List">
     course_abstract, course_remark
   </sql>
     <sql id="Union_Column_List">
-      cc.course_id,cc.course_name, cc.course_cost,cc.course_status,cc.class_status,cc.course_current,cc.course_total,cc.average_hour,cc.percentage,cc.exceed_num,cc.extra_charge,cc.average_hour_cost,cc.course_start_time,cc.course_end_time,cc.course_abstract, cc.course_remark,
+      cc.course_id,cc.course_name, cc.course_cost,cc.course_status,cc.class_status,cc.charge_type,cc.course_current,cc.course_total,cc.average_hour,cc.percentage,cc.exceed_num,cc.extra_charge,cc.average_hour_cost,cc.course_start_time,cc.course_end_time,cc.course_abstract, cc.course_remark,
       sl.seat_id, sl.seat_left, sl.seat_mid, sl.seat_right, sl.seat_rows, sl.deleted AS seat_layout_deleted,
       u.user_id,u.account_id, u.name, u.sex, u.age, u.phone, u.address,u.remark,u.teacher_charge_type,
       ct.type_id, ct.type_name, ct.type_series, ct.deleted AS course_type_deleted
@@ -137,6 +138,9 @@
             <if test="classCourse.classStatus != null">
                 AND cc.class_status = #{classCourse.classStatus,jdbcType=CHAR}
             </if>
+            <if test="classCourse.chargeType != null">
+                AND cc.charge_type = #{classCourse.chargeType,jdbcType=CHAR}
+            </if>
             <if test="classCourse.deleted != null">
                 AND cc.deleted = #{classCourse.deleted,jdbcType=BIT}
             </if>
@@ -162,12 +166,12 @@
     <insert id="insert" parameterType="com.simon.basics.model.ClassCourseWithBLOBs">
     insert into class_course (course_id, seat_id, account_id, 
       type_id, course_name, course_cost, 
-      course_start_time, course_end_time, course_status,class_status,
+      course_start_time, course_end_time, course_status,class_status,charge_type,
       deleted, create_time, update_time, 
       course_abstract, course_remark)
     values (#{courseId,jdbcType=BIGINT}, #{seatId,jdbcType=BIGINT}, #{accountId,jdbcType=BIGINT}, 
       #{typeId,jdbcType=BIGINT}, #{courseName,jdbcType=VARCHAR}, #{courseCost,jdbcType=DOUBLE}, 
-      #{courseStartTime,jdbcType=TIMESTAMP}, #{courseEndTime,jdbcType=TIMESTAMP}, #{courseStatus,jdbcType=CHAR}, #{classStatus,jdbcType=CHAR},
+      #{courseStartTime,jdbcType=TIMESTAMP}, #{courseEndTime,jdbcType=TIMESTAMP}, #{courseStatus,jdbcType=CHAR}, #{classStatus,jdbcType=CHAR},#{chargeType,jdbcType=CHAR},
       #{deleted,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{courseAbstract,jdbcType=LONGVARCHAR}, #{courseRemark,jdbcType=LONGVARCHAR})
   </insert>
@@ -206,6 +210,9 @@
             </if>
             <if test="classStatus != null">
                 class_status,
+            </if>
+            <if test="chargeType != null">
+                charge_type,
             </if>
             <if test="deleted != null">
                 deleted,
@@ -272,6 +279,9 @@
             <if test="classStatus != null">
                 #{classStatus,jdbcType=CHAR},
             </if>
+            <if test="chargeType != null">
+                #{chargeType,jdbcType=CHAR},
+            </if>
             <if test="deleted != null">
                 #{deleted,jdbcType=BIT},
             </if>
@@ -334,6 +344,9 @@
             <if test="classStatus != null">
                 class_status = #{classStatus,jdbcType=CHAR},
             </if>
+            <if test="chargeType != null">
+                charge_type = #{chargeType,jdbcType=CHAR},
+            </if>
             <if test="courseCurrent != null">
                 course_current = course_current+1,
             </if>
@@ -387,6 +400,7 @@
       course_end_time = #{courseEndTime,jdbcType=TIMESTAMP},
       course_status = #{courseStatus,jdbcType=CHAR},
       class_status = #{classStatus,jdbcType=CHAR},
+      charge_type = #{chargeType,jdbcType=CHAR},
       deleted = #{deleted,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -405,6 +419,7 @@
       course_end_time = #{courseEndTime,jdbcType=TIMESTAMP},
       course_status = #{courseStatus,jdbcType=CHAR},
       class_status = #{classStatus,jdbcType=CHAR},
+      charge_type = #{chargeType,jdbcType=CHAR},
       deleted = #{deleted,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}

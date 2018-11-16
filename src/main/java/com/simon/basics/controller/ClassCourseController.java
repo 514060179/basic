@@ -13,9 +13,11 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Future;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -61,7 +63,8 @@ public class ClassCourseController {
 
     @PostMapping("add")
     @ApiOperation("课程新增")
-    public ReturnParam<ClassCourse> add(ClassCourse classCourse, @RequestParam Long accountId, @RequestParam Integer courseTotal, @RequestParam Long seatId, @RequestParam Long typeId, @RequestParam Double courseCost, @RequestParam Date courseStartTime, @RequestParam @Future Date courseEndTime) {
+    public ReturnParam<ClassCourse> add(ClassCourse classCourse, @RequestParam Long accountId,@RequestParam String chargeType, @RequestParam Integer courseTotal, @RequestParam Long seatId, @RequestParam Long typeId, @RequestParam Double courseCost, @RequestParam Date courseStartTime, @RequestParam @Future Date courseEndTime) throws MissingServletRequestParameterException {
+        verifyChargeType(classCourse);
         ClassCourse classCourseRespone = classCourseService.add(classCourse);
         if (classCourse!=null){
             //获取座位存放缓存中
@@ -74,6 +77,23 @@ public class ClassCourseController {
         return ReturnParam.success(classCourseRespone);
     }
 
+    private void verifyChargeType(ClassCourse classCourse) throws MissingServletRequestParameterException {
+        String chargeType = classCourse.getChargeType();
+        if (EnumCode.TeacherChargeType.CHARGE_TYPE_TIME.getValue().equals(chargeType)) {//按时
+            Integer exceedNum = classCourse.getExceedNum();
+            BigDecimal averageHourCost = classCourse.getAverageHourCost();
+            BigDecimal extraCharge = classCourse.getExtraCharge();
+            if (Objects.isNull(exceedNum)||Objects.isNull(averageHourCost)||Objects.isNull(extraCharge)){
+                logger.warn("[exceedNum,averageHourCost,extraCharge] have one is misss");
+                throw new MissingServletRequestParameterException("[exceedNum,averageHourCost,extraCharge]","[exceedNum,averageHourCost,extraCharge] have one is misss");
+            }
+        }else{
+            if (Objects.isNull(classCourse.getPercentage())){
+                logger.warn("percentage param is miss");
+                throw new MissingServletRequestParameterException("percentage","percentage param is miss");
+            }
+        }
+    }
     @PostMapping("update")
     @ApiOperation("课程修改")
     public ReturnParam update(ClassCourse classCourse, @RequestParam Long courseId) {
