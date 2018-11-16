@@ -558,3 +558,8 @@ ALTER TABLE `simon`.`class_course`
 
 ALTER TABLE `simon`.`class_course`
   ADD COLUMN `charge_type` ENUM('1','2') DEFAULT '1' NOT NULL COMMENT '收费类型1按人头2按提成' AFTER `course_abstract`;
+
+
+-- 20181116
+ALTER TABLE `simon`.`user`
+  ADD COLUMN `school_number` VARCHAR(50) NULL COMMENT '学号' AFTER `name`;

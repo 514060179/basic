@@ -20,6 +20,8 @@ public class User extends Account {
     private String gradeName;
     @ApiModelProperty("学生家长名字")
     private String parentName;
+    @ApiModelProperty("学生学号")
+    private String schoolNumber;
     @ApiModelProperty("用户性别")
     private String sex;
     @ApiModelProperty(value = "生日,格式:2007-01-10")
@@ -92,6 +94,14 @@ public class User extends Account {
 
     public void setParentName(String parentName) {
         this.parentName = parentName;
+    }
+
+    public String getSchoolNumber() {
+        return schoolNumber;
+    }
+
+    public void setSchoolNumber(String schoolNumber) {
+        this.schoolNumber = schoolNumber;
     }
 
     public String getSex() {
