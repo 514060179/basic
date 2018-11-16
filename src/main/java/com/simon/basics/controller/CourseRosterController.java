@@ -43,7 +43,7 @@ public class CourseRosterController {
     }
     @PostMapping("update")
     @ApiOperation("更新座位名单.ids格式:rosterId,seatX,sertY")
-    public ReturnParam<List<CourseRoster>> update(@RequestParam Long courseId, @ApiParam(name = "ids", value = "rosterId,seatX,sertY这样字符串数组", required = true) @RequestParam String[] ids){
+    public ReturnParam<List<CourseRoster>> update(@RequestParam Long courseId, @ApiParam(name = "ids", value = "rosterId,seatX,sertY;rosterId1,seatX1,sertY1这样字符串", required = true) @RequestParam String ids){
         ClassCourseWithBLOBs classCourseWithBLOBs = (ClassCourseWithBLOBs)classCourseService.findOne(courseId,null,null);
         if (Objects.isNull(classCourseWithBLOBs)){
             logger.warn("更新课程名单失败,无效资源courseId="+courseId);
@@ -57,11 +57,12 @@ public class CourseRosterController {
         int x = seatLayout.getSeatLeft()+seatLayout.getSeatMid()+seatLayout.getSeatRight()-1;
         int y = seatLayout.getSeatRows()-1;
         List<CourseRoster> updateList = new ArrayList<CourseRoster>();
-        for (int i = 0; i < ids.length; i++) {
-            String[] param = ids[i].split(",");
+        String[] temp = ids.split(";");
+        for (int i = 0; i < temp.length; i++) {
+            String[] param = temp[i].split(",");
             if (param.length!=3){
-                logger.error("更新课程名单,格式有误:id="+ids[i]);
-                return ReturnParam.paramiolationException("ids格式有误,非[param1,prarm2,param3]");
+                logger.error("更新课程名单,格式有误:id="+temp[i]);
+                return ReturnParam.paramiolationException("ids格式有误,非param1,prarm2,param3;param1,prarm2,param3");
             }
             Long rostrId = Long.parseLong(param[0]);
             int seatX = Integer.parseInt(param[1]);
