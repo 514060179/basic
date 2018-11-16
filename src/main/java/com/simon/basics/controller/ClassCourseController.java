@@ -9,6 +9,7 @@ import com.simon.basics.service.ClassCourseService;
 import com.simon.basics.service.SeatLayoutService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +46,8 @@ public class ClassCourseController {
 
     @PostMapping("list")
     @ApiOperation("课程列表")
-    public ReturnParam<PageInfo<ClassCourseWithBLOBs>> list(ClassCourse classCourse, Boolean bought, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
-        return ReturnParam.success(classCourseService.findListByPage(classCourse, bought, pageNum, pageSize));
+    public ReturnParam<PageInfo<ClassCourseWithBLOBs>> list(ClassCourse classCourse, Boolean bought, @ApiParam(name = "studentId",value ="学生id") @RequestParam(required = false) Long studentId, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
+        return ReturnParam.success(classCourseService.findListByPage(classCourse, bought,studentId ,pageNum, pageSize));
     }
 
     @PostMapping("detail")
