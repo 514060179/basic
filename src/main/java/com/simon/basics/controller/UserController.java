@@ -96,6 +96,12 @@ public class UserController {
             logger.warn("新增用户{}验证码{}验证错误！", phone, verification);
             return ReturnParam.noVerification();
         }
+        if (!Objects.isNull(user.getSchoolNumber())){
+            if (!Objects.isNull(userService.findBySchoolNumber(user.getSchoolNumber()))){
+                logger.warn("重复学号!{}", user.getSchoolNumber());
+                return ReturnParam.repeatResource("重复学号!");
+            }
+        }
         User u = userService.findByUserName(user.getName());
         if (u != null) {
             logger.warn("新增用户{}已存在", user.getName());
@@ -107,12 +113,19 @@ public class UserController {
 
     @PostMapping("addManager")
     @ApiOperation(value = "新增管理员")
-    public ReturnParam<Account> addManager(@RequestParam String username, @RequestParam String password) {
+    public ReturnParam<Account> addManager(@RequestParam String username,String name,@Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！") @RequestParam(required = false) String phone,@RequestParam String password, @Pattern(regexp = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$", message = "身份证号码格式有误！") @RequestParam String cardNum) {
         Account account = new Account();
         account.setUsername(username);
         account.setPassword(SaltEncryUtil.getMD5SaltString(username,password));
         account.setType(EnumCode.UserType.TYPE_MANAGER.getValue());
-        return ReturnParam.success(userService.addManager(account));
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setType(EnumCode.UserType.TYPE_MANAGER.getValue());
+        user.setCardNum(cardNum);
+        user.setName(name);
+        user.setPhone(phone);
+        return ReturnParam.success(userService.add(user));
     }
 
     @PostMapping("update")

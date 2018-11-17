@@ -226,6 +226,12 @@
     from account a LEFT JOIN user u ON u.account_id=a.account_id
     where a.username = #{userName,jdbcType=VARCHAR}
   </select>
+  <select id="findBySchoolNumber" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from account a LEFT JOIN user u ON u.account_id=a.account_id
+    where u.school_number = #{schoolNumber,jdbcType=VARCHAR}
+  </select>
 
   <select id="findListByCondition" resultMap="BaseResultMap">
     select

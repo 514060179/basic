@@ -20,5 +20,7 @@ public interface UserMapper {
 
     User findByUserName(String userName);
 
+    User findBySchoolNumber(String schoolNumber);
+
     List<User> findListByCondition(User user);
 }

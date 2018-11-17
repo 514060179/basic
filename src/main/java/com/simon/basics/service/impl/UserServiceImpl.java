@@ -48,6 +48,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User findBySchoolNumber(String shoolNumber) {
+        return userMapper.findBySchoolNumber(shoolNumber);
+    }
+
+    @Override
     public PageInfo<User> findListByPage(User user, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum,pageSize);
         return new PageInfo<User>(userMapper.findListByCondition(user));
@@ -86,6 +91,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public Account addManager(Account account) {
         Long accountId = new SnowflakeIdWorker().nextId();
         account.setAccountId(accountId);
