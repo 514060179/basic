@@ -112,6 +112,7 @@ public class CallbackController {
         logger.info("======微信支付回调======");
         String xmlResult = IOUtils.toString(request.getInputStream(), request.getCharacterEncoding());
         logger.warn("响应参数：{}",xmlResult);
+        logger.error("响应参数：{}",xmlResult);
         WxPayOrderNotifyResult params = WxPayOrderNotifyResult.fromXML(xmlResult);
         //校验结果是否成功
         if (!"SUCCESS".equalsIgnoreCase(params.getResultCode())) {
@@ -130,6 +131,7 @@ public class CallbackController {
 //        wxPayService.parseOrderNotifyResult(xmlResult);
 
         logger.warn("微信支付回调参数：{}",JSONUtil.objectToJson(params));
+        logger.error("微信支付回调参数：{}",JSONUtil.objectToJson(params));
         if (!SignUtils.checkSign(params,null,wechatConfig.getMchKey())){
             return WxPayNotifyResponse.fail("签名验证失败!");
         }
@@ -143,6 +145,7 @@ public class CallbackController {
             }
         }
         logger.info("======微信支付回调失败======");
+        logger.error("======微信支付回调失败======");
         return WxPayNotifyResponse.fail("回调失败!");
     }
 
