@@ -13,6 +13,9 @@
     <collection property="courseTypeList" ofType="com.simon.basics.model.CourseType" >
       <id column="child_type_id" property="typeId" jdbcType="BIGINT" />
       <result column="child_type_name" property="typeName" jdbcType="VARCHAR" />
+      <result column="child_deleted" property="deleted" jdbcType="BIT" />
+      <result column="child_create_time" property="createTime" jdbcType="TIMESTAMP" />
+      <result column="child_update_time" property="updateTime" jdbcType="TIMESTAMP" />
     </collection>
   </resultMap>
   <sql id="Base_Column_List" >
@@ -20,7 +23,7 @@
   </sql>
   <sql id="Union_Column_List" >
      ct1.type_id, ct1.type_name, ct1.type_series, ct1.deleted, ct1.create_time, ct1.update_time,
-     ct2.type_id AS child_type_id,ct2.type_name AS child_type_name
+     ct2.type_id AS child_type_id,ct2.type_name AS child_type_name, ct2.deleted AS child_deleted, ct2.create_time AS child_create_time, ct2.update_time AS child_update_time
   </sql>
   <select id="findParentListByTypeSeries" resultMap="UnionResultMap">
     select 
