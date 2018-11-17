@@ -9,8 +9,10 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import com.github.binarywang.wxpay.util.SignUtils;
+import com.simon.basics.config.WechatConfig;
 import com.simon.basics.model.CourseOrder;
 import com.simon.basics.service.CourseOrderService;
+import io.swagger.annotations.Api;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +33,9 @@ import java.util.Objects;
  * @author fengtianying
  * @date 2018/10/31 15:51
  */
-//@RestController
-//@RequestMapping("common")
+@RestController
+@RequestMapping("common")
+@Api(hidden = true)
 public class CallbackController {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -41,7 +44,7 @@ public class CallbackController {
     private CourseOrderService courseOrderService;
 
     @Autowired
-    private WxPayConfig wxPayConfig;
+    private WechatConfig wechatConfig;
 
     @RequestMapping("alipay/callback")
     public void alipay(HttpServletRequest request, HttpServletResponse response) throws AlipayApiException {
@@ -84,31 +87,68 @@ public class CallbackController {
             }
         }
     }
+//
+//    @RequestMapping("alipay/wechat")
+//    public String wechat(HttpServletRequest request, HttpServletResponse response) throws IOException, WxPayException {
+//
+//        String xmlResult = IOUtils.toString(request.getInputStream(), request.getCharacterEncoding());
+//        WxPayService wxPayService = new WxPayServiceImpl();
+//        WxPayOrderNotifyResult params = WxPayOrderNotifyResult.fromXML(xmlResult);
+//        //校验结果是否成功
+//        if (!"SUCCESS".equalsIgnoreCase(params.getResultCode())) {
+//            logger.error("returnCode={},resultCode={},errCode={},errCodeDes={}", params.getReturnCode(), params.getResultCode(), params.getErrCode(), params.getErrCodeDes());
+//            return WxPayNotifyResponse.fail("支付失败!");
+//        }
+//        wxPayService.setConfig(this.wxPayConfig);
+//        wxPayService.parseOrderNotifyResult(xmlResult);
+//
+//        if (!SignUtils.checkSign(params,null,"")){
+//            return WxPayNotifyResponse.fail("签名验证失败!");
+//        }
+//        String orderNo = params.getOutTradeNo();
+//        CourseOrder courseOrder = courseOrderService.findOneByOrderNo(orderNo);
+//        if (!Objects.isNull(courseOrder)){
+//            if (courseOrderService.paySuccess(1L,"","")>0){
+//                return WxPayNotifyResponse.success("回调成功！");
+//            }
+//        }
+//        return WxPayNotifyResponse.fail("回调失败!");
+//    }
 
-    @RequestMapping("alipay/wechat")
+    @RequestMapping("wechat/callback")
     public String wechat(HttpServletRequest request, HttpServletResponse response) throws IOException, WxPayException {
-
+        logger.info("======微信支付回调======");
         String xmlResult = IOUtils.toString(request.getInputStream(), request.getCharacterEncoding());
-        WxPayService wxPayService = new WxPayServiceImpl();
+        logger.warn("响应参数：{}",xmlResult);
         WxPayOrderNotifyResult params = WxPayOrderNotifyResult.fromXML(xmlResult);
         //校验结果是否成功
         if (!"SUCCESS".equalsIgnoreCase(params.getResultCode())) {
             logger.error("returnCode={},resultCode={},errCode={},errCodeDes={}", params.getReturnCode(), params.getResultCode(), params.getErrCode(), params.getErrCodeDes());
             return WxPayNotifyResponse.fail("支付失败!");
         }
-        wxPayService.setConfig(this.wxPayConfig);
-        wxPayService.parseOrderNotifyResult(xmlResult);
+//        WxPayService wxPayService = new WxPayServiceImpl();
+//        WxPayConfig wxPayConfig = new WxPayConfig();
+//        wxPayConfig.setMchId(wechatConfig.getMchId());
+//        wxPayConfig.setAppId(wechatConfig.getAppId());
+//        wxPayConfig.setKeyPath(wechatConfig.getCertLocalPath());//证书位置
+//        wxPayConfig.setMchKey(wechatConfig.getMchKey());
+//        wxPayConfig.setNotifyUrl(wechatConfig.getNotifyUrl());//回调地址
+//        wxPayConfig.setTradeType("NATIVE");//交易类型
+//        wxPayService.setConfig(wxPayConfig);
+//        wxPayService.parseOrderNotifyResult(xmlResult);
 
-        if (!SignUtils.checkSign(params,null,"")){
+        if (!SignUtils.checkSign(params,null,wechatConfig.getMchKey())){
             return WxPayNotifyResponse.fail("签名验证失败!");
         }
         String orderNo = params.getOutTradeNo();
         CourseOrder courseOrder = courseOrderService.findOneByOrderNo(orderNo);
         if (!Objects.isNull(courseOrder)){
-            if (courseOrderService.paySuccess(1L,"","")>0){
+            if (courseOrderService.paySuccess(courseOrder.getOrderId(),courseOrder.getOrderNo(),"")>0){
+                logger.info("======微信支付回调成功======");
                 return WxPayNotifyResponse.success("回调成功！");
             }
         }
+        logger.info("======微信支付回调失败======");
         return WxPayNotifyResponse.fail("回调失败!");
     }
 

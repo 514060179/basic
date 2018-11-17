@@ -11,6 +11,8 @@ public class CourseOrder {
     private Long orderId;
     @ApiModelProperty(value = "订单编号")
     private String orderNo;
+    @ApiModelProperty(value = "订单名称")
+    private String orderName;
     @ApiModelProperty(value = "课程id")
     private Long courseId;
     @ApiModelProperty(value = "用户（老师）id")
@@ -69,6 +71,14 @@ public class CourseOrder {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo == null ? null : orderNo.trim();
+    }
+
+    public String getOrderName() {
+        return orderName;
+    }
+
+    public void setOrderName(String orderName) {
+        this.orderName = orderName;
     }
 
     public Long getCourseId() {

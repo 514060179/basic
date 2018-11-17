@@ -563,3 +563,7 @@ ALTER TABLE `simon`.`class_course`
 -- 20181116
 ALTER TABLE `simon`.`user`
   ADD COLUMN `school_number` VARCHAR(50) NULL COMMENT '学号' AFTER `name`;
+
+-- 20181117
+ALTER TABLE `simon`.`course_order`
+  ADD COLUMN `order_name` VARCHAR(200) NULL COMMENT '订单名称' AFTER `order_no`;

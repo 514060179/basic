@@ -9,17 +9,17 @@ import org.springframework.context.annotation.Configuration;
  * @author fengtianying
  * @date 2018/10/31 16:30
  */
-//@Configuration
+@Configuration
 public class WechatConfig {
 
-    @Bean
-    public WxPayConfig wechatConfig(){
-        WxPayConfig wxPayConfig = new WxPayConfig();
-        wxPayConfig.setAppId(appId);
-        wxPayConfig.setMchId(mchId);
-        wxPayConfig.setMchKey(mchKey);
-        return wxPayConfig;
-    }
+//    @Bean
+//    public WxPayConfig wechatConfig(){
+//        WxPayConfig wxPayConfig = new WxPayConfig();
+//        wxPayConfig.setAppId(appId);
+//        wxPayConfig.setMchId(mchId);
+//        wxPayConfig.setMchKey(mchKey);
+//        return wxPayConfig;
+//    }
     @Value("${wechat.appId}")
     private String appId;
 
@@ -28,6 +28,30 @@ public class WechatConfig {
 
     @Value("${wechat.mchKey}")
     private String mchKey;
+
+    //证书路径
+    @Value("${wechat.certLocalPath}")
+    private String certLocalPath;
+
+    //回调url
+    @Value("${wechat.notifyUrl}")
+    private String notifyUrl;
+
+    public String getCertLocalPath() {
+        return certLocalPath;
+    }
+
+    public void setCertLocalPath(String certLocalPath) {
+        this.certLocalPath = certLocalPath;
+    }
+
+    public String getNotifyUrl() {
+        return notifyUrl;
+    }
+
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl;
+    }
 
     public String getAppId() {
         return appId;

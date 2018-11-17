@@ -1,7 +1,15 @@
 package com.simon.basics.controller;
 
+import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
+import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
+import com.github.binarywang.wxpay.config.WxPayConfig;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
+import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
+import com.github.binarywang.wxpay.util.SignUtils;
 import com.github.pagehelper.PageInfo;
 import com.simon.basics.componet.exception.PayExcetion;
+import com.simon.basics.config.WechatConfig;
 import com.simon.basics.model.*;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.qianying.pay.QianyingPayService;
@@ -23,6 +31,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
@@ -47,6 +56,9 @@ public class CourseOrderController {
     private CourseRosterService courseRosterService;
     @Autowired
     private QianyingPayService qianyingPayService;
+
+    @Autowired
+    private WechatConfig wechatConfig;
 
     @PostMapping("list")
     @ApiOperation("查询订单列表")
@@ -81,38 +93,93 @@ public class CourseOrderController {
         return ReturnParam.success(courseOrderService.paySuccess(orderId,new SnowflakeIdWorker().nextId()+"","101"));
     }
 
-    @GetMapping("pay")
-    @ApiOperation("调起支付. ps:使用浏览器调用")
-    public void pay(HttpServletResponse response, @RequestParam Long orderId,
-                    @ApiParam(value = "支付类型:alipay,wechat",name = "type" ,required = true)@RequestParam String type,
-                    @ApiParam(value = "成功跳转url",name = "gotrue" ,required = true)@RequestParam String gotrue,@ApiParam(value = "失败跳转url",name = "gofalse" ,required = true)@RequestParam String gofalse) throws NoHandlerFoundException {
+//    @GetMapping("pay")
+//    @ApiOperation("调起支付. ps:使用浏览器调用")
+//    public void pay(HttpServletResponse response, @RequestParam Long orderId,
+//                    @ApiParam(value = "支付类型:alipay,wechat",name = "type" ,required = true)@RequestParam String type,
+//                    @ApiParam(value = "成功跳转url",name = "gotrue" ,required = true)@RequestParam String gotrue,@ApiParam(value = "失败跳转url",name = "gofalse" ,required = true)@RequestParam String gofalse) throws NoHandlerFoundException {
+//        CourseOrder courseOrder = courseOrderService.findOneByOrderId(orderId);
+//        if (courseOrder==null){
+//            throw new NoHandlerFoundException("资源不存在!","资源不存在!",null);
+//        }
+//        if (!EnumCode.OrderStatus.ORDER_NOPAY.getValue().equals(courseOrder.getOrderStatus())){
+//            PrintWriter printWriter = null;
+//            try {
+//                response.setCharacterEncoding("UTF-8");
+//                response.setHeader("content-type", "text/html;charset=UTF-8");
+//                printWriter = new PrintWriter(response.getOutputStream());
+//                printWriter.print("<h1>订单已支付或已经取消</h1>");
+//                printWriter.flush();
+//                printWriter.close();
+//                return;
+//            } catch (IOException e) {
+//                logger.error("获取流异常！",e);
+//                e.printStackTrace();
+//            }
+//        }
+//        if ("alipay".equals(type)){
+//            type = "101";
+//        }else{
+//            type = "102";
+//        }
+//        String qianyingPayNo = new SnowflakeIdWorker().nextId()+"";//支付订单
+//        qianyingPayService.submitOrder(response,courseOrder.getOrderCost().intValue()+"",qianyingPayNo,courseOrder.getOrderId()+"",type,gotrue,gofalse);
+//    }
+
+
+    @GetMapping("wechatPay")
+    @ApiOperation("微信调起支付")
+    public ReturnParam<String> wechat(@RequestParam Long orderId) throws NoHandlerFoundException {
+
         CourseOrder courseOrder = courseOrderService.findOneByOrderId(orderId);
         if (courseOrder==null){
             throw new NoHandlerFoundException("资源不存在!","资源不存在!",null);
         }
         if (!EnumCode.OrderStatus.ORDER_NOPAY.getValue().equals(courseOrder.getOrderStatus())){
-            PrintWriter printWriter = null;
-            try {
-                response.setCharacterEncoding("UTF-8");
-                response.setHeader("content-type", "text/html;charset=UTF-8");
-                printWriter = new PrintWriter(response.getOutputStream());
-                printWriter.print("<h1>订单已支付或已经取消</h1>");
-                printWriter.flush();
-                printWriter.close();
-                return;
-            } catch (IOException e) {
-                logger.error("获取流异常！",e);
-                e.printStackTrace();
-            }
+            logger.warn("订单处于非未支付状态:{}",courseOrder.getOrderStatus());
+            return ReturnParam.orderHadPay();
         }
-        if ("alipay".equals(type)){
-            type = "101";
-        }else{
-            type = "102";
+        //配置参数
+        WxPayService wxPayService = new WxPayServiceImpl();
+        WxPayConfig wxPayConfig = new WxPayConfig();
+
+        wxPayConfig.setMchId(wechatConfig.getMchId());
+        wxPayConfig.setAppId(wechatConfig.getAppId());
+        wxPayConfig.setKeyPath(wechatConfig.getCertLocalPath());//证书位置
+        wxPayConfig.setMchKey(wechatConfig.getMchKey());
+        wxPayConfig.setNotifyUrl(wechatConfig.getNotifyUrl());//回调地址
+        wxPayConfig.setTradeType("NATIVE");//交易类型
+
+        wxPayService.setConfig(wxPayConfig);
+        // 微信统一下单请求对象
+        WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
+        request.setDeviceInfo("web");
+        request.setBody(courseOrder.getOrderName());
+        request.setDetail(courseOrder.getOrderName());
+        request.setAttach(null);
+        request.setOutTradeNo(""+new SnowflakeIdWorker().nextId());
+        request.setFeeType("CNY");//币种类型
+        request.setTotalFee(courseOrder.getOrderCost().intValue()*100);//总额,单位分
+        request.setSpbillCreateIp("127.0.0.1");
+        request.setTimeStart(null);
+        request.setTimeExpire(null);
+        request.setGoodsTag(null);
+        request.setNotifyUrl(wechatConfig.getNotifyUrl());
+        request.setTradeType("NATIVE");
+        request.setProductId(orderId+"");
+        request.setLimitPay(null);
+        try {
+            WxPayUnifiedOrderResult wxPayUnifiedOrderResult = wxPayService.unifiedOrder(request);
+//            wxPayUnifiedOrderResult.get
+            System.out.println(wxPayUnifiedOrderResult);
+            return ReturnParam.success("succeess",wxPayUnifiedOrderResult.getCodeURL());
+        } catch (WxPayException e) {
+            e.printStackTrace();
         }
-        String qianyingPayNo = new SnowflakeIdWorker().nextId()+"";//支付订单
-        qianyingPayService.submitOrder(response,courseOrder.getOrderCost().intValue()+"",qianyingPayNo,courseOrder.getOrderId()+"",type,gotrue,gofalse);
+        return null;
     }
+
+
     @PostMapping("applyback")
     @ApiOperation("学生申请退款")
     public ReturnParam<RefundOrder> applyback(@RequestParam Long orderId) throws NoHandlerFoundException {

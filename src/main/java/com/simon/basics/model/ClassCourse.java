@@ -29,17 +29,20 @@ public class ClassCourse {
     @ApiModelProperty(value = "课程价格")
     private BigDecimal courseCost;
 
+    @ApiModelProperty(value = "每节课费用")
+    private BigDecimal coursePerCost;
+
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "开始时间")
     private Date courseStartTime;
 
-    @ApiModelProperty(value = "开始日期",hidden = true)
+    @ApiModelProperty(value = "开始日期")
     private String courseStartDateStr;
-    @ApiModelProperty(value = "上课时间",hidden = true)
+    @ApiModelProperty(value = "上课时间")
     private String classStartTimeStr;
-    @ApiModelProperty(value = "结束日期",hidden = true)
+    @ApiModelProperty(value = "结束日期")
     private String courseEndDateStr;
-    @ApiModelProperty(value = "下课时间",hidden = true)
+    @ApiModelProperty(value = "下课时间")
     private String classEndTimeStr;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -138,6 +141,17 @@ public class ClassCourse {
 
     public void setCourseCost(BigDecimal courseCost) {
         this.courseCost = courseCost;
+    }
+
+    public BigDecimal getCoursePerCost() {
+        if (courseCost!=null&&courseTotal!=0){
+            coursePerCost = courseCost.divide(courseCost,2, BigDecimal.ROUND_CEILING);
+        }
+        return coursePerCost;
+    }
+
+    public void setCoursePerCost(BigDecimal coursePerCost) {
+        this.coursePerCost = coursePerCost;
     }
 
     public Date getCourseStartTime() {

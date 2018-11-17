@@ -54,6 +54,10 @@ public class CodeParam {
 
     public final static String courseStartingMsg = "课程还在上课中,请前往点击下课按钮!";
 
+    public final static String orderHadPay  = "212";
+
+    public final static String orderHadPayMsg = "订单已支付或已经取消!";
+
     public final static String missParam = "300";
 
     public final static String missParamMsg = "缺少参数！";
