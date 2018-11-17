@@ -140,9 +140,16 @@ public class UserController {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String salt =null;
         if (EnumCode.UserType.TYPE_SUPER.getValue().equals(user.getType())||EnumCode.UserType.TYPE_MANAGER.getValue().equals(user.getType())) {//管理员可以修改其他用户密码
-            if (Objects.isNull(accountId)){
+            if (Objects.isNull(accountId)||user.getAccountId().longValue()==accountId){//修改自己
                 salt = user.getUsername();
                 accountId = user.getAccountId();
+                if (Objects.isNull(oldPassword)){
+                    throw new MissingServletRequestParameterException("oldPassword","String type [oldPassword] is misss");
+                }
+                String old = SaltEncryUtil.getMD5SaltString(salt, oldPassword);
+                if (!old.equalsIgnoreCase(user.getPassword())){
+                    return ReturnParam.incorrectCredentials();
+                }
             }else{
                 User other = userService.findByAccountId(accountId);
                 salt = other.getUsername();
