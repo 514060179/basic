@@ -137,7 +137,7 @@ public class CallbackController {
         }
         Long orderId = Long.parseLong(params.getAttach());
         String orderNo = params.getOutTradeNo();
-        CourseOrder courseOrder = courseOrderService.findOneByCourseId(orderId);
+        CourseOrder courseOrder = courseOrderService.findOneByOrderId(orderId);
         if (!Objects.isNull(courseOrder)){
             if (courseOrderService.paySuccess(orderId,orderNo,"")>0){
                 logger.info("======微信支付回调成功======");
