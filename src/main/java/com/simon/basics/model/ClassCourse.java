@@ -145,7 +145,7 @@ public class ClassCourse {
 
     public BigDecimal getCoursePerCost() {
         if (courseCost!=null&&courseTotal!=0){
-            coursePerCost = courseCost.divide(courseCost,2, BigDecimal.ROUND_CEILING);
+            coursePerCost = courseCost.divide(new BigDecimal(courseTotal),2, BigDecimal.ROUND_CEILING);
         }
         return coursePerCost;
     }
