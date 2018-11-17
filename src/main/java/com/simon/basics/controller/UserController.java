@@ -150,6 +150,7 @@ public class UserController {
                 if (!old.equalsIgnoreCase(user.getPassword())){
                     return ReturnParam.incorrectCredentials();
                 }
+                SecurityUtils.getSubject().logout();
             }else{
                 User other = userService.findByAccountId(accountId);
                 salt = other.getUsername();
