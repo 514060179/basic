@@ -12,6 +12,7 @@ import com.github.binarywang.wxpay.util.SignUtils;
 import com.simon.basics.config.WechatConfig;
 import com.simon.basics.model.CourseOrder;
 import com.simon.basics.service.CourseOrderService;
+import com.simon.basics.util.JSONUtil;
 import io.swagger.annotations.Api;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -137,13 +138,15 @@ public class CallbackController {
 //        wxPayService.setConfig(wxPayConfig);
 //        wxPayService.parseOrderNotifyResult(xmlResult);
 
+        logger.warn("微信支付回调参数：{}",JSONUtil.objectToJson(params));
         if (!SignUtils.checkSign(params,null,wechatConfig.getMchKey())){
             return WxPayNotifyResponse.fail("签名验证失败!");
         }
+        Long orderId = Long.parseLong(params.getAttach());
         String orderNo = params.getOutTradeNo();
-        CourseOrder courseOrder = courseOrderService.findOneByOrderNo(orderNo);
+        CourseOrder courseOrder = courseOrderService.findOneByCourseId(orderId);
         if (!Objects.isNull(courseOrder)){
-            if (courseOrderService.paySuccess(courseOrder.getOrderId(),courseOrder.getOrderNo(),"")>0){
+            if (courseOrderService.paySuccess(orderId,orderNo,"")>0){
                 logger.info("======微信支付回调成功======");
                 return WxPayNotifyResponse.success("回调成功！");
             }

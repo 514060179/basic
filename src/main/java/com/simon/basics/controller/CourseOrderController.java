@@ -156,7 +156,7 @@ public class CourseOrderController {
         request.setDeviceInfo("web");
         request.setBody(courseOrder.getOrderName());
         request.setDetail(courseOrder.getOrderName());
-        request.setAttach(null);
+        request.setAttach(courseOrder.getOrderId()+"");
         request.setOutTradeNo(""+new SnowflakeIdWorker().nextId());
         request.setFeeType("CNY");//币种类型
         request.setTotalFee(courseOrder.getOrderCost().intValue()*100);//总额,单位分
