@@ -16,4 +16,34 @@ public interface CourseTypeService {
      * @return
      */
     List<CourseType> findListByTypeSeries(Long typeSeries);
+
+
+    /**
+     * 新增
+     * @param courseType
+     * @return
+     */
+    CourseType add(CourseType courseType);
+
+    /**
+     * 删除
+     * @param typeId
+     * @return
+     */
+    int delete(Long typeId);
+
+    /**
+     * 更新
+     * @param courseType
+     * @return
+     */
+    int update(CourseType courseType);
+
+
+    /**
+     * 查询记录
+     * @param typeId
+     * @return
+     */
+    CourseType findOne(Long typeId);
 }

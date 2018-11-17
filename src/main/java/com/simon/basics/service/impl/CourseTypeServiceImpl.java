@@ -6,6 +6,7 @@ import com.simon.basics.service.CourseTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,5 +27,28 @@ public class CourseTypeServiceImpl implements CourseTypeService {
             courseTypeList = courseTypeMapper.findChildListByTypeSeries(typeSeries);
         }
         return courseTypeList;
+    }
+
+    @Override
+    public CourseType add(CourseType courseType) {
+        courseType.setCreateTime(new Date());
+        courseType.setDeleted(false);
+        courseTypeMapper.insertCourseType(courseType);
+        return courseType;
+    }
+
+    @Override
+    public int delete(Long typeId) {
+        return courseTypeMapper.deleteById(typeId);
+    }
+
+    @Override
+    public int update(CourseType courseType) {
+        return courseTypeMapper.updateCourseType(courseType);
+    }
+
+    @Override
+    public CourseType findOne(Long typeId) {
+        return courseTypeMapper.findById(typeId);
     }
 }

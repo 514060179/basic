@@ -35,4 +35,34 @@
     where type_series = #{typeId,jdbcType=BIGINT}
   </select>
 
+  <insert id="insertCourseType" useGeneratedKeys="true" keyProperty="typeId">
+    INSERT INTO course_type(type_name, type_series)VALUES (#{typeName,jdbcType=VARCHAR},#{typeSeries,jdbcType=BIGINT});
+  </insert>
+
+  <update id="updateCourseType" parameterType="com.simon.basics.model.CourseType">
+    UPDATE course_type
+    <set >
+    <if test="typeName != null" >
+      type_name=#{typeName,jdbcType=VARCHAR},
+    </if>
+    <if test="deleted != null" >
+      deleted=#{deleted,jdbcType=BIT},
+    </if>
+    <if test="typeSeries != null" >
+      type_series=#{typeSeries,jdbcType=BIGINT},
+    </if>
+    </set>
+    WHERE type_id=#{typeId,jdbcType=BIGINT}
+  </update>
+
+  <delete id="deleteById"  parameterType="long">
+    DELETE FROM course_type WHERE type_id=#{typeId,jdbcType=BIGINT}
+  </delete>
+
+  <select id="findById"  parameterType="long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course_type
+    WHERE type_id=#{typeId,jdbcType=BIGINT}
+  </select>
 </mapper>

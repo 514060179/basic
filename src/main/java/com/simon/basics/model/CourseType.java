@@ -1,20 +1,27 @@
 package com.simon.basics.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
+@ApiModel("课程类型")
 public class CourseType {
     private Long typeId;
 
+    @ApiModelProperty("课程类型名字")
     private String typeName;
 
+    @ApiModelProperty("父级id.0代表顶级id")
     private Long typeSeries;
 
     private Boolean deleted;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(hidden = true)
     private Date createTime;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(hidden = true)
     private Date updateTime;
 
     public Long getTypeId() {

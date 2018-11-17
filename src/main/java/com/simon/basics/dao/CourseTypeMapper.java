@@ -11,4 +11,11 @@ public interface CourseTypeMapper {
 
     List<CourseType> findChildListByTypeSeries(Long typeId);
 
+    int insertCourseType(CourseType courseType);
+
+    int updateCourseType(CourseType courseType);
+
+    int deleteById(Long typeId);
+
+    CourseType findById(Long typeId);
 }
