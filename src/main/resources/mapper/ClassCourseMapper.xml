@@ -30,6 +30,7 @@
     </resultMap>
     <resultMap id="UnionMapResult" type="com.simon.basics.model.ClassCourseWithBLOBs" extends="ResultMapWithBLOBs">
         <result column="bought" property="bought" jdbcType="BIT"/>
+        <result column="order_id" property="orderId" jdbcType="BIGINT"/>
         <result column="order_status" property="orderStatus" jdbcType="VARCHAR"/>
         <association property="user" javaType="com.simon.basics.model.User">
             <id column="user_id" property="userId" jdbcType="BIGINT"/>
@@ -95,7 +96,7 @@
         select
         <include refid="Union_Column_List"/>
         <if test="classCourse.accountId != null">
-            ,co.order_status,CASE  WHEN co.order_status='1' THEN TRUE ELSE FALSE END AS bought
+            ,co.order_id,co.order_status,CASE  WHEN co.order_status='1' THEN TRUE ELSE FALSE END AS bought
         </if>
         from class_course cc
         JOIN seat_layout sl ON cc.seat_id=sl.seat_id

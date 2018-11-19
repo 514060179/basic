@@ -16,6 +16,9 @@ public class ClassCourseWithBLOBs extends ClassCourse {
     @ApiModelProperty("订单状态")
     private String orderStatus;
 
+    @ApiModelProperty("订单id")
+    private Long orderId;
+
     @ApiModelProperty(hidden = true)
     private Boolean bought;
 
@@ -25,6 +28,14 @@ public class ClassCourseWithBLOBs extends ClassCourse {
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public Boolean getBought() {
