@@ -66,6 +66,12 @@ public class CourseOrderController {
         return ReturnParam.success(courseOrderService.getListByPage(courseOrder,pageNum,pageSize));
     }
 
+    @PostMapping("detail")
+    @ApiOperation("订单详情")
+    public ReturnParam<CourseOrder> detail(Long orderId) {
+        return ReturnParam.success(courseOrderService.findOneByOrderId(orderId));
+    }
+
     @PostMapping("create")
     @ApiOperation("学生创建订单")
     public ReturnParam<CourseOrder> create(@RequestParam Long courseId) {
