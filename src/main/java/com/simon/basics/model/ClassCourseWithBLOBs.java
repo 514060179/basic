@@ -13,8 +13,19 @@ public class ClassCourseWithBLOBs extends ClassCourse {
     @ApiModelProperty(hidden = true)
     private SeatLayout seatLayout;
 
+    @ApiModelProperty("订单状态")
+    private String orderStatus;
+
     @ApiModelProperty(hidden = true)
     private Boolean bought;
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 
     public Boolean getBought() {
         return bought;

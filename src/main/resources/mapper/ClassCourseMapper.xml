@@ -30,6 +30,7 @@
     </resultMap>
     <resultMap id="UnionMapResult" type="com.simon.basics.model.ClassCourseWithBLOBs" extends="ResultMapWithBLOBs">
         <result column="bought" property="bought" jdbcType="BIT"/>
+        <result column="order_status" property="orderStatus" jdbcType="VARCHAR"/>
         <association property="user" javaType="com.simon.basics.model.User">
             <id column="user_id" property="userId" jdbcType="BIGINT"/>
             <result column="account_id" property="accountId" jdbcType="BIGINT"/>
@@ -94,19 +95,18 @@
         select
         <include refid="Union_Column_List"/>
         <if test="classCourse.accountId != null">
-            ,IFNULL(co.order_id,FALSE ) AS bought
+            ,co.order_status,CASE  WHEN co.order_status='1' THEN TRUE ELSE FALSE END AS bought
         </if>
         from class_course cc
         JOIN seat_layout sl ON cc.seat_id=sl.seat_id
         JOIN user u ON u.account_id=cc.account_id
         JOIN course_type ct ON ct.type_id=cc.type_id
         <if test="classCourse.accountId != null">
-            LEFT JOIN course_order co ON cc.course_id=co.course_id AND co.account_id = #{classCourse.accountId,jdbcType=BIGINT} AND
-            co.order_status = '1'
+            LEFT JOIN course_order co ON cc.course_id=co.course_id AND co.account_id = #{classCourse.accountId,jdbcType=BIGINT}
         </if>
         <where>
             <if test="classCourse.accountId != null and bought==1">
-                AND co.order_id IS NOT NULL
+                AND co.order_id IS NOT NULL AND co.order_status = '1'
             </if>
             <if test="classCourse.accountId != null and bought==0">
                 AND co.order_id IS NULL
