@@ -75,7 +75,7 @@ public class CourseOrderController {
             return ReturnParam.noHandlerFound("找不到资源：courseId=" + courseId);
         }
         if(EnumCode.CourseStatus.COURSE_ACTION.getValue().equals(classCourse.getCourseStatus())||EnumCode.CourseStatus.COURSE_IN.getValue().equals(classCourse.getCourseStatus())){
-            CourseOrder courseOrder = courseOrderService.findOneByCourseId(courseId);
+            CourseOrder courseOrder = courseOrderService.findOneByCourseId(courseId,null);
             if (courseOrder!=null){
                 logger.warn("重复下单：");
                 return ReturnParam.repeatOrder();

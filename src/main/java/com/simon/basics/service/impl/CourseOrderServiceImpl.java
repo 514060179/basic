@@ -64,14 +64,14 @@ public class CourseOrderServiceImpl implements CourseOrderService {
     }
 
     @Override
-    public CourseOrder findOneByCourseId(Long courseId) {
+    public CourseOrder findOneByCourseId(Long courseId,Long accountId) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         CourseOrder courseOrder = new CourseOrder();
         courseOrder.setCourseId(courseId);
         if (EnumCode.UserType.TYPE_STUDENT.getValue().equals(user.getType())){//学生 查询自己
             courseOrder.setAccountId(user.getAccountId());
         }else{//管理员 查询所有
-            courseOrder.setAccountId(null);
+            courseOrder.setAccountId(accountId);
         }
         List<CourseOrder> findCourseOrderList = courseOrderMapper.findListByCondition(courseOrder);
         if (findCourseOrderList==null||findCourseOrderList.size()==0){

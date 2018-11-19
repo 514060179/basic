@@ -4,10 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.simon.basics.componet.exception.SqlWriteException;
 import com.simon.basics.componet.exception.SqlWritePrerequisiteException;
-import com.simon.basics.dao.ClassCourseMapper;
-import com.simon.basics.dao.CourseRosterMapper;
-import com.simon.basics.dao.RosterAttendanceMapper;
-import com.simon.basics.dao.RosterIncomeMapper;
+import com.simon.basics.dao.*;
 import com.simon.basics.model.*;
 import com.simon.basics.service.ClassCourseService;
 import com.simon.basics.util.JSONUtil;
@@ -40,7 +37,8 @@ public class ClassCourseServiceimpl implements ClassCourseService {
     private RosterAttendanceMapper rosterAttendanceMapper;
     @Autowired
     private RosterIncomeMapper rosterIncomeMapper;
-
+    @Autowired
+    private UserMapper userMapper;
     @Override
     public ClassCourse findOne(Long courseId, Long studentId, Long accountId) {
         return classCourseMapper.selectByPrimaryKey(courseId,studentId, accountId);
@@ -270,5 +268,10 @@ public class ClassCourseServiceimpl implements ClassCourseService {
                 SmsUtil.sendSMS(phone,msg)
             ).start();
         });
+    }
+
+    @Override
+    public List<User> noChoiceSeatList(Long courseId) {
+        return userMapper.noChoiceSeatList(courseId);
     }
 }

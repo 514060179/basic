@@ -50,6 +50,11 @@ public class ClassCourseController {
         return ReturnParam.success(classCourseService.findListByPage(classCourse, bought,studentId ,pageNum, pageSize));
     }
 
+    @GetMapping("noSeatList")
+    @ApiOperation("没有选座位学生列表")
+    public ReturnParam<User> noChoiceSeatList(@RequestParam Long courseId){
+        return ReturnParam.success(classCourseService.noChoiceSeatList(courseId));
+    }
     @PostMapping("detail")
     @ApiOperation("课程详情")
     public ReturnParam<ClassCourseWithBLOBs> detail(@RequestParam Long courseId) {

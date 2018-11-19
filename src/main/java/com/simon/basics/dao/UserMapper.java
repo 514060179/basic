@@ -23,4 +23,6 @@ public interface UserMapper {
     User findBySchoolNumber(String schoolNumber);
 
     List<User> findListByCondition(User user);
+
+    List<User> noChoiceSeatList(Long courseId);
 }

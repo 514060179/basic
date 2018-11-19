@@ -39,7 +39,7 @@ public interface CourseOrderService {
      * @param courseId
      * @return
      */
-    CourseOrder findOneByCourseId(Long courseId);
+    CourseOrder findOneByCourseId(Long courseId,Long accountId);
 
     /**
      * 根据订单id查询订单

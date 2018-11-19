@@ -271,6 +271,23 @@
     </where>
   </select>
 
+  <select id="noChoiceSeatList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    FROM
+    course_order co
+    LEFT JOIN course_roster cr
+    ON co.`account_id` = cr.`account_id`
+    AND co.`course_id` = cr.`course_id`
+    INNER JOIN account a
+    ON co.`account_id` = a.`account_id`
+    LEFT JOIN `user` u
+    ON u.account_id = a.account_id
+    WHERE co.`order_status` = '1'
+    AND cr.roster_id IS NULL
+    AND co.`course_id`=#{courseId}
+  </select>
+
   <update id="delete">
     UPDATE account a LEFT JOIN `user` u ON a.`account_id`=u.`account_id` SET a.`deleted`=#{deleted,jdbcType=BIT},u.`deleted`=#{deleted,jdbcType=BIT} WHERE a.account_id = #{accountId,jdbcType=BIGINT}
   </update>

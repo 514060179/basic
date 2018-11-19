@@ -140,4 +140,11 @@ public interface ClassCourseService {
      * @param courseRosterAttendanceList
      */
     void endCourseSendMsg(List<CourseRosterAttendance> courseRosterAttendanceList);
+
+    /**
+     * 获取未选择作为的用户
+     * @param courseId
+     * @return
+     */
+    List<User> noChoiceSeatList(Long courseId);
 }

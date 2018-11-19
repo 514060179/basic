@@ -48,10 +48,10 @@ public class SeatLayoutController {
 
     @PostMapping("choice")
     @ApiOperation("选择座位")
-    public ReturnParam<CourseRoster> choice(@RequestParam Long courseId, @RequestParam int seatX, @RequestParam int seatY) {
+    public ReturnParam<CourseRoster> choice(@RequestParam Long courseId, @RequestParam int seatX, @RequestParam int seatY,Long accountId) {
         //redis 存储
         //获取课程
-        CourseOrderWithBLOBs courseOrder = (CourseOrderWithBLOBs)courseOrderService.findOneByCourseId(courseId);
+        CourseOrderWithBLOBs courseOrder = (CourseOrderWithBLOBs)courseOrderService.findOneByCourseId(courseId,accountId);
         if (Objects.isNull(courseOrder)|| !EnumCode.OrderStatus.ORDER_PAID.getValue().equals(courseOrder.getOrderStatus())){
             logger.warn("选择座位，课程courseId={}未购买!",courseId);
             return ReturnParam.courseNotEnoughOrNotHad();
