@@ -12,7 +12,7 @@ public class CodeParam {
 
     public final static String courseEnding = "201";
 
-    public final static String courseEndingMsg = "课程已结束！";
+    public final static String courseEndingMsg = "课程已结束或未发布！";
 
     public final static String lastCourseNoEnding = "202";
 
