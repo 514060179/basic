@@ -185,7 +185,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         int i = rosterAttendanceMapper.updateByCourseAndNum(rosterAttendanceUpdate);
         ClassCourse update = new ClassCourse();
         update.setCourseId(classCourse.getCourseId());
-        if(classCourse.getCourseCurrent()-1==classCourse.getCourseTotal()){
+        if(classCourse.getCourseCurrent()==classCourse.getCourseTotal()-1){
             update.setCourseStatus(EnumCode.CourseStatus.COURSE_END.getValue());
             update.setClassStatus(EnumCode.ClassStatus.CLASS_ENDING.getValue());
         }else{
