@@ -125,7 +125,7 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         int rest = courseRoster.getRosterCourseCountRest();
         int courseTotal = courseOrder.getCourseTotal();//购买时的总课时
         BigDecimal orderCost = courseOrder.getOrderCost();//购买时的总费用
-        BigDecimal amount = orderCost.divide(new BigDecimal(courseTotal)).multiply(new BigDecimal(rest));//退款金额
+        BigDecimal amount = orderCost.divide(new BigDecimal(courseTotal),2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(rest));//退款金额
         refundOrder.setAmount(amount);
         refundOrder.setCourseAmount(orderCost);//课程金额
         refundOrder.setCourseTotal(courseTotal);
