@@ -166,10 +166,12 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         String teacherChargeType = classCourse.getChargeType();
         rosterIncomeInsert.setIncomeType(teacherChargeType);//收费类型
         if (EnumCode.TeacherChargeType.CHARGE_TYPE_TIME.getValue().equals(teacherChargeType)) {//按时
-            BigDecimal averageHour = classCourse.getAverageHour();
-            int unit = new BigDecimal(costTime).divide(averageHour.multiply(new BigDecimal(1000 * 60 * 60)),2, BigDecimal.ROUND_HALF_UP).intValue();//花费总单位时间
-            rosterIncomeInsert.setAverageHour(averageHour);//平均X小时起收费。收费单位
-            BigDecimal averageHourCost = classCourse.getAverageHourCost().multiply(new BigDecimal(unit)).setScale(2, BigDecimal.ROUND_HALF_UP);//基本收入
+//            BigDecimal averageHour = classCourse.getAverageHour();
+//            int unit = new BigDecimal(costTime).divide(averageHour.multiply(new BigDecimal(1000 * 60 * 60)),2, BigDecimal.ROUND_HALF_UP).intValue();//花费总单位时间
+//            rosterIncomeInsert.setAverageHour(averageHour);//平均X小时起收费。收费单位
+            BigDecimal averageHourCost = classCourse.getAverageHourCost();//基本收入 每节课收入
+            rosterIncomeInsert.setAverageHour(averageHourCost);//收费单位
+
             if (actualNumber > classCourse.getExceedNum()) {//提成
                 averageHourCost = averageHourCost.add(classCourse.getExtraCharge());
             }
@@ -183,7 +185,12 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         int i = rosterAttendanceMapper.updateByCourseAndNum(rosterAttendanceUpdate);
         ClassCourse update = new ClassCourse();
         update.setCourseId(classCourse.getCourseId());
-        update.setClassStatus(EnumCode.ClassStatus.CLASS_OVER.getValue());
+        if(classCourse.getCourseCurrent()-1==classCourse.getCourseTotal()){
+            update.setCourseStatus(EnumCode.CourseStatus.COURSE_END.getValue());
+            update.setClassStatus(EnumCode.ClassStatus.CLASS_ENDING.getValue());
+        }else{
+            update.setClassStatus(EnumCode.ClassStatus.CLASS_OVER.getValue());
+        }
         classCourseMapper.updateByPrimaryKeyAndAccountIdSelective(update);
         if (i > 0) {
             int j = rosterIncomeMapper.insertSelective(rosterIncomeInsert);

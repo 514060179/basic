@@ -67,6 +67,7 @@ public class EnumCode {
      */
     public enum ClassStatus {
         //-1新建 0上课1下课
+        CLASS_ENDING("-1"),
         CLASS_OVER("1"),
         CLASS_BEGINS("0");
 
