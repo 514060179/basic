@@ -64,18 +64,18 @@ public class UserController {
     public ReturnParam sendCode(@RequestParam @Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！") String phone) {
         String verification = jedisService.getString(phone);
         String code = UtilToString.getRandomString(6);
-        if (StringUtils.isEmpty(verification)) {
-            jedisService.put(phone, code, 60);
+//        if (StringUtils.isEmpty(verification)) {
+            jedisService.put(phone, code, 180);
             //发送验证码
             new Thread(() -> {
                 if (!SmsUtil.sendSMS(phone,code)){
                     logger.error("发送验证码失败，tel={}",phone);
                 }
             }).start();
-        } else {
-            logger.warn("重复发送验证码{}", phone);
-            return ReturnParam.verifing();
-        }
+//        } else {
+////            logger.warn("重复发送验证码{}", phone);
+////            return ReturnParam.verifing();
+//        }
         return ReturnParam.success("获取成功!");
     }
 
@@ -85,14 +85,14 @@ public class UserController {
     @RequestParam String phone, @RequestParam(defaultValue = "1") String type, @RequestParam String name,
                            @RequestParam String username, @RequestParam String password,
                            @RequestParam String verification,
-                           @Pattern(regexp = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$", message = "身份证号码格式有误！") @RequestParam String cardNum) {
+                           @Pattern(regexp = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$", message = "身份证号码格式有误！") @RequestParam(required = false) String cardNum) {
         //验证码验证
         String code = jedisService.getString(phone);
         if (StringUtils.isEmpty(code)) {
             logger.warn("新增用户未获取验证码{}", phone);
             return ReturnParam.noVerification();
         }
-        if (code.equals(verification)) {
+        if (!code.equals(verification)) {
             logger.warn("新增用户{}验证码{}验证错误！", phone, verification);
             return ReturnParam.noVerification();
         }
