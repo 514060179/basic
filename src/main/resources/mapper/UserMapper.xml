@@ -287,6 +287,23 @@
     AND cr.roster_id IS NULL
     AND co.`course_id`=#{courseId}
   </select>
+  <select id="additionalUserList" resultMap="BaseResultMap">
+    select
+    DISTINCT
+    <include refid="Base_Column_List" />
+    FROM
+    class_course cc1
+    JOIN class_course cc2
+    ON cc1.`type_id` = cc2.`type_id`
+    AND cc1.`course_id` = #{courseId}
+    AND cc2.`course_id` != #{courseId}
+    LEFT JOIN course_roster cr
+    ON cr.`course_id` = cc2.`course_id`
+    INNER JOIN `user` u
+    ON cr.`account_id` = u.`account_id`
+    INNER JOIN account a
+    ON u.`account_id` = a.`account_id`
+  </select>
 
   <update id="delete">
     UPDATE account a LEFT JOIN `user` u ON a.`account_id`=u.`account_id` SET a.`deleted`=#{deleted,jdbcType=BIT},u.`deleted`=#{deleted,jdbcType=BIT} WHERE a.account_id = #{accountId,jdbcType=BIGINT}

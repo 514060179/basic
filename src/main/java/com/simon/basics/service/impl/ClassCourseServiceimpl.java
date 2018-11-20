@@ -61,6 +61,12 @@ public class ClassCourseServiceimpl implements ClassCourseService {
     }
 
     @Override
+    public PageInfo<User> additionalUserList(Long courseId, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return new PageInfo<User>(userMapper.additionalUserList(courseId));
+    }
+
+    @Override
     public int update(ClassCourse classCourse) {
         return classCourseMapper.updateByPrimaryKeyAndAccountIdSelective(classCourse);
     }
@@ -243,7 +249,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         rosterAttendanceInsert.setAccountId(accountId);
         rosterAttendanceInsert.setAttendType(EnumCode.AttendType.ATTEND_TYPE_ADDITIONAL.getValue());
         rosterAttendanceInsert.setAttendSectionNum(courseCurrent);
-        rosterAttendanceInsert.setAttendName("【第+" +courseCurrent+"节课签到】");
+        rosterAttendanceInsert.setAttendName("【第" +courseCurrent+"节课签到】");
         rosterAttendanceInsert.setAdditionalSeatX(rosterSeatX);
         rosterAttendanceInsert.setAdditionalSeatY(rosterSeatY);
         rosterAttendanceMapper.insertSelective(rosterAttendanceInsert);

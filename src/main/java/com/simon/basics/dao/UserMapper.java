@@ -25,4 +25,6 @@ public interface UserMapper {
     List<User> findListByCondition(User user);
 
     List<User> noChoiceSeatList(Long courseId);
+
+    List<User> additionalUserList(Long courseId);
 }

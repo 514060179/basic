@@ -30,6 +30,15 @@ public interface ClassCourseService {
     PageInfo<ClassCourseWithBLOBs> findListByPage(ClassCourse classCourse, Boolean bought, Long studentId, int pageNum, int pageSize);
 
     /**
+     * 可串课名单列表
+     * @param courseId
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    PageInfo<User> additionalUserList(Long courseId, int pageNum, int pageSize);
+
+    /**
      * 更新
      *
      * @param classCourse

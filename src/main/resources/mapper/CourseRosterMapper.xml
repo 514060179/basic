@@ -84,7 +84,7 @@
     from course_roster cr
     inner join class_course cc
     on cr.course_id=cc.course_id and cr.account_id=#{accountId,jdbcType=BIGINT}
-    where cc.type_id = #{typeId,jdbcType=BIGINT} LIMIT 0,1
+    where cc.type_id = #{typeId,jdbcType=BIGINT} and cr.roster_course_count_rest>0 LIMIT 0,1
   </select>
 
   <!--<select id="findTeacherCourseRoster" resultMap="BaseResultMap">-->

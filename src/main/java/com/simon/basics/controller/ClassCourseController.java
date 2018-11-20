@@ -67,6 +67,11 @@ public class ClassCourseController {
         }
     }
 
+    @PostMapping("additionalUserList")
+    @ApiOperation("可串课用户名单")
+    public ReturnParam<PageInfo<User>> additionalUserList(@RequestParam Long courseId,@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "50") int pageSize){
+        return ReturnParam.success(classCourseService.additionalUserList(courseId,pageNum, pageSize));
+    }
     @PostMapping("add")
     @ApiOperation("课程新增")
     public ReturnParam<ClassCourse> add(ClassCourse classCourse, @RequestParam Long accountId,@RequestParam String chargeType, @RequestParam Integer courseTotal, @RequestParam Long seatId, @RequestParam Long typeId, @RequestParam Double courseCost, @RequestParam Date courseStartTime, @RequestParam @Future Date courseEndTime) throws MissingServletRequestParameterException {
@@ -185,10 +190,10 @@ public class ClassCourseController {
         Long type = classCourse.getTypeId();
         CourseRoster courseRoster = classCourseService.findCourseRoster(accountId, type);
         if (!Objects.isNull(courseRoster)) {
-            int rest = courseRoster.getRosterCourseCountRest();
-            if (rest < 1) {
-                return ReturnParam.courseNotEnoughOrNotHad();
-            }
+//            int rest = courseRoster.getRosterCourseCountRest();
+//            if (rest < 1) {
+//                return ReturnParam.courseNotEnoughOrNotHad();
+//            }
             classCourseService.additional(accountId, courseId, classCourse.getCourseCurrent(), courseRoster.getRosterId(),rosterSeatX,rosterSeatY);
             return ReturnParam.success(classCourseService.getAttendanceList(courseId, classCourse.getCourseCurrent()));
         } else {
