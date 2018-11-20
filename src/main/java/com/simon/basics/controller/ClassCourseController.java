@@ -114,8 +114,8 @@ public class ClassCourseController {
     @GetMapping("courseStart")
     @ApiOperation("老师开始开始上课")
     public ReturnParam<ClassCourseWithBLOBs> courseStart(@RequestParam Long courseId) {
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        ClassCourse classCourse = classCourseService.findOne(courseId, null,user.getAccountId());
+//        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        ClassCourse classCourse = classCourseService.findOne(courseId, null,null);
 
         if (Objects.isNull(classCourse)) {
             logger.warn("找不到资源：courseId=" + courseId);

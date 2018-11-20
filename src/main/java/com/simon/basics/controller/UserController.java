@@ -117,11 +117,11 @@ public class UserController {
         //验证码验证
         String code = jedisService.getString(phone);
         if (StringUtils.isEmpty(code)) {
-            logger.warn("新增用户未获取验证码{}", phone);
+            logger.warn("新增管理员未获取验证码{}", phone);
             return ReturnParam.noVerification();
         }
         if (!code.equals(verification)) {
-            logger.warn("新增用户{}验证码{}验证错误！", phone, verification);
+            logger.warn("新增管理员{}验证码{}验证错误！", phone, verification);
             return ReturnParam.noVerification();
         }
         Account account = new Account();
