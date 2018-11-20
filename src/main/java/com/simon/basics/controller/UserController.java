@@ -113,7 +113,17 @@ public class UserController {
 
     @PostMapping("addManager")
     @ApiOperation(value = "新增管理员")
-    public ReturnParam<Account> addManager(@RequestParam String username,String name,@Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！") @RequestParam(required = false) String phone,@RequestParam String password, @Pattern(regexp = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$", message = "身份证号码格式有误！") @RequestParam String cardNum) {
+    public ReturnParam<Account> addManager(@RequestParam String username,String name,@RequestParam String verification,@Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！") @RequestParam(required = false) String phone,@RequestParam String password, @Pattern(regexp = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$", message = "身份证号码格式有误！") @RequestParam String cardNum) {
+        //验证码验证
+        String code = jedisService.getString(phone);
+        if (StringUtils.isEmpty(code)) {
+            logger.warn("新增用户未获取验证码{}", phone);
+            return ReturnParam.noVerification();
+        }
+        if (!code.equals(verification)) {
+            logger.warn("新增用户{}验证码{}验证错误！", phone, verification);
+            return ReturnParam.noVerification();
+        }
         Account account = new Account();
         account.setUsername(username);
         account.setPassword(SaltEncryUtil.getMD5SaltString(username,password));
