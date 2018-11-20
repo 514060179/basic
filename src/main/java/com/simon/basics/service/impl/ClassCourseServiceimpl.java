@@ -99,17 +99,17 @@ public class ClassCourseServiceimpl implements ClassCourseService {
             classCourse.setCourseStatus(EnumCode.CourseStatus.COURSE_IN.getValue());
             update.setCourseStatus(EnumCode.CourseStatus.COURSE_IN.getValue());
         }
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+//        User user = (User) SecurityUtils.getSubject().getPrincipal();
         update.setCourseCurrent(1);
-        update.setAccountId(user.getAccountId());
+//        update.setAccountId(user.getAccountId());
         update.setClassStatus(EnumCode.ClassStatus.CLASS_BEGINS.getValue());
         int i = classCourseMapper.updateByPrimaryKeyAndAccountIdSelective(update);
         if (i > 0) {
             //新增签到
             RosterAttendance rosterAttendanceInsert = new RosterAttendance();
-            rosterAttendanceInsert.setAccountId(user.getAccountId());
+            rosterAttendanceInsert.setAccountId(classCourse.getAccountId());
             rosterAttendanceInsert.setAttendSectionNum(classCourse.getCourseCurrent() + 1);
-            rosterAttendanceInsert.setAttendName(classCourse.getCourseName()+"【第+" +(classCourse.getCourseCurrent()+1)+"节课签到】");
+            rosterAttendanceInsert.setAttendName(classCourse.getCourseName()+"【第" +(classCourse.getCourseCurrent()+1)+"节课签到】");
             rosterAttendanceInsert.setCourseId(classCourse.getCourseId());
             rosterAttendanceInsert.setAttendType(EnumCode.AttendType.ATTEND_TYPE_TEACHER.getValue());
             rosterAttendanceMapper.insertSelective(rosterAttendanceInsert);
