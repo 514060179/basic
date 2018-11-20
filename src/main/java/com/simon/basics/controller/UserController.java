@@ -121,7 +121,7 @@ public class UserController {
             return ReturnParam.noVerification();
         }
         if (!code.equals(verification)) {
-            logger.warn("新增管理员{}验证码{}验证错误！", phone, verification);
+            logger.warn("新增管理员{}验证码{}!={}验证错误！", phone, verification,code);
             return ReturnParam.noVerification();
         }
         Account account = new Account();

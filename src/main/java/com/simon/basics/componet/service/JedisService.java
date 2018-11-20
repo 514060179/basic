@@ -19,6 +19,8 @@ public interface JedisService {
 
     void put(String key, String value);
 
+    void put(String key, String value,int expritime);
+
     void put(String key, Object value, int expritime);
 
     <T> T getObject(String key, Class<T> c);

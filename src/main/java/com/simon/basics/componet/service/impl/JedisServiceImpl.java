@@ -70,6 +70,20 @@ public class JedisServiceImpl implements JedisService {
     }
 
     @Override
+    public void put(String key, String value, int expritime) {
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            jedis.set(key, value);
+            if (-1 != expritime) {
+                jedis.expire(key, expritime);
+            }
+        } finally {
+            returnResource(jedis);
+        }
+    }
+
+    @Override
     public void put(String key, Object value, int expritime) {
         Jedis jedis = null;
         try {
