@@ -143,7 +143,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
 
     @Transactional
     @Override
-    public void courseEnd(ClassCourse classCourse, User user, int actualNumber, int mustNumber, Long costTime) {
+    public void courseEnd(ClassCourse classCourse, int actualNumber, int mustNumber, Long costTime) {
 //        //1.更新学生课时 放到学生签到处
 //        CourseRoster courseRosterUpdate = new CourseRoster();
 //        courseRosterUpdate.setCourseId(classCourse.getCourseId());

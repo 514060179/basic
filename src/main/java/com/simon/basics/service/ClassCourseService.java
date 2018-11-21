@@ -101,7 +101,7 @@ public interface ClassCourseService {
      *
      * @param classCourse
      */
-    void courseEnd(ClassCourse classCourse, User user, int actualNumber, int mustNumber, Long costTime);
+    void courseEnd(ClassCourse classCourse,int actualNumber, int mustNumber, Long costTime);
     /**
      * 结束课程(取消)
      *

@@ -205,8 +205,8 @@ public class ClassCourseController {
     @GetMapping("courseEnd")
     @ApiOperation("老师结束课程（下课）")
     public ReturnParam courseEnd(@RequestParam Long courseId) {
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        ClassCourse classCourse = classCourseService.findOne(courseId, null,user.getAccountId());
+//        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        ClassCourse classCourse = classCourseService.findOne(courseId, null,null);
         if (Objects.isNull(classCourse)) {
             logger.warn("找不到资源：courseId=" + courseId);
             return ReturnParam.noHandlerFound("找不到资源：courseId=" + courseId);
@@ -228,7 +228,7 @@ public class ClassCourseController {
                 actualNumber++;
             }
         }
-        classCourseService.courseEnd(classCourse, user, actualNumber, mustNumber, total);
+        classCourseService.courseEnd(classCourse, actualNumber, mustNumber, total);
         //发送短信
         classCourseService.endCourseSendMsg(classCourseService.getAttendanceList(courseId, classCourse.getCourseCurrent()));
         return ReturnParam.success();
