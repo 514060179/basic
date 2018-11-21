@@ -68,6 +68,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
 
     @Override
     public int update(ClassCourse classCourse) {
+        classCourse.setCourseCurrent(null);
         return classCourseMapper.updateByPrimaryKeyAndAccountIdSelective(classCourse);
     }
 
