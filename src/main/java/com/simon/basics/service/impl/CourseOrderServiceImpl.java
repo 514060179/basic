@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author simon.feng
@@ -111,18 +112,23 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         //2 删除课程名单
         //3 更新订单状态
         //4 添加退款记录
-        courseRosterMapper.delByCourseIdAndAccountId(courseRoster.getCourseId(),courseRoster.getAccountId());
-        CourseOrder update = new CourseOrder();
-        update.setOrderStatus(EnumCode.OrderStatus.ORDER_APPLY_REBACK.getValue());
-        update.setOrderId(courseOrder.getOrderId());
-        courseOrderMapper.updateByPrimaryKeySelective(update);//refundOrderMapper
         RefundOrder refundOrder = new RefundOrder();
         refundOrder.setRefundId(new SnowflakeIdWorker().nextId());
-        refundOrder.setAccountId(courseRoster.getAccountId());
+        refundOrder.setAccountId(courseOrder.getAccountId());
         refundOrder.setCourseId(classCourse.getCourseId());
         refundOrder.setOrderId(courseOrder.getOrderId());
         //剩余课程
-        int rest = courseRoster.getRosterCourseCountRest();
+        int rest = 0;
+        if (Objects.isNull(courseRoster)){
+            rest = classCourse.getCourseTotal()-classCourse.getCourseCurrent();
+        }else{
+            courseRosterMapper.delByCourseIdAndAccountId(courseRoster.getCourseId(),courseRoster.getAccountId());
+            CourseOrder update = new CourseOrder();
+            update.setOrderStatus(EnumCode.OrderStatus.ORDER_APPLY_REBACK.getValue());
+            update.setOrderId(courseOrder.getOrderId());
+            courseOrderMapper.updateByPrimaryKeySelective(update);//refundOrderMapper
+            rest = courseRoster.getRosterCourseCountRest();
+        }
         int courseTotal = courseOrder.getCourseTotal();//购买时的总课时
         BigDecimal orderCost = courseOrder.getOrderCost();//购买时的总费用
         BigDecimal amount = orderCost.divide(new BigDecimal(courseTotal),2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(rest));//退款金额

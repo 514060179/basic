@@ -199,7 +199,7 @@ public class CourseOrderController {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         ClassCourseWithBLOBs classCourse = (ClassCourseWithBLOBs)classCourseService.findOne(courseOrder.getCourseId(),user.getAccountId(),null);
         if (!classCourse.getBought()){
-            return ReturnParam.noHandlerFound("资源未购买!");
+            return ReturnParam.noHandlerFound("该课程未购买!");
         }
         //开始以及进行中的才可以退款
         if(EnumCode.CourseStatus.COURSE_ACTION.getValue().equals(classCourse.getCourseStatus()) || EnumCode.CourseStatus.COURSE_IN.getValue().equals(classCourse.getCourseStatus())){
