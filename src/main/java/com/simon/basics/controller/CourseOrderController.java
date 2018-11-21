@@ -196,13 +196,16 @@ public class CourseOrderController {
         if (Objects.isNull(courseOrder)){
             throw new NoHandlerFoundException("资源不存在!","资源不存在!",null);
         }
-        ClassCourse classCourse = classCourseService.findOne(courseOrder.getCourseId(),null,null);
         User user = (User) SecurityUtils.getSubject().getPrincipal();
+        ClassCourseWithBLOBs classCourse = (ClassCourseWithBLOBs)classCourseService.findOne(courseOrder.getCourseId(),user.getAccountId(),null);
+        if (!classCourse.getBought()){
+            return ReturnParam.noHandlerFound("资源未购买!");
+        }
         //开始以及进行中的才可以退款
         if(EnumCode.CourseStatus.COURSE_ACTION.getValue().equals(classCourse.getCourseStatus()) || EnumCode.CourseStatus.COURSE_IN.getValue().equals(classCourse.getCourseStatus())){
             //获取剩余课程
             CourseRoster courseRoster = courseRosterService.findByCourseIdAndAccountId(classCourse.getCourseId(),user.getAccountId());
-            if (courseRoster.getRosterCourseCountRest()<=0){
+            if (courseRoster!=null&&courseRoster.getRosterCourseCountRest()<=0){
                 return ReturnParam.courseNoAllowReback();
             }
             return ReturnParam.success(courseOrderService.applyback(classCourse,courseOrder,courseRoster));
