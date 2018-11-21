@@ -108,6 +108,7 @@
     <!--级别顺序trace-debug-info-warn-error-fetal-->
     <root level="${log.level}">
         <appender-ref ref="CONSOLE" />
+        <appender-ref ref="WARN" />
         <appender-ref ref="ERROR" />
         <appender-ref ref="INFO" />
     </root>
