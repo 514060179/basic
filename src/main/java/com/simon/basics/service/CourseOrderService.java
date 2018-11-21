@@ -68,4 +68,13 @@ public interface CourseOrderService {
      * @return
      */
     RefundOrder applyback(ClassCourse classCourse, CourseOrder courseOrder, CourseRoster courseRoster);
+
+
+    /**
+     * 保存微信支付url
+     * @param orderId
+     * @param wechatUrl
+     * @return
+     */
+    int updateWechatUrl(Long orderId,String wechatUrl);
 }

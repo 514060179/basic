@@ -17,6 +17,7 @@ import com.simon.basics.qianying.pay.tools.MD5;
 import com.simon.basics.service.ClassCourseService;
 import com.simon.basics.service.CourseOrderService;
 import com.simon.basics.service.CourseRosterService;
+import com.simon.basics.threadpool.PayOrderService;
 import com.simon.basics.util.JSONUtil;
 import com.simon.basics.util.SnowflakeIdWorker;
 import io.swagger.annotations.Api;
@@ -56,7 +57,8 @@ public class CourseOrderController {
     private CourseRosterService courseRosterService;
     @Autowired
     private QianyingPayService qianyingPayService;
-
+    @Autowired
+    private PayOrderService payOrderService;
     @Autowired
     private WechatConfig wechatConfig;
 
@@ -177,7 +179,7 @@ public class CourseOrderController {
         try {
             WxPayUnifiedOrderResult wxPayUnifiedOrderResult = wxPayService.unifiedOrder(request);
 //            wxPayUnifiedOrderResult.get
-            System.out.println(wxPayUnifiedOrderResult);
+            payOrderService.wechatPay(orderId,wxPayUnifiedOrderResult.getCodeURL());
             return ReturnParam.success("succeess",wxPayUnifiedOrderResult.getCodeURL());
         } catch (WxPayException e) {
             e.printStackTrace();

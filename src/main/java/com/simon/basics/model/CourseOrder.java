@@ -23,23 +23,33 @@ public class CourseOrder {
     private String orderStatus;
     @ApiModelProperty(value = "支付金额")
     private BigDecimal orderCost;
-    @ApiModelProperty(value = "支付状态",hidden = true)
+    @ApiModelProperty(value = "支付状态")
     private String orderPayStatus;
     @ApiModelProperty(value = "支付状态",hidden = true)
     private String orderPayWay;
-    @ApiModelProperty(value = "创建时间",hidden = true)
+    @ApiModelProperty(value = "扫码支付url")
+    private String wechatPayUrl;
+    @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "更新时间",hidden = true)
+    @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 
-    @ApiModelProperty(value = "支付时间",hidden = true)
+    @ApiModelProperty(value = "支付时间")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date orderPayTime;
 
     @ApiModelProperty(value = "筛选条件:日期.格式:2018/10")
     private String[] date;
+
+    public String getWechatPayUrl() {
+        return wechatPayUrl;
+    }
+
+    public void setWechatPayUrl(String wechatPayUrl) {
+        this.wechatPayUrl = wechatPayUrl;
+    }
 
     public Date getOrderPayTime() {
         return orderPayTime;

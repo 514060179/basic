@@ -7,6 +7,7 @@ import com.github.binarywang.wxpay.util.SignUtils;
 import com.simon.basics.config.WechatConfig;
 import com.simon.basics.model.CourseOrder;
 import com.simon.basics.service.CourseOrderService;
+import com.simon.basics.threadpool.PayOrderService;
 import com.simon.basics.util.JSONUtil;
 import io.swagger.annotations.Api;
 import org.apache.commons.io.IOUtils;
@@ -34,6 +35,9 @@ public class CallbackController {
 
     @Autowired
     private CourseOrderService courseOrderService;
+
+    @Autowired
+    private PayOrderService payOrderService;
 
     @Autowired
     private WechatConfig wechatConfig;
@@ -112,26 +116,14 @@ public class CallbackController {
         logger.info("======微信支付回调======");
         String xmlResult = IOUtils.toString(request.getInputStream(), request.getCharacterEncoding());
         logger.warn("响应参数：{}",xmlResult);
-        logger.error("响应参数：{}",xmlResult);
         WxPayOrderNotifyResult params = WxPayOrderNotifyResult.fromXML(xmlResult);
         //校验结果是否成功
         if (!"SUCCESS".equalsIgnoreCase(params.getResultCode())) {
             logger.error("returnCode={},resultCode={},errCode={},errCodeDes={}", params.getReturnCode(), params.getResultCode(), params.getErrCode(), params.getErrCodeDes());
             return WxPayNotifyResponse.fail("支付失败!");
         }
-//        WxPayService wxPayService = new WxPayServiceImpl();
-//        WxPayConfig wxPayConfig = new WxPayConfig();
-//        wxPayConfig.setMchId(wechatConfig.getMchId());
-//        wxPayConfig.setAppId(wechatConfig.getAppId());
-//        wxPayConfig.setKeyPath(wechatConfig.getCertLocalPath());//证书位置
-//        wxPayConfig.setMchKey(wechatConfig.getMchKey());
-//        wxPayConfig.setNotifyUrl(wechatConfig.getNotifyUrl());//回调地址
-//        wxPayConfig.setTradeType("NATIVE");//交易类型
-//        wxPayService.setConfig(wxPayConfig);
-//        wxPayService.parseOrderNotifyResult(xmlResult);
 
         logger.warn("微信支付回调参数：{}",JSONUtil.objectToJson(params));
-        logger.error("微信支付回调参数：{}",JSONUtil.objectToJson(params));
         if (!SignUtils.checkSign(params,null,wechatConfig.getMchKey())){
             return WxPayNotifyResponse.fail("签名验证失败!");
         }
@@ -139,12 +131,13 @@ public class CallbackController {
         String orderNo = params.getOutTradeNo();
         CourseOrder courseOrder = courseOrderService.findOneByOrderId(orderId);
         if (!Objects.isNull(courseOrder)){
-            if (courseOrderService.paySuccess(orderId,orderNo,"")>0){
-                logger.info("======微信支付回调成功======");
-                return WxPayNotifyResponse.success("回调成功！");
-            }
+//            if (courseOrderService.paySuccess(orderId,orderNo,"")>0){
+//                logger.info("======微信支付回调成功======");
+//                return WxPayNotifyResponse.success("回调成功！");
+//            }
+            payOrderService.paySuccess(orderId,orderNo,"");
+            return WxPayNotifyResponse.success("回调成功！");
         }
-        logger.info("======微信支付回调失败======");
         logger.error("======微信支付回调失败======");
         return WxPayNotifyResponse.fail("回调失败!");
     }

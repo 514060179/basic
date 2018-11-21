@@ -136,4 +136,11 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         refundOrderMapper.insertSelective(refundOrder);
         return refundOrder;
     }
+    @Override
+    public int updateWechatUrl(Long orderId,String wechatUrl) {
+        CourseOrder courseOrder = new CourseOrder();
+        courseOrder.setOrderId(orderId);
+        courseOrder.setWechatPayUrl(wechatUrl);
+        return courseOrderMapper.updateByPrimaryKeySelective(courseOrder);
+    }
 }

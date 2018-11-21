@@ -567,3 +567,7 @@ ALTER TABLE `simon`.`user`
 -- 20181117
 ALTER TABLE `simon`.`course_order`
   ADD COLUMN `order_name` VARCHAR(200) NULL COMMENT '订单名称' AFTER `order_no`;
+
+-- 20181121
+ALTER TABLE `simon`.`course_order`
+  ADD COLUMN `wechat_pay_url` VARCHAR(200) NULL COMMENT '微信支付url' AFTER `order_cost`;
