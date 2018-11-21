@@ -172,9 +172,9 @@ public class ClassCourseController {
     @ApiOperation("老师添加串课名单")
     public ReturnParam<List<CourseRosterAttendance>> additional(@RequestParam Long courseId, @RequestParam Long accountId, @RequestParam int rosterSeatX, @RequestParam int rosterSeatY) {
         //查询是否有资格
-        User user = (User) SecurityUtils.getSubject().getPrincipal();//查找当前课程是否开始(老师是否签到)
+//        User user = (User) SecurityUtils.getSubject().getPrincipal();//查找当前课程是否开始(老师是否签到)
 
-        ClassCourseWithBLOBs classCourse = (ClassCourseWithBLOBs)classCourseService.findOne(courseId, accountId,user.getAccountId());
+        ClassCourseWithBLOBs classCourse = (ClassCourseWithBLOBs)classCourseService.findOne(courseId, accountId,null);
         RosterAttendance rosterAttendance = classCourseService.findTeacherRosterAttendance(courseId, classCourse.getCourseCurrent());
         if (Objects.isNull(rosterAttendance)) {
             logger.warn("课程courseId={},courseCurrent={}未开始", courseId, classCourse.getCourseCurrent());
