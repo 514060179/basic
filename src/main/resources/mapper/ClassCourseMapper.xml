@@ -386,9 +386,6 @@
             </if>
         </set>
         where course_id = #{courseId,jdbcType=BIGINT}
-        <if test="accountId != null">
-            and account_id = #{accountId,jdbcType=BIGINT}
-        </if>
     </update>
     <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.simon.basics.model.ClassCourseWithBLOBs">
     update class_course
