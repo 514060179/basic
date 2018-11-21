@@ -173,7 +173,8 @@ public class ClassCourseServiceimpl implements ClassCourseService {
             rosterIncomeInsert.setAverageHour(averageHourCost);//收费单位
 
             if (actualNumber > classCourse.getExceedNum()) {//提成
-                averageHourCost = averageHourCost.add(classCourse.getExtraCharge());
+                int exceed = actualNumber-classCourse.getExceedNum();
+                averageHourCost = averageHourCost.add(classCourse.getExtraCharge().multiply(new BigDecimal(exceed)));
             }
             rosterIncomeInsert.setAverageHourCost(classCourse.getAverageHourCost());//每个收费单位收取费用
             rosterIncomeInsert.setExceedNum(classCourse.getExceedNum());//超过人数提成
