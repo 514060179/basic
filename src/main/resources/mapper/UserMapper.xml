@@ -242,7 +242,7 @@
         AND a.account_id = #{accountId,jdbcType=BIGINT}
       </if>
       <if test="name != null" >
-        AND u.NAME like concat('%',#{name,jdbcType=VARCHAR},'%')
+        AND u.`name` like concat('%',#{name,jdbcType=VARCHAR},'%')
       </if>
       <if test="sex != null" >
         AND u.sex = #{sex,jdbcType=CHAR}
@@ -257,10 +257,10 @@
         AND u.birthday = #{birthday,jdbcType=DATE}
       </if>
       <if test="phone != null" >
-        AND u.phone = #{phone,jdbcType=VARCHAR}
+        AND u.phone like concat('%',#{phone,jdbcType=VARCHAR},'%')
       </if>
       <if test="cardNum != null" >
-        AND u.card_num = #{cardNum,jdbcType=VARCHAR}
+        AND u.card_num like concat('%',#{cardNum,jdbcType=VARCHAR},'%')
       </if>
       <if test="address != null" >
         AND u.address = #{address,jdbcType=VARCHAR}
