@@ -32,32 +32,22 @@
   <select id="findByCondition" resultMap="BaseResultMap" parameterType="com.simon.basics.model.RosterAttendance" >
     select
     <include refid="Column_List" />
-    FROM roster_attendance ra
-    INNER JOIN course_order co ON ra.`course_id`=co.`course_id` AND co.`account_id`=#{accountId,jdbcType=BIGINT} AND ra.attend_type='2'
-    LEFT JOIN roster_attendance ra1 ON ra.course_id=ra1.course_id AND ra1.attend_type='1'
-    <where>
-      <if test="courseId != null" >
-        and ra.course_id = #{courseId,jdbcType=BIGINT}
-      </if>
-      <if test="accountId != null" >
-        and ra1.account_id = #{accountId,jdbcType=BIGINT}
-      </if>
-      <if test="attendSectionNum != null" >
-        and ra.attend_section_num = #{attendSectionNum,jdbcType=INTEGER}
-      </if>
-      <if test="additionalSeatX != null" >
-        and ra.additional_seat_x = #{additionalSeatX,jdbcType=INTEGER}
-      </if>
-      <if test="additionalSeatY != null" >
-        and ra.additional_seat_y = #{additionalSeatY,jdbcType=INTEGER}
-      </if>
-      <if test="attendName != null" >
-        and ra.attend_name = #{attendName,jdbcType=VARCHAR}
-      </if>
-      <if test="attendRemark != null" >
-        and ra.attend_remark = #{attendRemark,jdbcType=VARCHAR}
-      </if>
-    </where>
+    FROM
+    (SELECT
+    *
+    FROM
+    roster_attendance
+    WHERE course_id = #{courseId,jdbcType=BIGINT}
+    AND attend_type = '2') ra
+    LEFT JOIN
+    (SELECT
+    course_id,
+    attend_type,
+    attend_section_num
+    FROM
+    roster_attendance
+    WHERE course_id = #{courseId,jdbcType=BIGINT}
+    AND `account_id` = #{accountId,jdbcType=BIGINT}) ra1 ON ra.course_id=ra1.course_id AND ra.attend_section_num=ra1.attend_section_num
   </select>
   <select id="selectByCourseAndNum" resultMap="BaseResultMap">
     select
