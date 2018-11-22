@@ -181,7 +181,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
             rosterIncomeInsert.setExceedNum(classCourse.getExceedNum());//超过人数提成
             rosterIncomeInsert.setIncomeAmount(averageHourCost);//收入金额
         } else if (EnumCode.TeacherChargeType.CHARGE_TYPE_PERCENTAGE.getValue().equals(teacherChargeType)) {//按提成
-            rosterIncomeInsert.setIncomeAmount(classCourse.getPercentage().multiply(averageCourse).setScale(2, BigDecimal.ROUND_HALF_UP));//收入金额
+            rosterIncomeInsert.setIncomeAmount(classCourse.getPercentage().multiply(averageCourse).multiply(new BigDecimal(actualNumber)).setScale(2, BigDecimal.ROUND_HALF_UP));//收入金额
         }
         //更新
         int i = rosterAttendanceMapper.updateByCourseAndNum(rosterAttendanceUpdate);
