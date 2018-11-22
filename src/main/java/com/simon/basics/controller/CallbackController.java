@@ -6,7 +6,9 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.util.SignUtils;
 import com.simon.basics.config.WechatConfig;
 import com.simon.basics.model.CourseOrder;
+import com.simon.basics.model.OperateLog;
 import com.simon.basics.service.CourseOrderService;
+import com.simon.basics.threadpool.OperateLogPool;
 import com.simon.basics.threadpool.PayOrderService;
 import com.simon.basics.util.JSONUtil;
 import io.swagger.annotations.Api;
@@ -41,6 +43,9 @@ public class CallbackController {
 
     @Autowired
     private WechatConfig wechatConfig;
+
+    @Autowired
+    private OperateLogPool operateLogPool;
 
 //    @RequestMapping("alipay/callback")
 //    public void alipay(HttpServletRequest request, HttpServletResponse response) throws AlipayApiException {
@@ -113,20 +118,38 @@ public class CallbackController {
 
     @RequestMapping("wechat/callback")
     public String wechat(HttpServletRequest request, HttpServletResponse response) throws IOException, WxPayException {
+        OperateLog operateLog = new OperateLog();
+
+        // 获取请求地址
+        String requestUrl = request.getRequestURI();
+        operateLog.setReqeustUrl(requestUrl);
+        // 请求所在类
+        String className = this.getClass().getName();
+        operateLog.setClassName(className);
+        String method = "wechat";
+        operateLog.setMethod(method);
         logger.info("======微信支付回调======");
         String xmlResult = IOUtils.toString(request.getInputStream(), request.getCharacterEncoding());
+        operateLog.setDescribe(xmlResult);
         logger.warn("响应参数：{}",xmlResult);
         WxPayOrderNotifyResult params = WxPayOrderNotifyResult.fromXML(xmlResult);
+        operateLog.setParam(JSONUtil.objectToJson(params));
+        operateLog.setStatus("fail");
         //校验结果是否成功
         if (!"SUCCESS".equalsIgnoreCase(params.getResultCode())) {
+            operateLog.setRemark("支付失败！");
+            operateLogPool.addLog(operateLog);
             logger.error("returnCode={},resultCode={},errCode={},errCodeDes={}", params.getReturnCode(), params.getResultCode(), params.getErrCode(), params.getErrCodeDes());
             return WxPayNotifyResponse.fail("支付失败!");
         }
 
         logger.warn("微信支付回调参数：{}",JSONUtil.objectToJson(params));
         if (!SignUtils.checkSign(params,null,wechatConfig.getMchKey())){
+            operateLog.setRemark("签名验证失败！");
+            operateLogPool.addLog(operateLog);
             return WxPayNotifyResponse.fail("签名验证失败!");
         }
+
         Long orderId = Long.parseLong(params.getAttach());
         String orderNo = params.getOutTradeNo();
         CourseOrder courseOrder = courseOrderService.findOneByOrderId(orderId);
@@ -135,9 +158,18 @@ public class CallbackController {
 //                logger.info("======微信支付回调成功======");
 //                return WxPayNotifyResponse.success("回调成功！");
 //            }
+            if (params.getTotalFee()*100!=courseOrder.getOrderCost().intValue()){
+                String remark = String.format("支付金额与订单金额不一致,支付金额={"+params.getTotalFee()*100+"},订单金额={"+courseOrder.getOrderCost().intValue()+"}");
+                operateLog.setRemark(remark);
+                logger.error("支付金额与订单金额不一致,支付金额={},订单金额={}",params.getTotalFee()*100,courseOrder.getOrderCost().intValue());
+            }
             payOrderService.paySuccess(orderId,orderNo,"");
+            operateLog.setStatus("SUCCESS");
+            operateLogPool.addLog(operateLog);
             return WxPayNotifyResponse.success("回调成功！");
         }
+        operateLog.setRemark("微信回调失败！");
+        operateLogPool.addLog(operateLog);
         logger.error("======微信支付回调失败======");
         return WxPayNotifyResponse.fail("回调失败!");
     }

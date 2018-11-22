@@ -43,4 +43,18 @@ public class TaskPoolConfig {
         executor.setAwaitTerminationSeconds(60);
         return executor;
     }
+
+    @Bean("operateLogExecutor")
+    public Executor operateLogExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(20);
+        executor.setMaxPoolSize(20);
+        executor.setQueueCapacity(250);
+        executor.setKeepAliveSeconds(60);
+        executor.setThreadNamePrefix("operateLogExecutor-");
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        executor.setWaitForTasksToCompleteOnShutdown(true);
+        executor.setAwaitTerminationSeconds(600);
+        return executor;
+    }
 }
