@@ -158,10 +158,10 @@ public class CallbackController {
 //                logger.info("======微信支付回调成功======");
 //                return WxPayNotifyResponse.success("回调成功！");
 //            }
-            if (params.getTotalFee()*100!=courseOrder.getOrderCost().intValue()){
-                String remark = String.format("支付金额与订单金额不一致,支付金额={"+params.getTotalFee()*100+"},订单金额={"+courseOrder.getOrderCost().intValue()+"}");
+            if (params.getTotalFee()!=courseOrder.getOrderCost().intValue()*100){
+                String remark = String.format("支付金额与订单金额不一致,支付金额={"+params.getTotalFee()+"},订单金额={"+courseOrder.getOrderCost().intValue()*100+"}");
                 operateLog.setRemark(remark);
-                logger.error("支付金额与订单金额不一致,支付金额={},订单金额={}",params.getTotalFee()*100,courseOrder.getOrderCost().intValue());
+                logger.error("支付金额与订单金额不一致,支付金额={},订单金额={}",params.getTotalFee(),courseOrder.getOrderCost().intValue()*100);
             }
             payOrderService.paySuccess(orderId,orderNo,"");
             operateLog.setStatus("SUCCESS");
