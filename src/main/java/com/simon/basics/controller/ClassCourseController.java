@@ -7,6 +7,7 @@ import com.simon.basics.model.*;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.service.ClassCourseService;
 import com.simon.basics.service.SeatLayoutService;
+import com.simon.basics.util.SmsUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -165,6 +166,12 @@ public class ClassCourseController {
             return ReturnParam.courseNotBeginning();
         }
         classCourseService.sign(courseId,studentId,courseCurrent);
+        User user = classCourseWithBLOBs.getUser();
+        String phone = user.getPhone();
+        String msg = user.getParentName()+"您的孩子"+user.getName()+"已来上课";
+        new Thread(()->
+                SmsUtil.sendSMS(phone,msg)
+        ).start();
         return ReturnParam.success();
     }
 
@@ -229,8 +236,8 @@ public class ClassCourseController {
             }
         }
         classCourseService.courseEnd(classCourse, actualNumber, mustNumber, total);
-        //发送短信
-        classCourseService.endCourseSendMsg(classCourseService.getAttendanceList(courseId, classCourse.getCourseCurrent()));
+//        //发送短信
+//        classCourseService.endCourseSendMsg(classCourseService.getAttendanceList(courseId, classCourse.getCourseCurrent()));
         return ReturnParam.success();
     }
     @GetMapping("courseCancel")
