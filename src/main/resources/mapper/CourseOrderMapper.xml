@@ -53,7 +53,7 @@
         from course_order
         where order_no = #{orderNo,jdbcType=VARCHAR}
     </select>
-    <select id="findListByCondition" resultMap="UnionResultMap" parameterType="com.simon.basics.model.CourseOrder">
+    <select id="findListByCondition" resultMap="UnionResultMap" parameterType="com.simon.basics.model.CourseOrderWithBLOBs">
         select
         <include refid="Union_Column_List"/>
         <if test="accountId != null">

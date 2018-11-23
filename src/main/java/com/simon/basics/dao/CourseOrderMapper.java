@@ -1,6 +1,7 @@
 package com.simon.basics.dao;
 
 import com.simon.basics.model.CourseOrder;
+import com.simon.basics.model.CourseOrderWithBLOBs;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface CourseOrderMapper {
 
     CourseOrder selectByOrderNo(String orderNo);
 
-    List<CourseOrder> findListByCondition(CourseOrder record);
+    List<CourseOrder> findListByCondition(CourseOrderWithBLOBs record);
 
     int updateByPrimaryKeySelective(CourseOrder record);
 

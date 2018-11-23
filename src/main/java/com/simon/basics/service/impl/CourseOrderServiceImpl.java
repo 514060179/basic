@@ -34,7 +34,7 @@ public class CourseOrderServiceImpl implements CourseOrderService {
     private RefundOrderMapper refundOrderMapper;
 
     @Override
-    public PageInfo<CourseOrder> getListByPage(CourseOrder courseOrder, int pageNum, int pageSize) {
+    public PageInfo<CourseOrder> getListByPage(CourseOrderWithBLOBs courseOrder, int pageNum, int pageSize) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if (EnumCode.UserType.TYPE_STUDENT.getValue().equals(user.getType())){//学生 查询自己
             courseOrder.setAccountId(user.getAccountId());
@@ -67,7 +67,7 @@ public class CourseOrderServiceImpl implements CourseOrderService {
     @Override
     public CourseOrder findOneByCourseId(Long courseId,Long accountId) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        CourseOrder courseOrder = new CourseOrder();
+        CourseOrderWithBLOBs courseOrder = new CourseOrderWithBLOBs();
         courseOrder.setCourseId(courseId);
         if (EnumCode.UserType.TYPE_STUDENT.getValue().equals(user.getType())){//学生 查询自己
             courseOrder.setAccountId(user.getAccountId());
