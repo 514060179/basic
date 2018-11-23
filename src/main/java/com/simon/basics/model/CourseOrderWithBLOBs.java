@@ -1,5 +1,6 @@
 package com.simon.basics.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -29,6 +30,17 @@ public class CourseOrderWithBLOBs extends CourseOrder {
     private Long seatId;
     @ApiModelProperty(value = "课程价格")
     private BigDecimal courseCost;
+
+    @JsonIgnore
+    private String keyword;
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
 
     public Boolean getChooseSeat() {
         return chooseSeat;

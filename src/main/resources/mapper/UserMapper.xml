@@ -259,6 +259,14 @@
       <if test="username != null" >
         AND a.username like concat('%',#{username,jdbcType=VARCHAR},'%')
       </if>
+      <if test="keyword != null" >
+        AND (
+        a.username like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+        or u.phone like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+        or u.`name` like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+        or u.`school_number` like concat('%',#{keyword,jdbcType=VARCHAR},'%')
+        )
+      </if>
       <if test="birthday != null" >
         AND u.birthday = #{birthday,jdbcType=DATE}
       </if>
