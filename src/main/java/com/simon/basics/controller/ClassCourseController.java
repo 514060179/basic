@@ -168,7 +168,7 @@ public class ClassCourseController {
         classCourseService.sign(courseId,studentId,courseCurrent);
         User user = classCourseWithBLOBs.getUser();
         String phone = user.getPhone();
-        String msg = user.getParentName()+"您的孩子"+user.getName()+"已来上课";
+        String msg = (user.getParentName()==null?"":user.getParentName())+"您的孩子"+user.getName()+"已来上课";
         new Thread(()->
                 SmsUtil.sendSMS(phone,msg)
         ).start();
