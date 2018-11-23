@@ -12,7 +12,7 @@ public class Account implements Serializable{
     @ApiModelProperty(value = "账户id",hidden = true)
     private Long accountId;
 
-    @ApiModelProperty(value = "账户用户名",hidden = true)
+    @ApiModelProperty(value = "账户用户名")
     private String username;
 
     @ApiModelProperty(value = "账户密码",hidden = true)

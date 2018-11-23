@@ -3,6 +3,7 @@ package com.simon.basics.controller;
 import com.github.pagehelper.PageInfo;
 import com.simon.basics.model.RosterIncome;
 import com.simon.basics.model.RosterIncomeWithOther;
+import com.simon.basics.model.User;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.service.RosterIncomeService;
 import io.swagger.annotations.Api;
@@ -27,7 +28,8 @@ public class IncomeController {
     private RosterIncomeService rosterIncomeService;
     @PostMapping("list")
     @ApiOperation("获取每节课收入情况")
-    public ReturnParam<PageInfo<RosterIncomeWithOther>> list(RosterIncomeWithOther rosterIncomeWithOther, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10")Integer pageSize){
+    public ReturnParam<PageInfo<RosterIncomeWithOther>> list(RosterIncomeWithOther rosterIncomeWithOther, User user,@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10")Integer pageSize){
+        rosterIncomeWithOther.setUser(user);
         return ReturnParam.success(rosterIncomeService.findListByPage(rosterIncomeWithOther,pageNum,pageSize));
     }
 }

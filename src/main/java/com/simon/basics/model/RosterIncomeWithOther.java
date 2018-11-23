@@ -25,6 +25,7 @@ public class RosterIncomeWithOther extends RosterIncome{
     @ApiModelProperty(value = "时间字符串")
     private String timeStr;
 
+    @ApiModelProperty(hidden = true)
     private User user;
 
     public User getUser() {

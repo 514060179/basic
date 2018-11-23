@@ -64,8 +64,8 @@ public class CourseOrderController {
 
     @PostMapping("list")
     @ApiOperation("查询订单列表")
-    public ReturnParam<PageInfo<CourseOrder>> list(CourseOrder courseOrder, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
-        return ReturnParam.success(courseOrderService.getListByPage(courseOrder,pageNum,pageSize));
+    public ReturnParam<PageInfo<CourseOrderWithBLOBs>> list(CourseOrderWithBLOBs courseOrderWithBLOBs,User user,@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
+        return ReturnParam.success(courseOrderService.getListByPage(courseOrderWithBLOBs,pageNum,pageSize));
     }
 
     @PostMapping("detail")

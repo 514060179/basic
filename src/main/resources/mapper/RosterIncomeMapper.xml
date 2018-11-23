@@ -261,6 +261,12 @@
       <if test="incomeSectionNum != null" >
         and ri.income_section_num = #{incomeSectionNum,jdbcType=INTEGER}
       </if>
+      <if test="courseName != null" >
+        and cc.course_name like concat('%',#{courseName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="user.name != null" >
+        and u.name like concat('%',#{user.name,jdbcType=VARCHAR},'%')
+      </if>
       <if test="incomeType != null" >
         and ri.income_type = #{incomeType,jdbcType=CHAR}
       </if>

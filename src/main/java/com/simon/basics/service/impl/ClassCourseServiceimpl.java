@@ -224,7 +224,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
         RosterAttendance rosterAttendanceInsert = new RosterAttendance();
         rosterAttendanceInsert.setCourseId(courseId);
         rosterAttendanceInsert.setAttendSectionNum(courseCurrent);
-        rosterAttendanceInsert.setAttendName("【第+" +courseCurrent+"节课签到】");
+        rosterAttendanceInsert.setAttendName("【第" +courseCurrent+"节课签到】");
         rosterAttendanceInsert.setAccountId(accountId);
         rosterAttendanceInsert.setAttendType(EnumCode.AttendType.ATTEND_TYPE_STUDENT.getValue());
         rosterAttendanceMapper.insertSelective(rosterAttendanceInsert);
