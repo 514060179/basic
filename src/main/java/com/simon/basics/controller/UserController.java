@@ -79,23 +79,39 @@ public class UserController {
         return ReturnParam.success("获取成功!");
     }
 
+    @PostMapping("sendChangePwdCode")
+    @ApiOperation(value = "修改密码发送验证码")
+    public ReturnParam sendChangePwdCode() {
+        String code = UtilToString.getRandomString(6);
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        String phone = user.getPhone();
+        jedisService.put(user.getType()+":"+phone, code, 180);
+        //发送验证码
+        new Thread(() -> {
+            if (!SmsUtil.sendSMS(phone,code)){
+                logger.error("发送验证码失败，tel={}",phone);
+            }
+        }).start();
+        return ReturnParam.success("获取成功!");
+    }
+
     @PostMapping("add")
     @ApiOperation(value = "添加用户（学生/教师） type=1 学生 type=2教师")
     public ReturnParam<User> add(User user, @Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！")
     @RequestParam String phone, @RequestParam(defaultValue = "1") String type, @RequestParam String name,
                            @RequestParam String username, @RequestParam String password,
-                           @RequestParam String verification,
+//                           @RequestParam String verification,
                            @Pattern(regexp = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$", message = "身份证号码格式有误！") @RequestParam(required = false) String cardNum) {
         //验证码验证
-        String code = jedisService.getString(phone);
-        if (StringUtils.isEmpty(code)) {
-            logger.warn("新增用户未获取验证码{}", phone);
-            return ReturnParam.noVerification();
-        }
-        if (!code.equals(verification)) {
-            logger.warn("新增用户{}验证码{}验证错误！", phone, verification);
-            return ReturnParam.noVerification();
-        }
+//        String code = jedisService.getString(phone);
+//        if (StringUtils.isEmpty(code)) {
+//            logger.warn("新增用户未获取验证码{}", phone);
+//            return ReturnParam.noVerification();
+//        }
+//        if (!code.equals(verification)) {
+//            logger.warn("新增用户{}验证码{}验证错误！", phone, verification);
+//            return ReturnParam.noVerification();
+//        }
         if (!Objects.isNull(user.getSchoolNumber())){
             if (!Objects.isNull(userService.findBySchoolNumber(user.getSchoolNumber()))){
                 logger.warn("重复学号!{}", user.getSchoolNumber());
@@ -113,17 +129,17 @@ public class UserController {
 
     @PostMapping("addManager")
     @ApiOperation(value = "新增管理员")
-    public ReturnParam<Account> addManager(@RequestParam String username,String name,@RequestParam String verification,@Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！") @RequestParam(required = false) String phone,@RequestParam String password, @Pattern(regexp = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$", message = "身份证号码格式有误！") @RequestParam String cardNum) {
+    public ReturnParam<Account> addManager(@RequestParam String username,String name,@Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！") @RequestParam(required = false) String phone,@RequestParam String password, @Pattern(regexp = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$", message = "身份证号码格式有误！") @RequestParam String cardNum) {
         //验证码验证
-        String code = jedisService.getString(phone);
-        if (StringUtils.isEmpty(code)) {
-            logger.warn("新增管理员未获取验证码{}", phone);
-            return ReturnParam.noVerification();
-        }
-        if (!code.equals(verification)) {
-            logger.warn("新增管理员{}验证码{}!={}验证错误！", phone, verification,code);
-            return ReturnParam.noVerification();
-        }
+//        String code = jedisService.getString(phone);
+//        if (StringUtils.isEmpty(code)) {
+//            logger.warn("新增管理员未获取验证码{}", phone);
+//            return ReturnParam.noVerification();
+//        }
+//        if (!code.equals(verification)) {
+//            logger.warn("新增管理员{}验证码{}!={}验证错误！", phone, verification,code);
+//            return ReturnParam.noVerification("验证错误！");
+//        }
         Account account = new Account();
         account.setUsername(username);
         account.setPassword(SaltEncryUtil.getMD5SaltString(username,password));
@@ -178,6 +194,25 @@ public class UserController {
         String password = SaltEncryUtil.getMD5SaltString(salt, newPassword);
 
         return ReturnParam.success(userService.updatePassword(accountId,password));
+    }
+    @PostMapping("updOwnPwd")
+    @ApiOperation(value = "管理员,教师,学生修改自己密码")
+    public ReturnParam updOwnPwd(@RequestParam String verification,@RequestParam String newPassword) throws MissingServletRequestParameterException {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        String salt = user.getUsername();
+        //验证码
+        String code = jedisService.getString(user.getType()+":"+user.getPhone());
+        if (Objects.isNull(code)){
+            logger.warn("用户修改密码未获取验证码{}", user.getPhone());
+            return ReturnParam.noVerification();
+        }
+        if (!code.equals(verification)){
+            logger.warn("用户修改密码验证码验证错误code={},verification={}", code,verification);
+            return ReturnParam.noVerification();
+        }
+        String password = SaltEncryUtil.getMD5SaltString(salt, newPassword);
+        SecurityUtils.getSubject().logout();
+        return ReturnParam.success(userService.updatePassword(user.getAccountId(),password));
     }
 
     @PostMapping("delete")

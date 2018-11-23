@@ -122,6 +122,9 @@ public class ReturnParam<T> extends CodeParam {
     public static ReturnParam noVerification(){
         return new ReturnParam(noVerification,noVerificationMsg,null);
     }
+    public static ReturnParam noVerification(String msg){
+        return new ReturnParam(noVerification,msg,null);
+    }
 
 
 
