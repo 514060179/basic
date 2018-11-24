@@ -162,12 +162,12 @@ public class CourseOrderController {
         // 微信统一下单请求对象
         WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
         request.setDeviceInfo("web");
-        request.setBody("测试固定金额0.01:"+courseOrder.getOrderName());
+        request.setBody(courseOrder.getOrderName());
         request.setDetail(courseOrder.getOrderName());
         request.setAttach(courseOrder.getOrderId()+"");
         request.setOutTradeNo(""+new SnowflakeIdWorker().nextId());
         request.setFeeType("CNY");//币种类型
-        request.setTotalFee(1);//总额,单位分
+        request.setTotalFee(courseOrder.getOrderCost().intValue()*100);//总额,单位分
         request.setSpbillCreateIp("127.0.0.1");
         request.setTimeStart(null);
         request.setTimeExpire(null);
