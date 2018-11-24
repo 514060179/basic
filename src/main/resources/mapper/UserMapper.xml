@@ -259,7 +259,7 @@
       <if test="username != null" >
         AND a.username like concat('%',#{username,jdbcType=VARCHAR},'%')
       </if>
-      <if test="keyword != null" >
+      <if test="keyword != null and keyword != ''" >
         AND (
         a.username like concat('%',#{keyword,jdbcType=VARCHAR},'%')
         or u.phone like concat('%',#{keyword,jdbcType=VARCHAR},'%')

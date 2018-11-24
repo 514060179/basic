@@ -267,7 +267,7 @@
       <if test="user.name != null" >
         and u.name like concat('%',#{user.name,jdbcType=VARCHAR},'%')
       </if>
-      <if test="user.keyword != null" >
+      <if test="user.keyword != null and user.keyword != ''" >
         and (
         u.name like concat('%',#{user.keyword,jdbcType=VARCHAR},'%')
         or cc.course_name like concat('%',#{user.keyword,jdbcType=VARCHAR},'%')

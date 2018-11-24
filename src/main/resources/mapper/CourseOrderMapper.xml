@@ -83,7 +83,7 @@
             <if test="name != null" >
                 AND u.`name` like concat('%',#{name,jdbcType=VARCHAR},'%')
             </if>
-            <if test="keyword != null" >
+            <if test="keyword != null  and keyword != ''" >
                 AND (
                 u.`name` like concat('%',#{keyword,jdbcType=VARCHAR},'%')
                 or co.order_no like concat('%',#{keyword,jdbcType=VARCHAR},'%')
