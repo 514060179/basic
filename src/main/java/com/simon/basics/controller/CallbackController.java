@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -158,7 +159,7 @@ public class CallbackController {
 //                logger.info("======微信支付回调成功======");
 //                return WxPayNotifyResponse.success("回调成功！");
 //            }
-            if (params.getTotalFee()!=courseOrder.getOrderCost().intValue()*100){
+            if (params.getTotalFee()!=courseOrder.getOrderCost().multiply(new BigDecimal(100)).intValue()){
                 String remark = String.format("支付金额与订单金额不一致,支付金额={"+params.getTotalFee()+"},订单金额={"+courseOrder.getOrderCost().intValue()*100+"}");
                 operateLog.setRemark(remark);
                 operateLog.setStatus("FAIL");
