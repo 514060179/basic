@@ -310,5 +310,6 @@
         and ri.update_time = #{updateTime,jdbcType=TIMESTAMP}
       </if>
     </where>
+    order by ri.create_time desc
   </select>
 </mapper>

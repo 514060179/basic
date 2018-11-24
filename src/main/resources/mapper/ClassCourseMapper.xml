@@ -158,6 +158,7 @@
                 AND cc.course_remark = #{classCourse.courseRemark,jdbcType=LONGVARCHAR}
             </if>
         </where>
+        order by cc.create_time desc
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

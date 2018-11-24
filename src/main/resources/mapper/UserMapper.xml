@@ -283,6 +283,7 @@
         AND a.deleted = #{deleted,jdbcType=BIT}
       </if>
     </where>
+    order by u.create_time desc
   </select>
 
   <select id="noChoiceSeatList" resultMap="BaseResultMap">
