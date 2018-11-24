@@ -211,8 +211,13 @@ public class UserController {
             return ReturnParam.noVerification();
         }
         String password = SaltEncryUtil.getMD5SaltString(salt, newPassword);
-        SecurityUtils.getSubject().logout();
-        return ReturnParam.success(userService.updatePassword(user.getAccountId(),password));
+        if (userService.updatePassword(user.getAccountId(),password)>0){
+            jedisService.remove(user.getType()+":"+user.getPhone());
+            SecurityUtils.getSubject().logout();
+            return ReturnParam.success();
+        }else {
+            return ReturnParam.sqlWritePrerequisiteException();
+        }
     }
 
     @PostMapping("delete")

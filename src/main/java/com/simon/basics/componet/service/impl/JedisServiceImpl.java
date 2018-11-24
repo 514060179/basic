@@ -158,6 +158,17 @@ public class JedisServiceImpl implements JedisService {
     }
 
     @Override
+    public long remove(String key) {
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            return jedis.del(key);
+        } finally {
+            returnResource(jedis);
+        }
+    }
+
+    @Override
     public String mapPut(String key, Map<String,String> map) {
         Jedis jedis = null;
         try {

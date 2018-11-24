@@ -31,6 +31,8 @@ public interface JedisService {
 
     boolean exists(String key);
 
+    long remove(String key);
+
     String mapPut(String key, Map<String,String> map);
 
     Long mapSet(String key,String field,String value);
