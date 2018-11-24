@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Objects;
 
@@ -167,7 +168,7 @@ public class CourseOrderController {
         request.setAttach(courseOrder.getOrderId()+"");
         request.setOutTradeNo(""+new SnowflakeIdWorker().nextId());
         request.setFeeType("CNY");//币种类型
-        request.setTotalFee(courseOrder.getOrderCost().intValue()*100);//总额,单位分
+        request.setTotalFee(courseOrder.getOrderCost().multiply(new BigDecimal(100)).intValue());//总额,单位分
         request.setSpbillCreateIp("127.0.0.1");
         request.setTimeStart(null);
         request.setTimeExpire(null);
