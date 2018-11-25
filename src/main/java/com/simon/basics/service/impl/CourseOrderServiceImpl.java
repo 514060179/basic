@@ -54,7 +54,9 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         courseOrder.setAccountId(user.getAccountId());
         courseOrder.setCourseId(classCourse.getCourseId());
         courseOrder.setOrderId(new SnowflakeIdWorker().nextId());
-        courseOrder.setOrderCost(classCourse.getCourseCost());
+//        courseOrder.setOrderCost(classCourse.getCourseCost());
+        BigDecimal adv = classCourse.getCourseCost().divide(new BigDecimal(classCourse.getCourseTotal()),2, BigDecimal.ROUND_HALF_UP);
+        courseOrder.setOrderCost(adv.multiply(new BigDecimal(classCourse.getCourseTotal()-classCourse.getCourseCurrent())));
         courseOrder.setCourseTotal(classCourse.getCourseTotal()-classCourse.getCourseCurrent());
         courseOrder.setOrderName(classCourse.getCourseName());
         int i = courseOrderMapper.insertSelective(courseOrder);
