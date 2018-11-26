@@ -7,6 +7,7 @@ import com.simon.basics.model.*;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.service.ClassCourseService;
 import com.simon.basics.service.SeatLayoutService;
+import com.simon.basics.service.UserService;
 import com.simon.basics.util.SmsUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,6 +45,9 @@ public class ClassCourseController {
 
     @Autowired
     private SeatLayoutService seatLayoutService;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("list")
     @ApiOperation("课程列表")
@@ -166,7 +170,7 @@ public class ClassCourseController {
             return ReturnParam.courseNotBeginning();
         }
         classCourseService.sign(courseId,studentId,courseCurrent);
-        User user = classCourseWithBLOBs.getUser();
+        User user = userService.findByAccountId(studentId);
         String phone = user.getPhone();
         String msg = (user.getParentName()==null?"":user.getParentName())+"您的孩子"+user.getName()+"已来上课";
         new Thread(()->

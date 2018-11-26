@@ -102,6 +102,7 @@
                 AND co.order_cost=#{orderCost,jdbcType=DECIMAL}
             </if>
         </where>
+        order by co.update_time desc
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from course_order
