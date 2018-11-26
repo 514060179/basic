@@ -165,7 +165,7 @@ public class CallbackController {
                 operateLog.setStatus("FAIL");
                 logger.error("支付金额与订单金额不一致,支付金额={},订单金额={}",params.getTotalFee(),courseOrder.getOrderCost().intValue()*100);
                 operateLogPool.addLog(operateLog);
-                return WxPayNotifyResponse.fail("处理失败!");
+//                return WxPayNotifyResponse.fail("处理失败!");
             }
             payOrderService.paySuccess(orderId,orderNo,"");
             operateLog.setStatus("SUCCESS");
