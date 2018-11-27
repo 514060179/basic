@@ -40,4 +40,12 @@ public interface RefundOrderService {
      * @return
      */
     RefundOrder findOneByOrderId(Long orderId);
+
+    /**
+     * 取消退款
+     * @param refundId
+     * @param orderId
+     * @return
+     */
+    int cancel(Long refundId,Long orderId);
 }

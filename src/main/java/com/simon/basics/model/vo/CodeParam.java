@@ -58,6 +58,10 @@ public class CodeParam {
 
     public final static String orderHadPayMsg = "订单已支付或已经取消!";
 
+    public final static String rebacked  = "213";
+
+    public final static String rebackedMsg = "订单已退款！";
+
     public final static String missParam = "300";
 
     public final static String missParamMsg = "缺少参数！";

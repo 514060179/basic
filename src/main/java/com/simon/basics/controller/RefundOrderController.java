@@ -2,6 +2,7 @@ package com.simon.basics.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.simon.basics.model.CourseRoster;
+import com.simon.basics.model.EnumCode;
 import com.simon.basics.model.RefundOrder;
 import com.simon.basics.model.RefundOrderWithUser;
 import com.simon.basics.model.vo.ReturnParam;
@@ -49,6 +50,12 @@ public class RefundOrderController {
     @PostMapping("confirm")
     public ReturnParam confirm(@RequestParam Long refundId, BigDecimal actualAmount){
         RefundOrder refundOrder = refundOrderService.findOneByKey(refundId);
+        if (Objects.isNull(refundOrder)){
+            return ReturnParam.noHandlerFound("未找到资源!");
+        }
+        if(EnumCode.OrderStatus.ORDER_REBACK.getValue().equals(refundOrder.getRefundStatus())){
+            return ReturnParam.rebacked();
+        }
         CourseRoster courseRoster = courseRosterService.findByCourseIdAndAccountId(refundOrder.getCourseId(),refundOrder.getAccountId());
         if (Objects.isNull(refundOrder)){
             logger.warn("找不到资源：refundId=" + refundId);
@@ -62,6 +69,17 @@ public class RefundOrderController {
     public ReturnParam<RefundOrder> detail(@RequestParam Long orderId){
         return ReturnParam.success(refundOrderService.findOneByOrderId(orderId));
     }
-
+    @ApiOperation("取消退款")
+    @PostMapping("cancel")
+    public ReturnParam cancel(@RequestParam Long refundId){
+        RefundOrder refundOrder = refundOrderService.findOneByKey(refundId);
+        if (Objects.isNull(refundOrder)){
+            return ReturnParam.noHandlerFound("未找到资源!");
+        }
+        if(EnumCode.OrderStatus.ORDER_REBACK.getValue().equals(refundOrder.getRefundStatus())){
+            return ReturnParam.rebacked();
+        }
+        return ReturnParam.success(refundOrderService.cancel(refundId,refundOrder.getOrderId()));
+    }
 
 }

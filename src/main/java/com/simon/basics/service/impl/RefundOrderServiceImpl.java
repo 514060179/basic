@@ -83,4 +83,19 @@ public class RefundOrderServiceImpl implements RefundOrderService {
         }
         return refundOrderMapper.findOneByOrderId(orderId,accountId);
     }
+
+    @Override
+    public int cancel(Long refundId, Long orderId) {
+        //1删除退款订单
+        int i = refundOrderMapper.deleteByPrimaryKey(refundId);
+        //2更新订单状态
+        CourseOrder courseOrder = new CourseOrder();
+        courseOrder.setOrderId(orderId);
+        courseOrder.setOrderStatus(EnumCode.OrderStatus.ORDER_PAID.getValue());
+        i += courseOrderMapper.updateByPrimaryKeySelective(courseOrder);
+        if (i != 2) {
+            throw new RuntimeException("取消订单失败！");
+        }
+        return i;
+    }
 }

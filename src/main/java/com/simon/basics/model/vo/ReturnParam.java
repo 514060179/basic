@@ -69,6 +69,9 @@ public class ReturnParam<T> extends CodeParam {
     public static ReturnParam orderHadPay(){
         return new ReturnParam(orderHadPay,orderHadPayMsg,null);
     }
+    public static ReturnParam rebacked(){
+        return new ReturnParam(rebacked,rebackedMsg,null);
+    }
 
     public static ReturnParam courseNotEnoughOrNotHad(){
         return new ReturnParam(courseNotEnoughOrNotHad,courseNotEnoughOrNotHadMsg,null);
