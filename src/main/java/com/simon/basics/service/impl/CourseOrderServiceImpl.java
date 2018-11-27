@@ -135,7 +135,7 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         BigDecimal orderCost = courseOrder.getOrderCost();//购买时的总费用
         BigDecimal amount = orderCost.divide(new BigDecimal(courseTotal),2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(rest));//退款金额
         refundOrder.setAmount(amount);
-        refundOrder.setCourseAmount(orderCost);//课程金额
+        refundOrder.setCourseAmount(orderCost);//课程支付金额
         refundOrder.setCourseTotal(courseTotal);
         refundOrder.setRefundStatus(EnumCode.OrderStatus.ORDER_APPLY_REBACK.getValue());
         refundOrder.setOrderPayWay(courseOrder.getOrderPayWay());
@@ -150,5 +150,10 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         courseOrder.setOrderId(orderId);
         courseOrder.setWechatPayUrl(wechatUrl);
         return courseOrderMapper.updateByPrimaryKeySelective(courseOrder);
+    }
+
+    public static void main(String[] args) {
+        BigDecimal orderCost = new BigDecimal(1000.00);
+        System.out.println(orderCost.divide(new BigDecimal(18),2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(18)));
     }
 }

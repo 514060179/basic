@@ -68,7 +68,7 @@ public class UserController {
             jedisService.put(phone, code, 180);
             //发送验证码
             new Thread(() -> {
-                if (!SmsUtil.sendSMS(phone,code)){
+                if (!SmsUtil.sendCodeMsg(phone,code)){
                     logger.error("发送验证码失败，tel={}",phone);
                 }
             }).start();
@@ -88,7 +88,7 @@ public class UserController {
         jedisService.put(user.getType()+":"+phone, code, 180);
         //发送验证码
         new Thread(() -> {
-            if (!SmsUtil.sendSMS(phone,code)){
+            if (!SmsUtil.sendCodeMsg(phone,code)){
                 logger.error("发送验证码失败，tel={}",phone);
             }
         }).start();

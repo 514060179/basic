@@ -278,9 +278,9 @@ public class ClassCourseServiceimpl implements ClassCourseService {
             String parentName = item.getParentName();
             String name = item.getName();
             String phone = item.getPhone();
-            String msg = parentName+"您的孩子"+name+"已来上课";
+            String msg = name;
             new Thread(()->
-                SmsUtil.sendSMS(phone,msg)
+                SmsUtil.sendCourseMsg(phone,msg)
             ).start();
         });
     }

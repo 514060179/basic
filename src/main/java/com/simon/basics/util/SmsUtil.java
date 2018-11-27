@@ -15,17 +15,26 @@ import java.io.IOException;
  */
 public class SmsUtil {
 
-    private static int appId = 1400090334;
+    private static int appId = 1400165245;
 
-    private static String appKey = "0440aaf8a840d845941d2be38313cfe8";
+    private static String appKey = "35d67f2089b51cf88f847ad510deaa4d";
 
-    private static int templateId = 124647;
+    private static int templateId1 = 236241;
 
-    private static String smsSign = "麦芽闲置";
+    private static int templateId2 = 236292;
+
+    private static String smsSign = "金珂教育培训学校";
 
     private static Logger logger = LoggerFactory.getLogger(SmsUtil.class);
 
-    public static boolean sendSMS(String phoneNumber,String msg) {
+    public static boolean sendCodeMsg(String phoneNumber,String msg){
+        return sendSMS(phoneNumber,msg,templateId1);
+    }
+
+    public static boolean sendCourseMsg(String phoneNumber,String msg){
+        return sendSMS(phoneNumber,msg,templateId2);
+    }
+    private static boolean sendSMS(String phoneNumber,String msg,int templateId) {
         String method = "【发送验证码】";
         try {
             //数组具体的元素个数和模板中变量个数必须一致，例如事例中templateId:5678对应一个变量，参数数组中元素个数也必须是一个
@@ -54,6 +63,7 @@ public class SmsUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(sendSMS("15919161025","测试用的，"));
+//        System.out.println(sendCodeMsg("15919161025","123456"));
+        System.out.println(sendCourseMsg("15919161025","simonfeng"));
     }
 }

@@ -172,9 +172,9 @@ public class ClassCourseController {
         classCourseService.sign(courseId,studentId,courseCurrent);
         User user = userService.findByAccountId(studentId);
         String phone = user.getPhone();
-        String msg = (user.getParentName()==null?"":user.getParentName())+"您的孩子"+user.getName()+",已在我校正常上课";
+        String msg = user.getName();
         new Thread(()->
-                SmsUtil.sendSMS(phone,msg)
+                SmsUtil.sendCourseMsg(phone,msg)
         ).start();
         return ReturnParam.success();
     }
@@ -209,9 +209,9 @@ public class ClassCourseController {
             //发送短信
             User user = userService.findByAccountId(accountId);
             String phone = user.getPhone();
-            String msg = (user.getParentName()==null?"":user.getParentName())+"您的孩子"+user.getName()+",已在我校正常上课";
+            String msg = user.getName();
             new Thread(()->
-                    SmsUtil.sendSMS(phone,msg)
+                    SmsUtil.sendCourseMsg(phone,msg)
             ).start();
             return ReturnParam.success(classCourseService.getAttendanceList(courseId, classCourse.getCourseCurrent()));
         } else {
