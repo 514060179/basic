@@ -203,16 +203,16 @@ public class CourseOrderController {
             return ReturnParam.noHandlerFound("该课程未购买!");
         }
         //开始以及进行中的才可以退款
-        if(EnumCode.CourseStatus.COURSE_ACTION.getValue().equals(classCourse.getCourseStatus()) || EnumCode.CourseStatus.COURSE_IN.getValue().equals(classCourse.getCourseStatus())){
+//        if(EnumCode.CourseStatus.COURSE_ACTION.getValue().equals(classCourse.getCourseStatus()) || EnumCode.CourseStatus.COURSE_IN.getValue().equals(classCourse.getCourseStatus())){
             //获取剩余课程
             CourseRoster courseRoster = courseRosterService.findByCourseIdAndAccountId(classCourse.getCourseId(),user.getAccountId());
             if (courseRoster!=null&&courseRoster.getRosterCourseCountRest()<=0){
                 return ReturnParam.courseNoAllowReback();
             }
             return ReturnParam.success(courseOrderService.applyback(classCourse,courseOrder,courseRoster));
-        }else{
-            return ReturnParam.courseNoAllowReback();
-        }
+//        }else{
+//            return ReturnParam.courseNoAllowReback();
+//        }
         //2 删除课程名单
         //3 更新订单状态
         //4 添加退款记录
