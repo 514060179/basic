@@ -122,8 +122,8 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         if (Objects.isNull(courseRoster)){
             rest = classCourse.getCourseTotal()-classCourse.getCourseCurrent();
         }else{
-            courseRosterMapper.delByCourseIdAndAccountId(courseRoster.getCourseId(),courseRoster.getAccountId());
-            rest = courseRoster.getRosterCourseCountRest();
+//            courseRosterMapper.delByCourseIdAndAccountId(courseRoster.getCourseId(),courseRoster.getAccountId());
+            rest = courseOrder.getCourseTotal();
         }
         //2 更新订单状态
         CourseOrder update = new CourseOrder();

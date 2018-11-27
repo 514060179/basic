@@ -1,9 +1,11 @@
 package com.simon.basics.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.simon.basics.model.CourseRoster;
 import com.simon.basics.model.RefundOrder;
 import com.simon.basics.model.RefundOrderWithUser;
 import com.simon.basics.model.vo.ReturnParam;
+import com.simon.basics.service.CourseRosterService;
 import com.simon.basics.service.RefundOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +35,9 @@ public class RefundOrderController {
     @Autowired
     private RefundOrderService refundOrderService;
 
+    @Autowired
+    private CourseRosterService courseRosterService;
+
 
     @ApiOperation("获取退费列表")
     @PostMapping("list")
@@ -44,12 +49,13 @@ public class RefundOrderController {
     @PostMapping("confirm")
     public ReturnParam confirm(@RequestParam Long refundId, BigDecimal actualAmount){
         RefundOrder refundOrder = refundOrderService.findOneByKey(refundId);
+        CourseRoster courseRoster = courseRosterService.findByCourseIdAndAccountId(refundOrder.getCourseId(),refundOrder.getAccountId());
         if (Objects.isNull(refundOrder)){
             logger.warn("找不到资源：refundId=" + refundId);
             return ReturnParam.noHandlerFound("找不到资源：refundId=" + refundId);
         }
         refundOrder.setActualAmount(actualAmount);
-        return ReturnParam.success(refundOrderService.refunded(refundOrder));
+        return ReturnParam.success(refundOrderService.refunded(refundOrder,courseRoster));
     }
     @ApiOperation("根据订单id退款详情")
     @PostMapping("detail")

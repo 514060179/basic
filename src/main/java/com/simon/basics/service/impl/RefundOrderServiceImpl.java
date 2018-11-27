@@ -3,6 +3,7 @@ package com.simon.basics.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.simon.basics.dao.CourseOrderMapper;
+import com.simon.basics.dao.CourseRosterMapper;
 import com.simon.basics.dao.RefundOrderMapper;
 import com.simon.basics.model.*;
 import com.simon.basics.service.CourseOrderService;
@@ -25,6 +26,8 @@ public class RefundOrderServiceImpl implements RefundOrderService {
     private RefundOrderMapper refundOrderMapper;
     @Autowired
     private CourseOrderMapper courseOrderMapper;
+    @Autowired
+    private CourseRosterMapper courseRosterMapper;
     @Override
     public PageInfo<RefundOrderWithUser> getListByPage(RefundOrder refundOrder, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum,pageSize);
@@ -42,7 +45,7 @@ public class RefundOrderServiceImpl implements RefundOrderService {
     }
 
     @Override
-    public int refunded(RefundOrder refundOrder) {
+    public int refunded(RefundOrder refundOrder, CourseRoster courseRoster) {
         //1.更新退款订单实际回退金额以及状态
         RefundOrder updateRefund = new RefundOrder();
         updateRefund.setRefundId(refundOrder.getRefundId());
@@ -58,8 +61,15 @@ public class RefundOrderServiceImpl implements RefundOrderService {
         courseOrder.setOrderId(refundOrder.getOrderId());
         courseOrder.setOrderStatus(EnumCode.OrderStatus.ORDER_REBACK.getValue());
         i += courseOrderMapper.updateByPrimaryKeySelective(courseOrder);
-        if (i!=2){
-              throw new RuntimeException("确认回退款失败！");
+        //1 删除课程名单
+        if (!Objects.isNull(courseRoster)){
+            i += courseRosterMapper.delByCourseIdAndAccountId(courseRoster.getCourseId(), courseRoster.getAccountId());
+            if (i != 3) {
+                throw new RuntimeException("确认回退款失败！");
+            }
+        }
+        if (i != 2&&Objects.isNull(courseRoster)) {
+            throw new RuntimeException("确认回退款失败！");
         }
         return i;
     }

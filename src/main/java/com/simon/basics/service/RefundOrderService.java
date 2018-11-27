@@ -1,6 +1,7 @@
 package com.simon.basics.service;
 
 import com.github.pagehelper.PageInfo;
+import com.simon.basics.model.CourseRoster;
 import com.simon.basics.model.RefundOrder;
 import com.simon.basics.model.RefundOrderWithUser;
 
@@ -31,7 +32,7 @@ public interface RefundOrderService {
      * @param refundOrder
      * @return
      */
-    int refunded(RefundOrder refundOrder);
+    int refunded(RefundOrder refundOrder, CourseRoster courseRoster);
 
     /**
      * orderId 查询详情
