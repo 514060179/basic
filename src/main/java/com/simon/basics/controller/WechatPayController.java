@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -92,14 +93,16 @@ public class WechatPayController {
                 WxPayUnifiedOrderResult wxPayUnifiedOrderResult = wxPayService.unifiedOrder(request);
                 String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
                 String nonceStr = String.valueOf(System.currentTimeMillis());
-                modelMap.put("appId", wechatConfig.getAppId());
-                modelMap.put("timeStamp", timestamp);
-                modelMap.put("nonceStr", nonceStr);
-                modelMap.put("package", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
-                modelMap.put("signType", "MD5");
-                modelMap.put("paySign", SignUtils.createSign(modelMap,null, wechatConfig.getMchKey(), new String[0]));
-                modelMap.put("amount", courseOrder.getOrderCost());
-                modelMap.put("body", courseOrder.getOrderName());
+                Map<String,Object> payParam = new HashMap<String,Object>();
+                payParam.put("appId", wechatConfig.getAppId());//appId、timeStamp、nonceStr、package、signType
+                payParam.put("timeStamp", timestamp);
+                payParam.put("nonceStr", nonceStr);
+                payParam.put("package", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
+                payParam.put("signType", "MD5");
+                payParam.put("paySign", SignUtils.createSign(payParam,null, wechatConfig.getMchKey(), new String[0]));
+                payParam.put("amount", courseOrder.getOrderCost());
+                payParam.put("body", courseOrder.getOrderName());
+                modelMap.put("payParam", payParam);
                 logger.warn("wxPayUnifiedOrderResult={}",JSONUtil.objectToJson(wxPayUnifiedOrderResult));
                 logger.warn("modelMap={}",JSONUtil.objectToJson(modelMap));
                 return "pay";
