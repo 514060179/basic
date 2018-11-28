@@ -41,14 +41,14 @@ public class WechatPayController {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final static String GetOpenIdURL = "http://ccjkjy.com/pay/getOpenId";
+    private final static String GetOpenIdURL = "http://ccjkjy.com/pay/jsapi";
     @Autowired
     private WechatConfig wechatConfig;
 
     @Autowired
     private CourseOrderService courseOrderService;
 
-    @GetMapping("getOpenId")
+    @GetMapping("jsapi")
     @ApiOperation("微信调起支付")
     public String getOpenId(ModelMap modelMap,HttpServletRequest httpServletRequest, HttpServletResponse response) throws IOException {
 //        String redirectUrl4Vx = GetOpenIdURL + "?redirectUrl=" + redirectUrl;
@@ -58,6 +58,7 @@ public class WechatPayController {
         if (!Objects.isNull(openId)){
             //统一下单
             //配置参数
+            logger.warn("openId={}",openId);
             CourseOrder courseOrder = courseOrderService.findOneByOrderId(Long.parseLong(orderId));
             WxPayService wxPayService = new WxPayServiceImpl();
             WxPayConfig wxPayConfig = new WxPayConfig();
@@ -98,7 +99,8 @@ public class WechatPayController {
                 modelMap.put("package", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
                 modelMap.put("signType", "MD5");
                 modelMap.put("paySign", SignUtils.createSign(modelMap,null, wechatConfig.getMchKey(), new String[0]));
-                System.out.println(JSONUtil.objectToJson(wxPayUnifiedOrderResult));
+                logger.warn("wxPayUnifiedOrderResult={}",JSONUtil.objectToJson(wxPayUnifiedOrderResult));
+                logger.warn("modelMap={}",JSONUtil.objectToJson(modelMap));
                 return "pay";
             } catch (WxPayException e) {
                 e.printStackTrace();
@@ -109,16 +111,20 @@ public class WechatPayController {
         if (Objects.isNull(code)){
             //获取code
             String redirectUrl4Vx = GetOpenIdURL + "?redirectUrl=" + GetOpenIdURL+"?orderId="+orderId;
+            logger.warn("redirectUrl4Vx={}",redirectUrl4Vx);
             String url = WxApi.getOAuthCodeUrl(wechatConfig.getAppId(), redirectUrl4Vx, "snsapi_base", "");
+            logger.warn("获取code返回跳转url={}",url);
             response.sendRedirect(url);
             return null;
         }else {
             openId = WxApiClient.getOAuthOpenId(wechatConfig.getAppId(), wechatConfig.getMchKey(), code);
+            logger.warn("获取openId={}",openId);
             if (redirectUrl.indexOf("?") > 0) {
                 redirectUrl += "&openId=" + openId;
             } else {
                 redirectUrl += "?openId=" + openId;
             }
+            logger.warn("获取openId跳转redirectUrl={}",redirectUrl);
             response.sendRedirect(redirectUrl);//跳转下单
             return null;
         }
