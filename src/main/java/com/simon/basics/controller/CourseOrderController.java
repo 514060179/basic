@@ -64,6 +64,8 @@ public class CourseOrderController {
     @Autowired
     private WechatConfig wechatConfig;
 
+    private final static String payUrl = "http://www.ccjkjy.com/basics/pay/jsapi?orderId=";
+
     @PostMapping("list")
     @ApiOperation("查询订单列表")
     public ReturnParam<PageInfo<CourseOrderWithBLOBs>> list(CourseOrderWithBLOBs courseOrderWithBLOBs,User user,@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize) {
@@ -149,51 +151,45 @@ public class CourseOrderController {
             logger.warn("订单处于非未支付状态:{}",courseOrder.getOrderStatus());
             return ReturnParam.orderHadPay();
         }
-        String tradeType = "NATIVE";
-//        String ua = httpServletRequest.getHeader("User-Agent");
-//        if (ua.contains("MicroMessenger")){//微信客户端
-//            tradeType = "JSAPI";
+//        String tradeType = "NATIVE";
+//        //配置参数
+//        WxPayService wxPayService = new WxPayServiceImpl();
+//        WxPayConfig wxPayConfig = new WxPayConfig();
+//
+//        wxPayConfig.setMchId(wechatConfig.getMchId());
+//        wxPayConfig.setAppId(wechatConfig.getAppId());
+//        wxPayConfig.setKeyPath(wechatConfig.getCertLocalPath());//证书位置
+//        wxPayConfig.setMchKey(wechatConfig.getMchKey());
+//        wxPayConfig.setNotifyUrl(wechatConfig.getNotifyUrl());//回调地址
+//        wxPayConfig.setTradeType(tradeType);//交易类型
+//
+//        wxPayService.setConfig(wxPayConfig);
+//        // 微信统一下单请求对象
+//        WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
+//        request.setDeviceInfo("web");
+//        request.setBody(courseOrder.getOrderName());
+//        request.setDetail(courseOrder.getOrderName());
+//        request.setAttach(courseOrder.getOrderId()+"");
+//        request.setOutTradeNo(""+new SnowflakeIdWorker().nextId());
+//        request.setFeeType("CNY");//币种类型
+//        request.setTotalFee(courseOrder.getOrderCost().multiply(new BigDecimal(100)).intValue());//总额,单位分
+//        request.setSpbillCreateIp("127.0.0.1");
+//        request.setTimeStart(null);
+//        request.setTimeExpire(null);
+//        request.setGoodsTag(null);
+//        request.setNotifyUrl(wechatConfig.getNotifyUrl());
+//        request.setTradeType(tradeType);
+//        request.setProductId(orderId+"");
+//        request.setLimitPay(null);
+//        try {
+//            WxPayUnifiedOrderResult wxPayUnifiedOrderResult = wxPayService.unifiedOrder(request);
+//            payOrderService.wechatPay(orderId,wxPayUnifiedOrderResult.getCodeURL());
+//            System.out.println(JSONUtil.objectToJson(wxPayUnifiedOrderResult));
+//            return ReturnParam.success("succeess",wxPayUnifiedOrderResult.getCodeURL());
+//        } catch (WxPayException e) {
+//            e.printStackTrace();
 //        }
-        //配置参数
-        WxPayService wxPayService = new WxPayServiceImpl();
-        WxPayConfig wxPayConfig = new WxPayConfig();
-
-        wxPayConfig.setMchId(wechatConfig.getMchId());
-        wxPayConfig.setAppId(wechatConfig.getAppId());
-        wxPayConfig.setKeyPath(wechatConfig.getCertLocalPath());//证书位置
-        wxPayConfig.setMchKey(wechatConfig.getMchKey());
-        wxPayConfig.setNotifyUrl(wechatConfig.getNotifyUrl());//回调地址
-        wxPayConfig.setTradeType(tradeType);//交易类型
-
-        wxPayService.setConfig(wxPayConfig);
-        // 微信统一下单请求对象
-        WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
-        request.setDeviceInfo("web");
-        request.setBody(courseOrder.getOrderName());
-        request.setDetail(courseOrder.getOrderName());
-        request.setAttach(courseOrder.getOrderId()+"");
-        request.setOutTradeNo(""+new SnowflakeIdWorker().nextId());
-        request.setFeeType("CNY");//币种类型
-        request.setTotalFee(courseOrder.getOrderCost().multiply(new BigDecimal(100)).intValue());//总额,单位分
-        request.setSpbillCreateIp("127.0.0.1");
-        request.setTimeStart(null);
-        request.setTimeExpire(null);
-        request.setGoodsTag(null);
-//        request.setOpenid("ouW450iH5ddr2y4QEekC6qIXfdWg");
-        request.setNotifyUrl(wechatConfig.getNotifyUrl());
-        request.setTradeType(tradeType);
-        request.setProductId(orderId+"");
-        request.setLimitPay(null);
-        try {
-            WxPayUnifiedOrderResult wxPayUnifiedOrderResult = wxPayService.unifiedOrder(request);
-//            wxPayUnifiedOrderResult.get
-            payOrderService.wechatPay(orderId,wxPayUnifiedOrderResult.getCodeURL());
-            System.out.println(JSONUtil.objectToJson(wxPayUnifiedOrderResult));
-            return ReturnParam.success("succeess",wxPayUnifiedOrderResult.getCodeURL());
-        } catch (WxPayException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return ReturnParam.success("succeess",payUrl+orderId);
     }
 
 
