@@ -149,11 +149,11 @@ public class CourseOrderController {
             logger.warn("订单处于非未支付状态:{}",courseOrder.getOrderStatus());
             return ReturnParam.orderHadPay();
         }
-        String tradeType = "JSAPI";
-        String ua = httpServletRequest.getHeader("User-Agent");
-        if (ua.contains("MicroMessenger")){//微信客户端
-            tradeType = "JSAPI";
-        }
+        String tradeType = "NATIVE";
+//        String ua = httpServletRequest.getHeader("User-Agent");
+//        if (ua.contains("MicroMessenger")){//微信客户端
+//            tradeType = "JSAPI";
+//        }
         //配置参数
         WxPayService wxPayService = new WxPayServiceImpl();
         WxPayConfig wxPayConfig = new WxPayConfig();
@@ -179,7 +179,7 @@ public class CourseOrderController {
         request.setTimeStart(null);
         request.setTimeExpire(null);
         request.setGoodsTag(null);
-        request.setOpenid("ouW450iH5ddr2y4QEekC6qIXfdWg");
+//        request.setOpenid("ouW450iH5ddr2y4QEekC6qIXfdWg");
         request.setNotifyUrl(wechatConfig.getNotifyUrl());
         request.setTradeType(tradeType);
         request.setProductId(orderId+"");
