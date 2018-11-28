@@ -93,14 +93,14 @@ public class WechatPayController {
                 WxPayUnifiedOrderResult wxPayUnifiedOrderResult = wxPayService.unifiedOrder(request);
                 String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
                 String nonceStr = String.valueOf(System.currentTimeMillis());
-                Map<String,Object> payParam = new HashMap<String,Object>();
-                payParam.put("appId", wechatConfig.getAppId());//appId、timeStamp、nonceStr、package、signType
+                Map<String,String> payParam = new HashMap<String,String>();
+                payParam.put("appId", wechatConfig.getAppId());
                 payParam.put("timeStamp", timestamp);
                 payParam.put("nonceStr", nonceStr);
                 payParam.put("package", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
                 payParam.put("signType", "MD5");
                 payParam.put("paySign", SignUtils.createSign(payParam,null, wechatConfig.getMchKey(), new String[0]));
-                payParam.put("amount", courseOrder.getOrderCost());
+                payParam.put("amount", courseOrder.getOrderCost()+"");
                 payParam.put("body", courseOrder.getOrderName());
                 modelMap.put("payParam", payParam);
                 logger.warn("wxPayUnifiedOrderResult={}",JSONUtil.objectToJson(wxPayUnifiedOrderResult));
