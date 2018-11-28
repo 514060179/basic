@@ -97,9 +97,9 @@ public class WechatPayController {
                 modelMap.put("nonceStr", nonceStr);
                 modelMap.put("package", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
                 modelMap.put("signType", "MD5");
+                modelMap.put("paySign", SignUtils.createSign(modelMap,null, wechatConfig.getMchKey(), new String[0]));
                 modelMap.put("amount", courseOrder.getOrderCost());
                 modelMap.put("body", courseOrder.getOrderName());
-                modelMap.put("paySign", SignUtils.createSign(modelMap,null, wechatConfig.getMchKey(), new String[0]));
                 logger.warn("wxPayUnifiedOrderResult={}",JSONUtil.objectToJson(wxPayUnifiedOrderResult));
                 logger.warn("modelMap={}",JSONUtil.objectToJson(modelMap));
                 return "pay";
