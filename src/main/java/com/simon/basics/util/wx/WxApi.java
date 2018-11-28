@@ -1,5 +1,7 @@
 package com.simon.basics.util.wx;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simon.basics.util.JSONUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +18,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.HashMap;
 
 /**
  * @author fengtianying
@@ -36,22 +39,24 @@ public class WxApi {
     public static OAuthAccessToken getOAuthAccessToken(String appId, String appSecret, String code) {
         OAuthAccessToken token = null;
         String tockenUrl = getOAuthTokenUrl(appId, appSecret, code);
-        JSONObject jsonObject = httpsRequest(tockenUrl, HttpMethod.GET.toString(), null);
+        String ret = httpsRequest(tockenUrl, HttpMethod.GET.toString(), null);
+        HashMap jsonObject = JSONUtil.jsonToMap(ret);
         _log.warn("获取token返回：token=",jsonObject);
-        if (null != jsonObject && !jsonObject.has("errcode")) {
+        if (null != jsonObject && !jsonObject.containsKey("errcode")) {
             try {
                 token = new OAuthAccessToken();
-                token.setAccessToken(jsonObject.getString("access_token"));
-                token.setExpiresIn(jsonObject.getInt("expires_in"));
-                token.setOpenid(jsonObject.getString("openid"));
-                token.setScope(jsonObject.getString("scope"));
+                token.setAccessToken((String)jsonObject.get("access_token"));
+                token.setExpiresIn((int)jsonObject.get("expires_in"));
+                token.setOpenid((String)jsonObject.get("openid"));
+                token.setScope((String)jsonObject.get("scope"));
             } catch (JSONException e) {
                 _log.error("json转换异常！",e);
                 token = null;//获取token失败
             }
         }else if(null != jsonObject){
             token = new OAuthAccessToken();
-            token.setErrcode(jsonObject.getInt("errcode"));
+            token.setErrcode((int)jsonObject.get("errcode"));
+            _log.error("获取token返回：token=",ret);
         }
         return token;
     }
@@ -74,8 +79,8 @@ public class WxApi {
         }
         return result;
     }
-    public static JSONObject httpsRequest(String requestUrl, String requestMethod, String outputStr) {
-        JSONObject jsonObject = null;
+    public static String httpsRequest(String requestUrl, String requestMethod, String outputStr) {
+        String respone = null;
         try {
             _log.info("发送HTTPS请求,requestMethod={},requestUrl={},outputStr={}", requestMethod, requestUrl, outputStr);
             TrustManager[] tm = { new JEEWeiXinX509TrustManager() };
@@ -109,11 +114,11 @@ public class WxApi {
             inputStream.close();
             conn.disconnect();
             _log.info("响应数据,rtn={}", buffer);
-            jsonObject = JSONUtil.jsonToObject(buffer.toString(),JSONObject.class);
+            respone = buffer.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return jsonObject;
+        return respone;
     }
 }
 

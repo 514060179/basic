@@ -24,5 +24,8 @@ public class WxApiClient {
         return null;
     }
 
+    public static void main(String[] args) {
+        System.out.println(getOAuthOpenId("wx254a867fd60891bd","345d84236a2b381f418ce887c186bf5f","001eT84G1PLIo00KMH3G1rbO3G1eT84P"));
+    }
 
 }
