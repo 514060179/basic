@@ -132,7 +132,6 @@ public class CallbackController {
         logger.info("======微信支付回调======");
         String xmlResult = IOUtils.toString(request.getInputStream(), request.getCharacterEncoding());
         operateLog.setDescribe(xmlResult);
-        logger.warn("响应参数：{}",xmlResult);
         WxPayOrderNotifyResult params = WxPayOrderNotifyResult.fromXML(xmlResult);
         operateLog.setParam(JSONUtil.objectToJson(params));
         operateLog.setStatus("fail");

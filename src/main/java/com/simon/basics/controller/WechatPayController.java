@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -50,9 +51,7 @@ public class WechatPayController {
 
     @GetMapping("jsapi")
     @ApiOperation("微信调起支付")
-    public String getOpenId(ModelMap modelMap,HttpServletRequest httpServletRequest, HttpServletResponse response) throws IOException {
-//        String redirectUrl4Vx = GetOpenIdURL + "?redirectUrl=" + redirectUrl;
-//        String url = WxApi.getOAuthCodeUrl(appId, redirectUrl4Vx, "snsapi_base", state);
+    public String jsapi(ModelMap modelMap,HttpServletRequest httpServletRequest, HttpServletResponse response) throws IOException {
         String openId = httpServletRequest.getParameter("openId");
         String orderId = httpServletRequest.getParameter("orderId");
         if (!Objects.isNull(openId)){
@@ -106,13 +105,16 @@ public class WechatPayController {
                 e.printStackTrace();
             }
         }
+        Map<String, String[]> map = httpServletRequest.getParameterMap();
+        logger.warn("获取请求参数:");
+        map.forEach((k,v)->logger.warn("Item : " + k + " Count : " + v[0]));
         String code = httpServletRequest.getParameter("code");
         String redirectUrl = httpServletRequest.getParameter("redirectUrl");
         if (Objects.isNull(code)){
             //获取code
             String redirectUrl4Vx = GetOpenIdURL + "?redirectUrl=" + GetOpenIdURL+"?orderId="+orderId;
             logger.warn("redirectUrl4Vx={}",redirectUrl4Vx);
-            String url = WxApi.getOAuthCodeUrl(wechatConfig.getAppId(), redirectUrl4Vx, "snsapi_base", "");
+            String url = WxApi.getOAuthCodeUrl(wechatConfig.getAppId(), redirectUrl4Vx, "snsapi_base", "123");
             logger.warn("获取code返回跳转url={}",url);
             response.sendRedirect(url);
             return null;
