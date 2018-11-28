@@ -41,7 +41,7 @@ public class WechatPayController {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final static String GetOpenIdURL = "http://ccjkjy.com/pay/jsapi";
+    private final static String GetOpenIdURL = "http://www.ccjkjy.com/pay/jsapi";
     @Autowired
     private WechatConfig wechatConfig;
 
