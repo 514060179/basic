@@ -20,6 +20,7 @@ import com.simon.basics.service.CourseRosterService;
 import com.simon.basics.threadpool.PayOrderService;
 import com.simon.basics.util.JSONUtil;
 import com.simon.basics.util.SnowflakeIdWorker;
+import com.simon.basics.util.wx.WxApi;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -138,7 +139,7 @@ public class CourseOrderController {
 
     @GetMapping("wechatPay")
     @ApiOperation("微信调起支付")
-    public ReturnParam<String> wechat(@RequestParam Long orderId) throws NoHandlerFoundException {
+    public ReturnParam<String> wechat(@RequestParam Long orderId,String openId,HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse) throws NoHandlerFoundException {
 
         CourseOrder courseOrder = courseOrderService.findOneByOrderId(orderId);
         if (courseOrder==null){
@@ -147,6 +148,11 @@ public class CourseOrderController {
         if (!EnumCode.OrderStatus.ORDER_NOPAY.getValue().equals(courseOrder.getOrderStatus())){
             logger.warn("订单处于非未支付状态:{}",courseOrder.getOrderStatus());
             return ReturnParam.orderHadPay();
+        }
+        String tradeType = "JSAPI";
+        String ua = httpServletRequest.getHeader("User-Agent");
+        if (ua.contains("MicroMessenger")){//微信客户端
+            tradeType = "JSAPI";
         }
         //配置参数
         WxPayService wxPayService = new WxPayServiceImpl();
@@ -157,7 +163,7 @@ public class CourseOrderController {
         wxPayConfig.setKeyPath(wechatConfig.getCertLocalPath());//证书位置
         wxPayConfig.setMchKey(wechatConfig.getMchKey());
         wxPayConfig.setNotifyUrl(wechatConfig.getNotifyUrl());//回调地址
-        wxPayConfig.setTradeType("NATIVE");//交易类型
+        wxPayConfig.setTradeType(tradeType);//交易类型
 
         wxPayService.setConfig(wxPayConfig);
         // 微信统一下单请求对象
@@ -173,14 +179,16 @@ public class CourseOrderController {
         request.setTimeStart(null);
         request.setTimeExpire(null);
         request.setGoodsTag(null);
+        request.setOpenid("ouW450iH5ddr2y4QEekC6qIXfdWg");
         request.setNotifyUrl(wechatConfig.getNotifyUrl());
-        request.setTradeType("NATIVE");
+        request.setTradeType(tradeType);
         request.setProductId(orderId+"");
         request.setLimitPay(null);
         try {
             WxPayUnifiedOrderResult wxPayUnifiedOrderResult = wxPayService.unifiedOrder(request);
 //            wxPayUnifiedOrderResult.get
             payOrderService.wechatPay(orderId,wxPayUnifiedOrderResult.getCodeURL());
+            System.out.println(JSONUtil.objectToJson(wxPayUnifiedOrderResult));
             return ReturnParam.success("succeess",wxPayUnifiedOrderResult.getCodeURL());
         } catch (WxPayException e) {
             e.printStackTrace();
