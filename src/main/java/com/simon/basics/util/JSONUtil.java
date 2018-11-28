@@ -2,11 +2,13 @@ package com.simon.basics.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -52,6 +54,17 @@ public class JSONUtil {
     public static String listToJson(List list) {
         try {
             return  mapper.writeValueAsString(list);
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error("system error",e);
+            return null;
+
+        }
+    }
+    public static HashMap jsonToMap(String jsonString) {
+        try {
+            JavaType jvt = mapper.getTypeFactory().constructParametricType(HashMap.class,String.class,Object.class);
+            return mapper.readValue(jsonString, jvt);
         } catch (IOException e) {
             e.printStackTrace();
             logger.error("system error",e);
