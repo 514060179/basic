@@ -61,7 +61,7 @@ public class UserController {
 
     @PostMapping("sendCode")
     @ApiOperation(value = "添加用户（学生/教师）发送验证码")
-    public ReturnParam sendCode(@RequestParam @Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！") String phone) {
+    public ReturnParam sendCode(@RequestParam @Pattern(regexp = "^((1[3589][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！") String phone) {
         String verification = jedisService.getString(phone);
         String code = UtilToString.getRandomString(6);
 //        if (StringUtils.isEmpty(verification)) {
