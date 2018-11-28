@@ -17,16 +17,16 @@
     <script src="//cdn.jsdelivr.net/jquery/1.12.1/jquery.min.js"></script>
 </head>
 <body>
-<div id="amount">1125</div>
+<div id="amount">${amount!}</div>
 <div id="info">
     <table>
         <tr>
             <td>购买商品</td>
-            <td class="fr">test</td>
+            <td class="fr">${body!}</td>
         </tr>
         <tr>
             <td>收款方</td>
-            <td class="fr">珠海太川云社区技术股份有限公司</td>
+            <td class="fr">金珂教育培训学校</td>
         </tr>
     </table>
 </div>
@@ -50,6 +50,7 @@
                 if(res.err_msg == "get_brand_wcpay_request:ok" ) {     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
                     alert('支付成功！');
                 } else {
+                    alter(JSON.stringify(res));
                     alert('支付失败：' + res.err_msg);
                 }
                 WeixinJSBridge.call('closeWindow');
