@@ -37,6 +37,7 @@ public class WxApi {
         OAuthAccessToken token = null;
         String tockenUrl = getOAuthTokenUrl(appId, appSecret, code);
         JSONObject jsonObject = httpsRequest(tockenUrl, HttpMethod.GET.toString(), null);
+        _log.warn("获取token返回：token=",jsonObject);
         if (null != jsonObject && !jsonObject.has("errcode")) {
             try {
                 token = new OAuthAccessToken();
@@ -45,6 +46,7 @@ public class WxApi {
                 token.setOpenid(jsonObject.getString("openid"));
                 token.setScope(jsonObject.getString("scope"));
             } catch (JSONException e) {
+                _log.error("json转换异常！",e);
                 token = null;//获取token失败
             }
         }else if(null != jsonObject){
