@@ -119,7 +119,7 @@ public class WechatPayController {
             response.sendRedirect(url);
             return null;
         }else {
-            openId = WxApiClient.getOAuthOpenId(wechatConfig.getAppId(), wechatConfig.getMchKey(), code);
+            openId = WxApiClient.getOAuthOpenId(wechatConfig.getAppId(), wechatConfig.getUserKey(), code);
             logger.warn("获取openId={}",openId);
             if (redirectUrl.indexOf("?") > 0) {
                 redirectUrl += "&openId=" + openId;

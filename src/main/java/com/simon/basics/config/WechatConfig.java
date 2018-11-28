@@ -29,6 +29,9 @@ public class WechatConfig {
     @Value("${wechat.mchKey}")
     private String mchKey;
 
+    @Value("${wechat.userKey}")
+    private String userKey;
+
     //证书路径
     @Value("${wechat.certLocalPath}")
     private String certLocalPath;
@@ -75,5 +78,13 @@ public class WechatConfig {
 
     public void setMchKey(String mchKey) {
         this.mchKey = mchKey;
+    }
+
+    public String getUserKey() {
+        return userKey;
+    }
+
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
     }
 }
