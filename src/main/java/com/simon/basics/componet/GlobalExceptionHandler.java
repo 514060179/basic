@@ -18,6 +18,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 /**
  * 全局异常处理
@@ -81,6 +82,11 @@ public class GlobalExceptionHandler {
     public ReturnParam exceptionHandler(Exception e) {
         logger.error(">>>> system error： ", e);
         return ReturnParam.systemError("系统异常！");
+    }
+    @ExceptionHandler(value = SQLIntegrityConstraintViolationException.class)
+    public ReturnParam sQLIntegrityConstraintViolationExceptionHandler(Exception e) {
+        logger.error(">>>> system error： ", e);
+        return ReturnParam.systemError("该资源已被占有,无法删除!");
     }
 //    @ResponseStatus(value= HttpStatus.UNAUTHORIZED,reason="没有权限")
 //    public ReturnParam unauthorizedHandler(Exception e) {
