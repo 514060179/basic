@@ -207,6 +207,12 @@
       <if test="phone != null" >
         phone = #{phone,jdbcType=VARCHAR},
       </if>
+      <if test="gradeName != null" >
+        grade_name = #{gradeName,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolName != null" >
+        school_name = #{schoolName,jdbcType=VARCHAR},
+      </if>
       <!--<if test="type != null" >-->
         <!--TYPE = #{type,jdbcType=CHAR},-->
       <!--</if>-->
