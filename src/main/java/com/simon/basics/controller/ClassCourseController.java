@@ -291,4 +291,9 @@ public class ClassCourseController {
             return ReturnParam.noHandlerFound("更新失败!courseId=" + courseId);
         }
     }
+    @GetMapping("delete")
+    @ApiOperation("删除课程")
+    public ReturnParam delete(@RequestParam Long courseId){
+        return ReturnParam.success(classCourseService.delete(courseId));
+    }
 }

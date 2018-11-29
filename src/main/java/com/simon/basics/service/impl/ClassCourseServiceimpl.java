@@ -74,7 +74,7 @@ public class ClassCourseServiceimpl implements ClassCourseService {
 
     @Override
     public int delete(Long courseId) {
-        return classCourseMapper.updateStatus(courseId, true);
+        return classCourseMapper.deleteByPrimaryKey(courseId);
     }
 
     @Override

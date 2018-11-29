@@ -61,7 +61,7 @@ public class UserController {
 
     @PostMapping("sendCode")
     @ApiOperation(value = "添加用户（学生/教师）发送验证码")
-    public ReturnParam sendCode(@RequestParam @Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！") String phone) {
+    public ReturnParam sendCode(@RequestParam @Pattern(regexp = "^((1[3589][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！") String phone) {
         String verification = jedisService.getString(phone);
         String code = UtilToString.getRandomString(6);
 //        if (StringUtils.isEmpty(verification)) {
@@ -97,7 +97,7 @@ public class UserController {
 
     @PostMapping("add")
     @ApiOperation(value = "添加用户（学生/教师） type=1 学生 type=2教师")
-    public ReturnParam<User> add(User user, @Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！")
+    public ReturnParam<User> add(User user, @Pattern(regexp = "^((1[3589][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！")
     @RequestParam String phone, @RequestParam(defaultValue = "1") String type, @RequestParam String name,
                            @RequestParam String username, @RequestParam String password,
 //                           @RequestParam String verification,
@@ -129,7 +129,7 @@ public class UserController {
 
     @PostMapping("addManager")
     @ApiOperation(value = "新增管理员")
-    public ReturnParam<Account> addManager(@RequestParam String username,String name,@Pattern(regexp = "^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！") @RequestParam(required = false) String phone,@RequestParam String password, @Pattern(regexp = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$", message = "身份证号码格式有误！") @RequestParam String cardNum) {
+    public ReturnParam<Account> addManager(@RequestParam String username,String name,@Pattern(regexp = "^((1[3589][0-9])|(14[57])|(17[0678])|(19[7]))\\d{8}$", message = "手机号码格式有误！") @RequestParam(required = false) String phone,@RequestParam String password, @Pattern(regexp = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$|^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$", message = "身份证号码格式有误！") @RequestParam String cardNum) {
         //验证码验证
 //        String code = jedisService.getString(phone);
 //        if (StringUtils.isEmpty(code)) {
