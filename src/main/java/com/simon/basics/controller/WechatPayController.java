@@ -9,6 +9,7 @@ import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import com.github.binarywang.wxpay.util.SignUtils;
 import com.simon.basics.config.WechatConfig;
 import com.simon.basics.model.CourseOrder;
+import com.simon.basics.model.EnumCode;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.service.CourseOrderService;
 import com.simon.basics.util.JSONUtil;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -60,6 +62,15 @@ public class WechatPayController {
             //配置参数
             logger.warn("openId={}",openId);
             CourseOrder courseOrder = courseOrderService.findOneByOrderId(Long.parseLong(orderId));
+            if (courseOrder==null){
+                modelMap.put("error","订单不存在!");
+                return "pay";
+            }
+            if (!EnumCode.OrderStatus.ORDER_NOPAY.getValue().equals(courseOrder.getOrderStatus())){
+                logger.error("订单处于非未支付状态:{}",courseOrder.getOrderStatus());
+                modelMap.put("error","订单处于非未支付状态下,无法支付!");
+                return "pay";
+            }
             WxPayService wxPayService = new WxPayServiceImpl();
             WxPayConfig wxPayConfig = new WxPayConfig();
 
@@ -108,6 +119,8 @@ public class WechatPayController {
                 return "pay";
             } catch (WxPayException e) {
                 e.printStackTrace();
+                modelMap.put("error","系统异常,支付失败!");
+                return "pay";
             }
         }
         Map<String, String[]> map = httpServletRequest.getParameterMap();

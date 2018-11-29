@@ -17,6 +17,7 @@
     <script src="//cdn.jsdelivr.net/jquery/1.12.1/jquery.min.js"></script>
 </head>
 <body>
+<#if payParam??>
 <div id="amount">￥${payParam.amount!}</div>
 <div id="info">
     <table>
@@ -30,9 +31,9 @@
         </tr>
     </table>
 </div>
-
+</#if>
 <div id="error">
-
+        ${error!}
 </div>
 </body>
 <script>
