@@ -65,7 +65,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = DataIntegrityViolationException.class)
     public ReturnParam dataIntegrityViolationExceptionHandler(Exception e) {
         logger.error(">>>> system error： ", e);
-        return ReturnParam.illegalKeyIdException(e.getMessage());
+        String msg = e.getMessage();
+        if (msg.indexOf("delete")>0){
+            msg = "该资源正在使用,无法删除";
+        }
+        return ReturnParam.illegalKeyIdException(msg);
     }
     @ExceptionHandler(value = SqlWritePrerequisiteException.class)
     public ReturnParam sqlWritePrerequisiteExceptionnHandler(Exception e) {
