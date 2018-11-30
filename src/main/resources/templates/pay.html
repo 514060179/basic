@@ -7,6 +7,7 @@
     <style>
         body{font-family: 'Microsoft YaHei';}
         #amount,#error,#time{height: 80px; line-height: 80px; text-align: center; color: #f00; font-size: 30px; font-weight: bold;}
+        #time{height: 70px; line-height: 70px; text-align: center; color: #060403; font-size: 20px; font-weight: bold;}
         #error{font-size: 20px;}
         #info{padding: 0 10px; font-size: 12px;}
         table{width: 100%; border-collapse: collapse;}
@@ -33,7 +34,7 @@
 </div>
     </div>
 </#if>
-<div id="time" style="display: none"> 等待时间:<a id="timeNum" style="color: black">5</a>自动跳转</div>
+<div id="time" style="display: none" > 正在支付校验...</br><a id="timeNum" style="color: red">5</a>秒后自动跳转</div>
 <div id="error">
     <#if error??>
         ${error!}
