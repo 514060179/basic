@@ -46,6 +46,8 @@ public class WechatPayController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final static String GetOpenIdURL = "http://www.ccjkjy.com/basics/pay/jsapi";
+
+    private final static String ReturnBackURL = "http://www.ccjkjy.com/home/class/order/pay?courseId=";
     @Autowired
     private WechatConfig wechatConfig;
 
@@ -113,6 +115,7 @@ public class WechatPayController {
                 payParam.put("paySign", SignUtils.createSign(payParam,null, wechatConfig.getMchKey(), new String[0]));
                 payParam.put("amount", courseOrder.getOrderCost()+"");
                 payParam.put("body", courseOrder.getOrderName());
+                payParam.put("url", ReturnBackURL+courseOrder.getCourseId());
                 modelMap.put("payParam", payParam);
                 logger.warn("wxPayUnifiedOrderResult={}",JSONUtil.objectToJson(wxPayUnifiedOrderResult));
                 logger.warn("modelMap={}",JSONUtil.objectToJson(modelMap));
