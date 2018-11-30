@@ -6,7 +6,7 @@
     <title>支付中心</title>
     <style>
         body{font-family: 'Microsoft YaHei';}
-        #amount,#error{height: 80px; line-height: 80px; text-align: center; color: #f00; font-size: 30px; font-weight: bold;}
+        #amount,#error,#time{height: 80px; line-height: 80px; text-align: center; color: #f00; font-size: 30px; font-weight: bold;}
         #error{font-size: 20px;}
         #info{padding: 0 10px; font-size: 12px;}
         table{width: 100%; border-collapse: collapse;}
@@ -14,10 +14,10 @@
         td{padding: 10px;}
         .fr{text-align: right; font-weight: bold;}
     </style>
-    <script src="//cdn.jsdelivr.net/jquery/1.12.1/jquery.min.js"></script>
 </head>
 <body>
 <#if payParam??>
+    <div id="payinfo">
 <div id="amount">￥${payParam.amount!}</div>
 <div id="info">
     <table>
@@ -31,7 +31,9 @@
         </tr>
     </table>
 </div>
+    </div>
 </#if>
+<div id="time" style="display: none"> 等待时间:<a id="timeNum" style="color: black">5</a>自动跳转</div>
 <div id="error">
     <#if error??>
         ${error!}
@@ -39,6 +41,19 @@
 </div>
 </body>
 <script>
+    var countdown=5;
+    function settime() {
+        if (countdown == 0) {
+            window.location.href = "${payParam.url}";
+        } else {
+            document.getElementById("timeNum").innerText=countdown;
+            countdown--;
+            setTimeout(function() {
+                settime()
+            },1000)
+        }
+
+    }
     function onBridgeReady(){
         WeixinJSBridge.invoke(
             'getBrandWCPayRequest', {
@@ -52,11 +67,13 @@
             function(res) {
                 if(res.err_msg == "get_brand_wcpay_request:ok" ) {     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
                     alert('支付成功！');
+                    document.getElementById("payinfo").innerText="";
+                    document.getElementById('time').style.display='block';
+                    settime();
                 } else {
-                    alert('支付失败：' + res.err_msg);
+                    alert('支付失败');
                     window.location.href = "${payParam.url}";
                 }
-//                WeixinJSBridge.call('closeWindow');
             }
         );
     }
