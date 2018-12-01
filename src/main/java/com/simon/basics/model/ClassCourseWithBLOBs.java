@@ -19,6 +19,9 @@ public class ClassCourseWithBLOBs extends ClassCourse {
     @ApiModelProperty("订单id")
     private Long orderId;
 
+    @ApiModelProperty("学生剩余课程")
+    private Long rosterCourseCountRest;
+
     @ApiModelProperty(hidden = true)
     private Boolean bought;
 
@@ -36,6 +39,14 @@ public class ClassCourseWithBLOBs extends ClassCourse {
 
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
+    }
+
+    public Long getRosterCourseCountRest() {
+        return rosterCourseCountRest;
+    }
+
+    public void setRosterCourseCountRest(Long rosterCourseCountRest) {
+        this.rosterCourseCountRest = rosterCourseCountRest;
     }
 
     public Boolean getBought() {
