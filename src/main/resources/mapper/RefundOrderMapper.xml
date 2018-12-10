@@ -10,6 +10,7 @@
     <result column="actual_amount" property="actualAmount" jdbcType="DECIMAL" />
     <result column="course_amount" property="courseAmount" jdbcType="DECIMAL" />
     <result column="order_pay_way" property="orderPayWay" jdbcType="CHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
     <result column="course_name" property="courseName" jdbcType="VARCHAR" />
     <result column="course_total" property="courseTotal" jdbcType="INTEGER" />
     <result column="refund_course_total" property="refundCourseTotal" jdbcType="INTEGER" />
@@ -28,11 +29,11 @@
   </resultMap>
   <sql id="Base_Column_List" >
     refund_id, order_id, course_id, account_id, amount, actual_amount, course_amount, 
-    order_pay_way,course_name, course_total, refund_course_total, refund_status, create_time, update_time
+    order_pay_way,course_name,order_no, course_total, refund_course_total, refund_status, create_time, update_time
   </sql>
   <sql id="Union_User_Column_List" >
     ro.refund_id, ro.order_id, ro.course_id, ro.account_id, ro.amount, ro.actual_amount, ro.course_amount,
-    ro.order_pay_way,ro.course_name, ro.course_total, ro.refund_course_total, ro.refund_status, ro.create_time, ro.update_time,
+    ro.order_pay_way,ro.course_name,ro.order_no, ro.course_total, ro.refund_course_total, ro.refund_status, ro.create_time, ro.update_time,
      u.name,u.parent_name,u.sex,u.age,u.phone
   </sql>
 
@@ -85,6 +86,9 @@
       <if test="courseName != null" >
         and ro.course_name = #{courseName,jdbcType=VARCHAR}
       </if>
+      <if test="orderNo != null" >
+        and ro.order_no = #{orderNo,jdbcType=VARCHAR}
+      </if>
       <if test="courseTotal != null" >
         and ro.course_total = #{courseTotal,jdbcType=INTEGER}
       </if>
@@ -104,12 +108,12 @@
   <insert id="insert" parameterType="com.simon.basics.model.RefundOrder" >
     insert into refund_order (refund_id, order_id, course_id, 
       account_id, amount, actual_amount, 
-      course_amount, order_pay_way,course_name, course_total,
+      course_amount, order_pay_way,course_name,order_no, course_total,
       refund_course_total, refund_status, create_time, 
       update_time)
     values (#{refundId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{courseId,jdbcType=BIGINT}, 
       #{accountId,jdbcType=BIGINT}, #{amount,jdbcType=DECIMAL}, #{actualAmount,jdbcType=DECIMAL}, 
-      #{courseAmount,jdbcType=DECIMAL}, #{orderPayWay,jdbcType=CHAR},#{courseName,jdbcType=VARCHAR}, #{courseTotal,jdbcType=INTEGER},
+      #{courseAmount,jdbcType=DECIMAL}, #{orderPayWay,jdbcType=CHAR},#{courseName,jdbcType=VARCHAR},#{orderNo,jdbcType=VARCHAR}, #{courseTotal,jdbcType=INTEGER},
       #{refundCourseTotal,jdbcType=INTEGER}, #{refundStatus,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -142,6 +146,9 @@
       </if>
       <if test="courseName != null" >
         course_name,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
       </if>
       <if test="courseTotal != null" >
         course_total,
@@ -187,6 +194,9 @@
       <if test="courseName != null" >
         #{courseName,jdbcType=VARCHAR},
       </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
       <if test="courseTotal != null" >
         #{courseTotal,jdbcType=INTEGER},
       </if>
@@ -231,6 +241,9 @@
       <if test="courseName != null" >
         course_name = #{courseName,jdbcType=VARCHAR},
       </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
       <if test="courseTotal != null" >
         course_total = #{courseTotal,jdbcType=INTEGER},
       </if>
@@ -259,6 +272,7 @@
       course_amount = #{courseAmount,jdbcType=DECIMAL},
       order_pay_way = #{orderPayWay,jdbcType=CHAR},
       course_name = #{courseName,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
       course_total = #{courseTotal,jdbcType=INTEGER},
       refund_course_total = #{refundCourseTotal,jdbcType=INTEGER},
       refund_status = #{refundStatus,jdbcType=CHAR},

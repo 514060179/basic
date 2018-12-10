@@ -571,3 +571,7 @@ ALTER TABLE `simon`.`course_order`
 -- 20181121
 ALTER TABLE `simon`.`course_order`
   ADD COLUMN `wechat_pay_url` VARCHAR(200) NULL COMMENT '微信支付url' AFTER `order_cost`;
+
+--20181210
+ALTER TABLE `simon`.`refund_order`
+  ADD COLUMN `order_no` VARCHAR(100) NULL COMMENT '支付订单编号' AFTER `order_id`;

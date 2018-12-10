@@ -116,6 +116,7 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         refundOrder.setAccountId(courseOrder.getAccountId());
         refundOrder.setCourseId(classCourse.getCourseId());
         refundOrder.setOrderId(courseOrder.getOrderId());
+        refundOrder.setOrderNo(courseOrder.getOrderNo());
         //剩余课程
         int rest = 0;
         //1 删除课程名单

@@ -29,6 +29,9 @@ public class RefundOrder {
     @ApiModelProperty(value = "课程总额")
     private BigDecimal courseAmount;
 
+    @ApiModelProperty(value = "订单支付订单编号")
+    private String orderNo;
+
     @ApiModelProperty(value = "订单支付方式")
     private String orderPayWay;
 
@@ -110,6 +113,14 @@ public class RefundOrder {
 
     public String getOrderPayWay() {
         return orderPayWay;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
     public void setOrderPayWay(String orderPayWay) {
