@@ -2,17 +2,20 @@ package com.simon.basics.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.simon.basics.componet.service.JedisService;
 import com.simon.basics.dao.CourseOrderMapper;
 import com.simon.basics.dao.CourseRosterMapper;
 import com.simon.basics.dao.RefundOrderMapper;
 import com.simon.basics.model.*;
 import com.simon.basics.service.CourseOrderService;
 import com.simon.basics.service.RefundOrderService;
+import com.simon.basics.util.JSONUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -28,6 +31,8 @@ public class RefundOrderServiceImpl implements RefundOrderService {
     private CourseOrderMapper courseOrderMapper;
     @Autowired
     private CourseRosterMapper courseRosterMapper;
+    @Autowired
+    private JedisService jedisService;
     @Override
     public PageInfo<RefundOrderWithUser> getListByPage(RefundOrder refundOrder, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum,pageSize);
@@ -66,6 +71,10 @@ public class RefundOrderServiceImpl implements RefundOrderService {
         //1 删除课程名单
         if (!Objects.isNull(courseRoster)){
             i += courseRosterMapper.delByCourseIdAndAccountId(courseRoster.getCourseId(), courseRoster.getAccountId());
+            List<String> seatList = JSONUtil.jsonToList(jedisService.getString("course-seatLayout:"+courseRoster.getCourseId()));
+            seatList.add(courseRoster.getRosterSeatX()+","+courseRoster.getRosterSeatY());
+            //重置
+            jedisService.put("course-seatLayout:"+courseRoster.getCourseId(),JSONUtil.listToJson(seatList));
             if (i != 3) {
                 throw new RuntimeException("确认回退款失败！");
             }

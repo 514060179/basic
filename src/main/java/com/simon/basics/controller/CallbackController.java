@@ -6,13 +6,16 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.util.SignUtils;
 import com.simon.basics.config.WechatConfig;
 import com.simon.basics.model.CourseOrder;
+import com.simon.basics.model.EnumCode;
 import com.simon.basics.model.OperateLog;
 import com.simon.basics.service.CourseOrderService;
 import com.simon.basics.threadpool.OperateLogPool;
 import com.simon.basics.threadpool.PayOrderService;
 import com.simon.basics.util.JSONUtil;
+import com.simon.basics.util.XMLUtil;
 import io.swagger.annotations.Api;
 import org.apache.commons.io.IOUtils;
+import org.jdom2.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -144,7 +148,17 @@ public class CallbackController {
         }
 
         logger.warn("微信支付回调参数：{}",JSONUtil.objectToJson(params));
-        if (!SignUtils.checkSign(params,null,wechatConfig.getMchKey())){
+        Map<String, String> signMap = null;
+        try {
+            signMap = XMLUtil.doXMLParse(xmlResult);
+        } catch (JDOMException e) {
+            logger.error("xml转换异常",e);
+            operateLog.setRemark("xml转换异常！");
+            operateLogPool.addLog(operateLog);
+            e.printStackTrace();
+            return WxPayNotifyResponse.fail("xml转换异常!");
+        }
+        if (!SignUtils.checkSign(signMap,null,wechatConfig.getMchKey())){
             operateLog.setRemark("签名验证失败！");
             operateLogPool.addLog(operateLog);
             return WxPayNotifyResponse.fail("签名验证失败!");
@@ -166,6 +180,12 @@ public class CallbackController {
                 operateLogPool.addLog(operateLog);
 //                return WxPayNotifyResponse.fail("处理失败!");
             }
+            if (!EnumCode.OrderStatus.ORDER_NOPAY.getValue().equals(courseOrder.getOrderStatus())){
+                operateLog.setRemark("订单重复支付orderId="+params.getAttach());
+                logger.error("订单重复支付,支付id={},支付订单编号={}",params.getAttach(),orderNo);
+                operateLog.setStatus("FAIL");
+                operateLogPool.addLog(operateLog);
+            }
             payOrderService.paySuccess(orderId,orderNo,"");
             operateLog.setStatus("SUCCESS");
             operateLogPool.addLog(operateLog);
@@ -177,4 +197,41 @@ public class CallbackController {
         return WxPayNotifyResponse.fail("回调失败!");
     }
 
+    public static void main(String[] args) {
+        String xmlResult = "<xml><appid><![CDATA[wx254a867fd60891bd]]></appid>\n" +
+                "<attach><![CDATA[5986401391109734]]></attach>\n" +
+                "<bank_type><![CDATA[ABC_DEBIT]]></bank_type>\n" +
+                "<cash_fee><![CDATA[129991]]></cash_fee>\n" +
+                "<coupon_count><![CDATA[1]]></coupon_count>\n" +
+                "<coupon_fee>9</coupon_fee>\n" +
+                "<coupon_fee_0><![CDATA[9]]></coupon_fee_0>\n" +
+                "<coupon_id_0><![CDATA[2000000064582577174]]></coupon_id_0>\n" +
+                "<device_info><![CDATA[web]]></device_info>\n" +
+                "<fee_type><![CDATA[CNY]]></fee_type>\n" +
+                "<is_subscribe><![CDATA[N]]></is_subscribe>\n" +
+                "<mch_id><![CDATA[1518606791]]></mch_id>\n" +
+                "<nonce_str><![CDATA[1544526070229]]></nonce_str>\n" +
+                "<openid><![CDATA[ouW450ubr0QCuJvBHW8mOjftuiyM]]></openid>\n" +
+                "<out_trade_no><![CDATA[5986408141003161]]></out_trade_no>\n" +
+                "<result_code><![CDATA[SUCCESS]]></result_code>\n" +
+                "<return_code><![CDATA[SUCCESS]]></return_code>\n" +
+                "<sign><![CDATA[13D568E90B7DDAF7DB8B24E070D44EC3]]></sign>\n" +
+                "<time_end><![CDATA[20181211190141]]></time_end>\n" +
+                "<total_fee>130000</total_fee>\n" +
+                "<trade_type><![CDATA[JSAPI]]></trade_type>\n" +
+                "<transaction_id><![CDATA[4200000196201812115686085875]]></transaction_id>\n" +
+                "</xml>";
+//        PayXml params = (PayXml)WxPayOrderNotifyResult.fromXML(xmlResult);
+//        params.setCouponList(null);
+//        params.setXmlString(null);
+        Map<String, String> params = null;
+        try {
+            params = XMLUtil.doXMLParse(xmlResult);
+        } catch (JDOMException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(SignUtils.checkSign(params,null,"astg5fa521fsd8w21fsd2f1q85r1r4gs"));
+    }
 }
