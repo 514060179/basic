@@ -57,10 +57,12 @@ public class RefundOrderServiceImpl implements RefundOrderService {
         updateRefund.setRefundStatus(EnumCode.OrderStatus.ORDER_REBACK.getValue());
         int i = refundOrderMapper.updateByPrimaryKeySelective(updateRefund);
         //2.更新支付订单状态
-        CourseOrder courseOrder = new CourseOrder();
-        courseOrder.setOrderId(refundOrder.getOrderId());
-        courseOrder.setOrderStatus(EnumCode.OrderStatus.ORDER_NOPAY.getValue());
-        i += courseOrderMapper.updateByPrimaryKeySelective(courseOrder);
+//        CourseOrder courseOrder = new CourseOrder();
+//        courseOrder.setOrderId(refundOrder.getOrderId());
+//        courseOrder.setOrderStatus(EnumCode.OrderStatus.ORDER_NOPAY.getValue());
+//        i += courseOrderMapper.updateByPrimaryKeySelective(courseOrder);
+        //删除原订单,后面可以继续购买
+        i += courseOrderMapper.deleteByPrimaryKey(refundOrder.getOrderId());
         //1 删除课程名单
         if (!Objects.isNull(courseRoster)){
             i += courseRosterMapper.delByCourseIdAndAccountId(courseRoster.getCourseId(), courseRoster.getAccountId());
