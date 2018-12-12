@@ -77,4 +77,24 @@ public class SeatLayoutController {
             return ReturnParam.alreadyChoose();
         }
     }
+
+    @PostMapping("cancel")
+    @ApiOperation("取消座位")
+    public ReturnParam<List<String>> cancel(@RequestParam Long courseId, @RequestParam int seatX, @RequestParam int seatY) {
+        List<String> seatList = JSONUtil.jsonToList(jedisService.getString("course-seatLayout:"+courseId));
+        if (seatList.contains(seatX+","+seatY)){
+            return ReturnParam.success(seatList);
+        }
+        seatList.add(seatX+","+seatY);
+        //重置
+        jedisService.put("course-seatLayout:"+courseId,JSONUtil.listToJson(seatList));
+        return ReturnParam.success(seatList);
+    }
+
+    @PostMapping("detail")
+    @ApiOperation("座位详情")
+    public ReturnParam<List<String>> detail(@RequestParam Long courseId) {
+        List<String> seatList = JSONUtil.jsonToList(jedisService.getString("course-seatLayout:"+courseId));
+        return ReturnParam.success(seatList);
+    }
 }
