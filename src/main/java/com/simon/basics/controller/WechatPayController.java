@@ -10,6 +10,7 @@ import com.github.binarywang.wxpay.util.SignUtils;
 import com.simon.basics.config.WechatConfig;
 import com.simon.basics.model.CourseOrder;
 import com.simon.basics.model.EnumCode;
+import com.simon.basics.model.User;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.service.CourseOrderService;
 import com.simon.basics.util.JSONUtil;
@@ -17,6 +18,7 @@ import com.simon.basics.util.SnowflakeIdWorker;
 import com.simon.basics.util.wx.WxApi;
 import com.simon.basics.util.wx.WxApiClient;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,6 +117,12 @@ public class WechatPayController {
                 payParam.put("paySign", SignUtils.createSign(payParam,null, wechatConfig.getMchKey(), new String[0]));
                 payParam.put("amount", courseOrder.getOrderCost()+"");
                 payParam.put("body", courseOrder.getOrderName());
+                User user=(User) SecurityUtils.getSubject().getPrincipal();
+                if (Objects.isNull(user)){
+                    payParam.put("self", "0");
+                }else if(user.getAccountId()==courseOrder.getAccountId()){//自己购买
+                    payParam.put("self", "1");
+                }
                 payParam.put("url", ReturnBackURL+courseOrder.getCourseId());
                 modelMap.put("payParam", payParam);
                 logger.warn("wxPayUnifiedOrderResult={}",JSONUtil.objectToJson(wxPayUnifiedOrderResult));
