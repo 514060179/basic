@@ -98,7 +98,7 @@
         <include refid="Union_Column_List"/>
         <if test="classCourse.accountId != null">
             ,co.order_id,co.order_status,CASE  WHEN co.order_status='1' THEN TRUE ELSE FALSE END AS bought
-            ,cr.roster_course_count_rest AS rosterCourseCountRest
+            ,cr.roster_course_count_rest
         </if>
         from class_course cc
         JOIN seat_layout sl ON cc.seat_id=sl.seat_id
