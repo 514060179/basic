@@ -7,7 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface CourseOrderMapper {
-    int deleteByPrimaryKey(Long orderId);
+
+    int deleteByPrimaryKey(@Param("orderId") Long orderId, @Param("accountId")Long accountId);
 
     int insert(CourseOrder record);
 

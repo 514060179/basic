@@ -153,6 +153,12 @@ public class CourseOrderServiceImpl implements CourseOrderService {
         return courseOrderMapper.updateByPrimaryKeySelective(courseOrder);
     }
 
+    @Override
+    public int cancel(Long orderId) {
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        return courseOrderMapper.deleteByPrimaryKey(orderId,user.getAccountId());
+    }
+
     public static void main(String[] args) {
         BigDecimal orderCost = new BigDecimal(1000.00);
         System.out.println(orderCost.divide(new BigDecimal(18),2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(18)));

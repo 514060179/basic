@@ -74,4 +74,11 @@ public interface CourseOrderService {
      * @return
      */
     int updateWechatUrl(Long orderId,String wechatUrl);
+
+    /**
+     * 取消订单
+     * @param orderId
+     * @return
+     */
+    int cancel(Long orderId);
 }
