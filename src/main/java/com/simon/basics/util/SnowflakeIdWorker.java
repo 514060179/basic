@@ -114,7 +114,7 @@ public class SnowflakeIdWorker {
         return (((timestamp - twepoch) << timestampLeftShift) //
                 | (datacenterId << datacenterIdShift) //
                 | (workerId << workerIdShift) //
-                | sequence)/10;
+                | sequence)/100;
     }
 
     /**
