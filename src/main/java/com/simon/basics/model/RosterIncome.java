@@ -50,6 +50,9 @@ public class RosterIncome {
     @ApiModelProperty(value = "收入费用")
     private BigDecimal incomeAmount;
 
+    @ApiModelProperty(value = "是否已清算0否1是")
+    private Boolean handled;
+
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
@@ -168,6 +171,14 @@ public class RosterIncome {
 
     public void setIncomeAmount(BigDecimal incomeAmount) {
         this.incomeAmount = incomeAmount;
+    }
+
+    public Boolean getHandled() {
+        return handled;
+    }
+
+    public void setHandled(Boolean handled) {
+        this.handled = handled;
     }
 
     public Date getCreateTime() {
