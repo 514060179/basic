@@ -15,5 +15,5 @@ public interface RosterIncomeService {
 
     PageInfo<RosterIncomeWithOther> findListByPage(RosterIncome rosterIncome, Integer pageNum, Integer pageSize);
 
-
+    int handle(String incomeIds, Boolean handled);
 }

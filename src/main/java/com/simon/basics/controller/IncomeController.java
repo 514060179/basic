@@ -7,7 +7,9 @@ import com.simon.basics.model.User;
 import com.simon.basics.model.vo.ReturnParam;
 import com.simon.basics.service.RosterIncomeService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,5 +33,11 @@ public class IncomeController {
     public ReturnParam<PageInfo<RosterIncomeWithOther>> list(RosterIncomeWithOther rosterIncomeWithOther, User user,@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10")Integer pageSize){
         rosterIncomeWithOther.setUser(user);
         return ReturnParam.success(rosterIncomeService.findListByPage(rosterIncomeWithOther,pageNum,pageSize));
+    }
+
+    @PostMapping("handle")
+    @ApiOperation(value = "清算")
+    public ReturnParam handle(@ApiParam(name = "incomeIds",value = "12,23,45") @RequestParam String incomeIds, @ApiParam(name = "handled",value = "true") @RequestParam Boolean handled){
+        return ReturnParam.success(rosterIncomeService.handle(incomeIds,handled));
     }
 }

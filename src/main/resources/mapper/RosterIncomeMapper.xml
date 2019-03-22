@@ -326,4 +326,11 @@
     </where>
     order by ri.create_time desc
   </select>
+
+  <update id="handle">
+    UPDATE roster_income SET handled = #{handled,jdbcType=BIT} where income_id in
+    <foreach collection="incomeIdList" separator="," item="item" open="(" close=")">
+      #{item}
+    </foreach>
+  </update>
 </mapper>

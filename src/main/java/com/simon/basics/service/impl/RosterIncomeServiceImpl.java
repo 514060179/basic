@@ -12,6 +12,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,5 +34,10 @@ public class RosterIncomeServiceImpl implements RosterIncomeService {
         }
         PageHelper.startPage(pageNum, pageSize);
         return new PageInfo<RosterIncomeWithOther>(rosterIncomeMapper.findListByCondition(rosterIncome));
+    }
+
+    @Override
+    public int handle(String incomeIds, Boolean handled) {
+        return rosterIncomeMapper.handle(Arrays.asList(incomeIds.split(",")),handled);
     }
 }
